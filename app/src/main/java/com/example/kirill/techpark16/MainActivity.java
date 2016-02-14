@@ -1,5 +1,6 @@
 package com.example.kirill.techpark16;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -49,4 +50,12 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void onButtonClick(View view) {
+        if (view.getId() == R.id.Abutton1) {
+            Intent i = new Intent(MainActivity.this, SecondActivity.class);
+            startActivity(i);
+        }
+    }
+
 }
