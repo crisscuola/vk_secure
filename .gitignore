@@ -6,3 +6,11 @@
 .DS_Store
 /build
 /captures
+
+*.iml
+*.iws
+*.ipr
+.idea/
+
+*~
+*.swp
