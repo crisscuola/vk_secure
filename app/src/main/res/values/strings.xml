@@ -3,4 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="btn1text">To 2nd activity</string>
     <string name="btn2text">To main activity</string>
+    <string name="friends">Friends</string>
+    <string name="settings">Settings</string>
+    <string name="audio">Audio</string>
 </resources>
