@@ -8,12 +8,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
+import com.vk.sdk.VKScope;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.util.VKUtil;
+
+import java.util.Arrays;
+
 public class MainActivity extends AppCompatActivity {
+
+    private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        VKSdk.login(this,scope);
+
+//        String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
+//        System.out.println(Arrays.asList(fingerprints));
+
 
         final Button button1 = (Button) findViewById(R.id.btn1);
         button1.setOnClickListener(new View.OnClickListener() {
@@ -29,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu_activity; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+
         return true;
     }
 
