@@ -19,7 +19,7 @@ public class MenuActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Intent friendsActivity = new Intent(view.getContext(), MainActivity.class);
+                Intent friendsActivity = new Intent(view.getContext(), FriendsActivity.class);
                 startActivity(friendsActivity);
             }
         });
