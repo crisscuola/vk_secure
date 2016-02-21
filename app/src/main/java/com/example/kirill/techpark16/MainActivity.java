@@ -29,14 +29,19 @@ import java.util.Arrays;
 
 public class MainActivity extends Activity {
 
+
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL};
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        //VKSdk.login(this,scope);
+        //VKSdk.initialize(this);
+
+        VKSdk.initialize(this);
+
+        VKSdk.login(this, scope);
 
 //        String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
 //        System.out.println(Arrays.asList(fingerprints));

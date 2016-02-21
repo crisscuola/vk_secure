@@ -29,7 +29,7 @@ public class MenuActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Intent settingsActivity = new Intent(view.getContext(), MainActivity.class);
+                Intent settingsActivity = new Intent(view.getContext(), SettingsActivity.class);
                 startActivity(settingsActivity);
             }
         });
@@ -39,7 +39,7 @@ public class MenuActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Intent audioActivity = new Intent(view.getContext(), MainActivity.class);
+                Intent audioActivity = new Intent(view.getContext(), AudioActivity.class);
                 startActivity(audioActivity);
             }
         });
