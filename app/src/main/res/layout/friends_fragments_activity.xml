@@ -15,4 +15,9 @@
         android:text="go to menu"
         android:id="@+id/test_friend_btn"
         android:layout_gravity="center_horizontal" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listViewFriends" />
 </LinearLayout>
