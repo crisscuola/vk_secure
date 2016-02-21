@@ -13,6 +13,8 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_activity);
 
+
+
         //TODO: одна функция для слушания кликов трех кнопок
         final Button friendsBtn =(Button)findViewById(R.id.friends_btn);
         friendsBtn.setOnClickListener(new View.OnClickListener() {

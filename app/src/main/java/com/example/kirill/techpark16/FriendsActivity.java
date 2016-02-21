@@ -37,6 +37,8 @@ public class FriendsActivity extends FragmentActivity{
 
         VKSdk.login(this, scope);
 
+
+
         final Button button1 = (Button) findViewById(R.id.test_friend_btn);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +65,8 @@ public class FriendsActivity extends FragmentActivity{
 
                         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(FriendsActivity.this,
                                 android.R.layout.simple_expandable_list_item_1, list);
+
+
 
                         listView.setAdapter(arrayAdapter);
                     }
