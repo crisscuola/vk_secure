@@ -98,7 +98,7 @@ public class DialogsListActivity extends AppCompatActivity {
             @Override
             public void onResult(VKAccessToken res) {
 // Пользователь успешно авторизовался
-                // test commit
+                // test commit la la
 
 
             }
