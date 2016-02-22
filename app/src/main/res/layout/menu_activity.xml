@@ -35,4 +35,16 @@
         android:id="@+id/audio_btn"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="20dp"/>
+
+    <Button
+        android:layout_width="@dimen/btn_width"
+        android:layout_height="wrap_content"
+        android:text="Dialogs"
+        android:id="@+id/dialogs_btn"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"/>
+
+
+
+
 </LinearLayout>

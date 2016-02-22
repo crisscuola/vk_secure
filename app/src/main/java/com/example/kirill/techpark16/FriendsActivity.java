@@ -21,7 +21,11 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiGetMessagesResponse;
+import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
+
+import java.util.ArrayList;
 
 /**
  * Created by kirill on 18.02.16.
@@ -30,13 +34,13 @@ public class FriendsActivity extends FragmentActivity{
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL};
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friends_fragments_activity);
 
         VKSdk.login(this, scope);
-
 
 
         final Button button1 = (Button) findViewById(R.id.test_friend_btn);
@@ -48,6 +52,10 @@ public class FriendsActivity extends FragmentActivity{
             }
         });
     }
+
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

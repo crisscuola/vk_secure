@@ -46,5 +46,15 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
+        final Button dialogsBtn =(Button)findViewById(R.id.dialogs_btn);
+        dialogsBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent dialogsActivity = new Intent(view.getContext(), DialogsListActivity.class);
+                startActivity(dialogsActivity);
+            }
+        });
+
     }
 }

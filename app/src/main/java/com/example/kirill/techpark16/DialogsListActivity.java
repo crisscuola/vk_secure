@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
@@ -39,7 +40,7 @@ import java.util.ArrayList;
 public class DialogsListActivity extends AppCompatActivity {
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL};
-    private ListView listView;
+    //private ListView listView;
     private Button showMessage;
 
     @Override
@@ -60,9 +61,12 @@ public class DialogsListActivity extends AppCompatActivity {
                     public void onComplete(VKResponse response) {
                     super.onComplete(response);
 
+                        final ListView listView = (ListView) findViewById(R.id.listView);
+
                     VKApiGetMessagesResponse getMessagesResponse = (VKApiGetMessagesResponse) response.parsedModel;
 
                      VKList<VKApiMessage> list = getMessagesResponse.items;
+
                      ArrayList<String> arrayList = new ArrayList<>();
 
                      for(VKApiMessage msg : list){
@@ -72,8 +76,7 @@ public class DialogsListActivity extends AppCompatActivity {
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(DialogsListActivity.this,
                            android.R.layout.simple_expandable_list_item_1, arrayList);
 
-                        //listView.setAdapter(arrayAdapter);
-                       listView.setAdapter(arrayAdapter);
+                        listView.setAdapter(arrayAdapter);
                   }
                 });
             }
@@ -95,6 +98,8 @@ public class DialogsListActivity extends AppCompatActivity {
             @Override
             public void onResult(VKAccessToken res) {
 // Пользователь успешно авторизовался
+
+
             }
             @Override
             public void onError(VKError error) {
@@ -104,6 +109,9 @@ public class DialogsListActivity extends AppCompatActivity {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
