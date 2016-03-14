@@ -1,10 +1,8 @@
 package com.example.kirill.techpark16;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,16 +19,12 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKApiGetMessagesResponse;
-import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
-
-import java.util.ArrayList;
 
 /**
  * Created by kirill on 18.02.16.
  */
-public class FriendsActivity extends FragmentActivity{
+public class FriendListActivity extends FragmentActivity{
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL};
 
@@ -71,7 +65,7 @@ public class FriendsActivity extends FragmentActivity{
 
                         VKList list = (VKList) response.parsedModel;
 
-                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(FriendsActivity.this,
+                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(FriendListActivity.this,
                                 android.R.layout.simple_expandable_list_item_1, list);
 
 

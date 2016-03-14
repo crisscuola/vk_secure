@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MenuActivity" />
-        <activity android:name=".FriendsActivity" />
+        <activity android:name=".FriendListActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".AudioActivity" />
         <activity android:name=".MainActivity" />

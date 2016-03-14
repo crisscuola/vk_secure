@@ -1,6 +1,5 @@
 package com.example.kirill.techpark16;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,12 +8,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
@@ -30,8 +27,6 @@ import com.vk.sdk.api.model.VKApiGetMessagesResponse;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
 
-import java.lang.reflect.Array;
-import java.security.AccessControlContext;
 import java.util.ArrayList;
 
 /**
@@ -136,7 +131,7 @@ public class DialogsListActivity extends AppCompatActivity {
                 startActivity(activity1);
                 return true;
             case R.id.action_friend:
-                Intent activity2 = new Intent(this, FriendsActivity.class);
+                Intent activity2 = new Intent(this, FriendListActivity.class);
                 startActivity(activity2);
                 infoTextView.setText("friend");
                 return true;
