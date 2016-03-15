@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,9 +26,7 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 import com.vk.sdk.util.VKUtil;
 
-import java.util.Arrays;
-
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL};

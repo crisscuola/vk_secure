@@ -8,11 +8,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.mikepenz.iconics.typeface.FontAwesome;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
+
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
@@ -43,45 +54,71 @@ public class DialogsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialogs_activity);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        new Drawer()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withActionBarDrawerToggle(true)
+                .withHeader(R.layout.drawer_header)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName(R.string.drawer_item_dialogs).withIcon(FontAwesome.Icon.faw_home).withBadge("4"),
+                        new PrimaryDrawerItem().withName(R.string.drawer_item_friends).withIcon(FontAwesome.Icon.faw_gamepad),
+                        new PrimaryDrawerItem().withName(R.string.drawer_item_settings).withIcon(FontAwesome.Icon.faw_cog),
+                        new DividerDrawerItem(),
+                        new SecondaryDrawerItem().withName(R.string.drawer_item_contact).withIcon(FontAwesome.Icon.faw_github).withIdentifier(1)
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
+                        if (id == 1) {
+                            Intent friendsActivity = new Intent(view.getContext(), FriendListActivity.class);
+                            startActivity(friendsActivity);
+                        } else if (id == 2) {
+                            Intent settingsActivity = new Intent(view.getContext(), SettingsActivity.class);
+                            startActivity(settingsActivity);
+                        } else if (drawerItem.getIdentifier() == 1) {
+                            Toast.makeText(DialogsListActivity.this, "TODO: link to github", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .build();
+
         VKSdk.login(this, scope);
 
         showMessage = (Button) findViewById(R.id.showMessage);
-        showMessage.setOnClickListener(new  View.OnClickListener() {
+        showMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                final VKRequest request = VKApi.messages().get(VKParameters.from(VKApiConst.COUNT,10));
+                final VKRequest request = VKApi.messages().get(VKParameters.from(VKApiConst.COUNT, 10));
                 request.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
-                    super.onComplete(response);
+                        super.onComplete(response);
 
                         final ListView listView = (ListView) findViewById(R.id.listView);
 
-                    VKApiGetMessagesResponse getMessagesResponse = (VKApiGetMessagesResponse) response.parsedModel;
+                        VKApiGetMessagesResponse getMessagesResponse = (VKApiGetMessagesResponse) response.parsedModel;
 
-                     VKList<VKApiMessage> list = getMessagesResponse.items;
+                        VKList<VKApiMessage> list = getMessagesResponse.items;
 
-                     ArrayList<String> arrayList = new ArrayList<>();
+                        ArrayList<String> arrayList = new ArrayList<>();
 
-                     for(VKApiMessage msg : list){
-                        arrayList.add(msg.body);
-                    }
+                        for (VKApiMessage msg : list) {
+                            arrayList.add(msg.body);
+                        }
 
-                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(DialogsListActivity.this,
-                           android.R.layout.simple_expandable_list_item_1, arrayList);
+                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(DialogsListActivity.this,
+                                android.R.layout.simple_expandable_list_item_1, arrayList);
 
                         listView.setAdapter(arrayAdapter);
-                  }
+                    }
                 });
             }
         });
-
-
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-
-
 
     }
 
