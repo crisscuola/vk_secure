@@ -3,9 +3,7 @@ package com.example.kirill.techpark16;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -37,14 +35,7 @@ public class FriendListActivity extends FragmentActivity{
         VKSdk.login(this, scope);
 
 
-        final Button button1 = (Button) findViewById(R.id.test_friend_btn);
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent activity1 = new Intent(view.getContext(), MenuActivity.class);
-                startActivity(activity1);
-            }
-        });
+
     }
 
 
