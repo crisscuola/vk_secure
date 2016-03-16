@@ -7,15 +7,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.kirill.techpark16.DialogsListActivity">
 
-    <android.support.v7.widget.Toolbar
+    <include
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:minHeight="?attr/actionBarSize"
-        android:paddingTop="@dimen/tool_bar_top_padding"
-        android:transitionName="actionBar" />
+        layout="@layout/toolbar"/>
 
     <TextView
         android:layout_width="wrap_content"

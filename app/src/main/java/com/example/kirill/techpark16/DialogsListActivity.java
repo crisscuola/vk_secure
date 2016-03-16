@@ -52,52 +52,6 @@ public class DialogsListActivity extends AppCompatActivity {
         }
 
         SideMenu.getDrawer(this, toolbar).build();
-//        AccountHeader headerResult = new AccountHeaderBuilder()
-//                .withActivity(this)
-//                .withHeaderBackground(R.drawable.header)
-//                .withSelectionListEnabledForSingleProfile(false)
-//                .addProfiles(
-//                        new ProfileDrawerItem().withName("Kirill Matveev").withEmail("testest@gmail.com")
-//                                .withIcon(getResources().getDrawable(R.drawable.profile))
-//                )
-//                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
-//                    @Override
-//                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
-//                        return false;
-//                    }
-//                })
-//                .build();
-//
-//        Drawer result = new DrawerBuilder()
-//                .withActivity(this)
-//                .withToolbar(toolbar)
-//                .withActionBarDrawerToggle(true)
-//                .withHeader(R.layout.drawer_header)
-//                .addDrawerItems(
-//                        new PrimaryDrawerItem().withName(R.string.drawer_item_dialogs).withIcon(FontAwesome.Icon.faw_comments).withBadge("4"),
-//                        new PrimaryDrawerItem().withName(R.string.drawer_item_friends).withIcon(FontAwesome.Icon.faw_users),
-//                        new PrimaryDrawerItem().withName(R.string.drawer_item_settings).withIcon(FontAwesome.Icon.faw_cog),
-//                        new DividerDrawerItem(),
-//                        new SecondaryDrawerItem().withName(R.string.drawer_item_contact).withIcon(FontAwesome.Icon.faw_github).withIdentifier(1)
-//                )
-//                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-//                    @Override
-//                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-//                        if (position == 2) {
-//                            Intent friendsActivity = new Intent(view.getContext(), FriendListActivity.class);
-//                            startActivity(friendsActivity);
-//                        } else if (position == 3) {
-//                            Intent settingsActivity = new Intent(view.getContext(), SettingsActivity.class);
-//                            startActivity(settingsActivity);
-//                        } else if (drawerItem.getIdentifier() == 1) {
-//                            Toast.makeText(DialogsListActivity.this, "TODO: link to github", Toast.LENGTH_SHORT).show();
-//                        }
-//                        return false;
-//                    }
-//
-//                })
-//                .withAccountHeader(headerResult)
-//                .build();
 
         VKSdk.login(this, scope);
 
