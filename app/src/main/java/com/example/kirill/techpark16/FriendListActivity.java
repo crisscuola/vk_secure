@@ -57,13 +57,18 @@ public class FriendListActivity extends AppCompatActivity{
             @Override
             public void onResult(VKAccessToken res) {
                 final ListView listView = (ListView) findViewById(R.id.listViewFriends);
-                VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name"));
+               VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name", "order", "hints"));
+
+                //VKRequest request = VKApi.friends().getOnline(VKParameters.from());
+
+
                 request.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
 
                         VKList list = (VKList) response.parsedModel;
+
 
                         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(FriendListActivity.this,
                                 android.R.layout.simple_expandable_list_item_1, list);
