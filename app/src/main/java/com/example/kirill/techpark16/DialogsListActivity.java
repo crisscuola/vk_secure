@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -24,11 +23,8 @@ import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SectionDrawerItem;
-
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
-import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
@@ -193,8 +189,8 @@ public class DialogsListActivity extends AppCompatActivity {
             case R.id.action_settings:
                 Log.i("settings", "SETTINGS!!!!!");
                 infoTextView.setText("seettings!!!");
-                Intent activity1 = new Intent(this, MenuActivity.class);
-                startActivity(activity1);
+               // Intent activity1 = new Intent(this, MenuActivity.class);
+               // startActivity(activity1);
                 return true;
             case R.id.action_friend:
                 Intent activity2 = new Intent(this, FriendListActivity.class);
@@ -205,8 +201,8 @@ public class DialogsListActivity extends AppCompatActivity {
 
                 infoTextView.setText("audio!!!");
 
-                Intent activity3 = new Intent(this, AudioActivity.class);
-                startActivity(activity3);
+                //Intent activity3 = new Intent(this, AudioActivity.class);
+                //startActivity(activity3);
                 return true;
             default:
                 infoTextView.setText("seetting@@222222s!!!");
