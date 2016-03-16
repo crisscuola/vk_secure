@@ -2,7 +2,8 @@ package com.example.kirill.techpark16;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -22,7 +23,7 @@ import com.vk.sdk.api.model.VKList;
 /**
  * Created by kirill on 18.02.16.
  */
-public class FriendListActivity extends FragmentActivity{
+public class FriendListActivity extends AppCompatActivity{
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL};
 
@@ -31,6 +32,16 @@ public class FriendListActivity extends FragmentActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friends_fragments_activity);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_friends);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null)
+        {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+        SideMenu.getDrawer(this, toolbar).build();
+
 
         VKSdk.login(this, scope);
 
@@ -66,7 +77,7 @@ public class FriendListActivity extends FragmentActivity{
                 }
                 );
 
-                Toast.makeText(getApplicationContext(), "Good", Toast.LENGTH_LONG).show();
+
             }
 
             @Override
