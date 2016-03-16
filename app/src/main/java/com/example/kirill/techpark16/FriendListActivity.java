@@ -33,7 +33,7 @@ public class FriendListActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friends_fragments_activity);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_friends);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null)
         {
