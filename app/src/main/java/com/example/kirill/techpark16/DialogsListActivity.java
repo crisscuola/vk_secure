@@ -53,9 +53,14 @@ public class DialogsListActivity extends AppCompatActivity {
 
         SideMenu.getDrawer(this, toolbar).build();
 
+
         VKSdk.login(this, scope);
 
+
         showMessage = (Button) findViewById(R.id.showMessage);
+
+
+
         showMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

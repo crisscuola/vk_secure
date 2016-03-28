@@ -26,6 +26,7 @@ import com.vk.sdk.api.model.VKList;
 public class FriendListActivity extends AppCompatActivity{
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL};
+
     static protected VKList list = new VKList();
 
 
@@ -45,8 +46,57 @@ public class FriendListActivity extends AppCompatActivity{
         SideMenu.getDrawer(this, toolbar).build();
 
 
-        VKSdk.login(this, scope);
+        //VKSdk.login(this, scope);
+        final ListView listView = (ListView) findViewById(R.id.listViewFriends);
 
+
+
+        VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name",VKApiConst.COUNT,5, "order", "hints"));
+
+        VKRequest request_all = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name",VKApiConst.COUNT,5, "order", "name"));
+
+        VKRequest requesto_online = VKApi.friends().getOnline(VKParameters.from(VKApiConst.FIELDS));
+
+
+
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+                                        @Override
+                                        public void onComplete(VKResponse response) {
+
+                                            super.onComplete(response);
+
+                                            list = (VKList) response.parsedModel;
+
+
+//                                                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(FriendListActivity.this,
+//                                                            android.R.layout.simple_expandable_list_item_1, list);
+//
+//
+//                                                    listView.setAdapter(arrayAdapter);
+                                        }
+                                    }
+
+        );
+
+        request_all.executeWithListener(new VKRequest.VKRequestListener() {
+                                            @Override
+                                            public void onComplete(VKResponse response) {
+
+                                                super.onComplete(response);
+
+                                                VKList listTmp = (VKList) response.parsedModel;
+                                                list.addAll(listTmp);
+
+
+                                                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(FriendListActivity.this,
+                                                        android.R.layout.simple_expandable_list_item_1, list);
+
+
+                                                listView.setAdapter(arrayAdapter);
+                                            }
+                                        }
+
+        );
 
 
     }
@@ -58,57 +108,6 @@ public class FriendListActivity extends AppCompatActivity{
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
             @Override
             public void onResult(VKAccessToken res) {
-                final ListView listView = (ListView) findViewById(R.id.listViewFriends);
-
-
-
-               VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name",VKApiConst.COUNT,5, "order", "hints"));
-
-                VKRequest request_all = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name",VKApiConst.COUNT,5, "order", "name"));
-
-
-                request.executeWithListener(new VKRequest.VKRequestListener() {
-                                                @Override
-                                                public void onComplete(VKResponse response) {
-
-                                                    super.onComplete(response);
-
-                                                    list = (VKList) response.parsedModel;
-
-
-
-//                                                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(FriendListActivity.this,
-//                                                            android.R.layout.simple_expandable_list_item_1, list);
-//
-//
-//                                                    listView.setAdapter(arrayAdapter);
-                                                }
-                                            }
-
-                );
-
-                request_all.executeWithListener(new VKRequest.VKRequestListener() {
-                                                 @Override
-                                                 public void onComplete(VKResponse response) {
-
-                                                     super.onComplete(response);
-
-                                                     VKList listTmp = (VKList) response.parsedModel;
-                                                     list.addAll(listTmp);
-
-
-                                                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(FriendListActivity.this,
-                                                             android.R.layout.simple_expandable_list_item_1, list);
-
-
-                                                     listView.setAdapter(arrayAdapter);
-                                                 }
-                                             }
-
-                );
-
-
-
 
 
 
