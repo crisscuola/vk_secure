@@ -1,6 +1,5 @@
 package com.example.kirill.techpark16;
 
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,56 +7,41 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiDialog;
+import com.vk.sdk.api.model.VKList;
+
 import java.util.ArrayList;
-import java.util.TreeSet;
+
+import static com.example.kirill.techpark16.R.layout.style_list_view;
 
 /**
- * Created by konstantin on 17.03.16.
+ * Created by konstantin on 02.04.16.
  */
-public class CustomAdapter extends BaseAdapter{
+public class CustomAdapter extends BaseAdapter {
+    private ArrayList<String> users, messages;
+    private Context context;
 
-    private static final int TYPE_ITEM = 0;
-    private static final int TYPE_SEPARATOR = 1;
+    private VKList<VKApiDialog> list;
 
-    private ArrayList<String> mData = new ArrayList<String>();
-    private TreeSet<Integer> sectionHeader = new TreeSet<Integer>();
-
-    private LayoutInflater mInflater;
-
-    public CustomAdapter(Context context) {
-        mInflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    public void addItem(final String item) {
-        mData.add(item);
-        notifyDataSetChanged();
-    }
-
-    public void addSectionHeaderItem(final String item) {
-        mData.add(item);
-        sectionHeader.add(mData.size() - 1);
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return sectionHeader.contains(position) ? TYPE_SEPARATOR : TYPE_ITEM;
-    }
-
-    @Override
-    public int getViewTypeCount() {
-        return 2;
+    public CustomAdapter(Context context, ArrayList<String> users, ArrayList<String> messages, VKList<VKApiDialog> list) {
+        this.users = users;
+        this.messages = messages;
+        this.context = context;
+        this.list = list;
     }
 
     @Override
     public int getCount() {
-        return mData.size();
+        return users.size();
     }
 
     @Override
-    public String getItem(int position) {
-        return mData.get(position);
+    public Object getItem(int position) {
+        return position;
     }
 
     @Override
@@ -65,35 +49,39 @@ public class CustomAdapter extends BaseAdapter{
         return position;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
-        int rowType = getItemViewType(position);
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        SetData setData = new SetData();
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(style_list_view,null);
 
-        if (convertView == null) {
-            holder = new ViewHolder();
-            switch (rowType) {
-                case TYPE_ITEM:
-                    convertView = mInflater.inflate(R.layout.snippet_item1, null);
-                    holder.textView = (TextView) convertView.findViewById(R.id.text);
-                    break;
-                case TYPE_SEPARATOR:
-                    convertView = mInflater.inflate(R.layout.snippet_item2, null);
-                    holder.textView = (TextView) convertView.findViewById(R.id.textSeparator);
-                    break;
+        setData.user_name = (TextView) view.findViewById(R.id.user_name);
+        setData.msg = (TextView) view.findViewById(R.id.msg);
+
+        setData.user_name.setText(users.get(position));
+        setData.msg.setText(messages.get(position));
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID,list.get(position).message.user_id,
+                        VKApiConst.MESSAGE, "Test msg !"));
+
+                request.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        super.onComplete(response);
+                        System.out.println("Сообщение отправлено");
+                    }
+                });
+
             }
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-        holder.textView.setText(mData.get(position));
+        });
 
-        return convertView;
+        return view;
     }
 
-    public static class ViewHolder {
-        public TextView textView;
+    public class SetData {
+        TextView user_name,msg;
     }
-
-
-
 }
