@@ -61,13 +61,18 @@ public class DialogsListFragment extends ListFragment {
 
                     messages.add(msg.message.body);
                     DialogsListFragment.msgs.add(msg.message.body);
+                    DialogsListFragment.username.add(String.valueOf(msg.message.user_id));
                     Log.i("message", msg.message.body);
                 }
-            Log.i("aaa",msgs.get(2));
+                Log.i("aaa", msgs.get(2));
             }
         });
         ArrayAdapter<String> ad = new ArrayAdapter<String>(inflater.getContext(), R.layout.dialogs_fragment,
-                R.id.msg, DialogsListFragment.msgs);
+                R.id.msg, msgs);
+
+        ArrayAdapter<String> ad2 = new ArrayAdapter<String>(inflater.getContext(), R.layout.dialogs_fragment,
+                R.id.user_name, username);
+
 
         setListAdapter(ad);
         return super.onCreateView(inflater, container, savedInstanceState);
