@@ -73,8 +73,8 @@ public class DialogsListFragment extends ListFragment {
         ArrayAdapter<String> ad2 = new ArrayAdapter<String>(inflater.getContext(), R.layout.dialogs_fragment,
                 R.id.user_name, username);
 
-        CustomAdapter ca = new CustomAdapter(inflater.getContext(),username,msgs);
-        setListAdapter(ca);
+        DialogsListAdapter adapter = new DialogsListAdapter(inflater.getContext(),username,msgs);
+        setListAdapter(adapter);
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
