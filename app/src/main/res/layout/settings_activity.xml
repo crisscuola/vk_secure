@@ -8,12 +8,13 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar"/>
 
-
-
-    <fragment
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:name="android.app.ListFragment"
-        android:id="@+id/friends_fragment" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="SETTINGS"
+        android:id="@+id/textView3"
+        android:layout_gravity="center_horizontal" />
+
 
 </LinearLayout>

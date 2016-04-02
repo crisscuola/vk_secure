@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.vk.sdk.VKScope;
-import com.vk.sdk.VKSdk;
 
 /**
  * Created by konstantin on 21.02.16.
@@ -30,7 +29,7 @@ public class SettingsActivity extends AppCompatActivity{
         SideMenu.getDrawer(this, toolbar).build();
 
 
-        VKSdk.login(this, scope);
+       // VKSdk.login(this, scope);
 
 
     }

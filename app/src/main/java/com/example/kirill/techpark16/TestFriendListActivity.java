@@ -20,6 +20,8 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 
+import java.util.ArrayList;
+
 /**
  * Created by konstantin on 02.04.16.
  */
@@ -48,7 +50,7 @@ public class TestFriendListActivity extends AppCompatActivity{
 
 
         //VKSdk.login(this, scope);
-        final ListView listView = (ListView) findViewById(R.id.listViewFriends);
+
 
 
         VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name", "order", "hints"));
@@ -61,8 +63,14 @@ public class TestFriendListActivity extends AppCompatActivity{
                                         public void onComplete(VKResponse response) {
                                             super.onComplete(response);
 
+                                            final ListView listView = (ListView) findViewById(R.id.listViewFriends);
+
                                             VKList list = (VKList) response.parsedModel;
 
+
+
+                                            ArrayList<String> messages = new ArrayList<>();
+                                            ArrayList<String> users = new ArrayList<>();
 
                                             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(TestFriendListActivity.this,
                                                     android.R.layout.simple_expandable_list_item_1, list);
@@ -70,6 +78,8 @@ public class TestFriendListActivity extends AppCompatActivity{
 
 
                                             listView.setAdapter(arrayAdapter);
+
+                                            //listView.setAdapter(new CustomAdapter(TestFriendListActivity.this,users,messages,list));
                                         }
                                     }
         );

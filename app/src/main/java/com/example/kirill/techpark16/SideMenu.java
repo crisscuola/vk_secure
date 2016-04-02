@@ -61,6 +61,9 @@ public class SideMenu {
                         } else if (position == 3) {
                             Intent settingsActivity = new Intent(view.getContext(), SettingsActivity.class);
                             activity.startActivity(settingsActivity);
+                        } else if (position == 1) {
+                            Intent testDialogsListActivity = new Intent(view.getContext(), TestDialogsListActivity.class);
+                            activity.startActivity(testDialogsListActivity);
                         } else if (drawerItem.getIdentifier() == 1) {
                             Toast.makeText(activity, "TODO: link to github", Toast.LENGTH_SHORT).show();
                         }
