@@ -58,39 +58,42 @@ public class TestDialogsListActivity extends AppCompatActivity {
         VKSdk.login(this, scope);
 
 
-        showMessage = (Button) findViewById(R.id.showMessage);
+        //showMessage = (Button) findViewById(R.id.showMessage);
 
 
-
-        showMessage.setOnClickListener(new View.OnClickListener() {
+        final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
+        request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
-            public void onClick(View v) {
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
 
-                final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
-                request.executeWithListener(new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
+                final ListView listView = (ListView) findViewById(R.id.listView);
 
-                        final ListView listView = (ListView) findViewById(R.id.listView);
+                VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
 
-                        VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
+                VKList<VKApiDialog> list = getMessagesResponse.items;
 
-                        VKList<VKApiDialog> list = getMessagesResponse.items;
+                ArrayList<String> messages = new ArrayList<>();
+                ArrayList<String> users = new ArrayList<>();
 
-                        ArrayList<String> messages = new ArrayList<>();
-                        ArrayList<String> users = new ArrayList<>();
+                for (VKApiDialog msg : list) {
+                    users.add(String.valueOf(msg.message.user_id));
+                    messages.add(msg.message.body);
+                }
 
-                        for (VKApiDialog msg : list) {
-                            users.add(String.valueOf(msg.message.user_id));
-                            messages.add(msg.message.body);
-                        }
-
-                        listView.setAdapter(new CustomAdapter(TestDialogsListActivity.this,users,messages,list));
-                    }
-                });
+                listView.setAdapter(new CustomAdapter(TestDialogsListActivity.this,users,messages,list));
             }
         });
+
+
+
+//        showMessage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//            }
+//        });
 
     }
 
