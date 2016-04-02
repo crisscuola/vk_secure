@@ -20,6 +20,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static com.example.kirill.techpark16.R.layout.style_list_view;
 
@@ -94,6 +96,8 @@ public class CustomAdapter extends BaseAdapter {
                                 VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
                                 msg[i] = mes;
                             }
+
+                            Arrays.sort(messages.toArray(), Collections.reverseOrder());
 
                             for (VKApiMessage mess : msg) {
                                 if (mess.out) {
