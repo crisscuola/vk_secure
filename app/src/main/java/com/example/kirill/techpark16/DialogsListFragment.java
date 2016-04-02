@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.vk.sdk.api.VKApi;
@@ -32,6 +33,7 @@ public class DialogsListFragment extends ListFragment {
 
     static ArrayList<String> msgs = new ArrayList<>();
     static ArrayList<String> username = new ArrayList<>();
+    static DialogsListAdapter dialogsAdapter = null;
 
     private onItemSelectedListener mCallback;
 
@@ -41,7 +43,7 @@ public class DialogsListFragment extends ListFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
         request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -64,17 +66,19 @@ public class DialogsListFragment extends ListFragment {
                     DialogsListFragment.username.add(String.valueOf(msg.message.user_id));
                     Log.i("message", msg.message.body);
                 }
-                Log.i("aaa", msgs.get(2));
+                DialogsListFragment.dialogsAdapter = new DialogsListAdapter(inflater.getContext(),username,msgs);
+                setListAdapter(new DialogsListAdapter(inflater.getContext(),username,msgs, list));
             }
         });
+
         ArrayAdapter<String> ad = new ArrayAdapter<String>(inflater.getContext(), R.layout.dialogs_fragment,
                 R.id.msg, msgs);
 
         ArrayAdapter<String> ad2 = new ArrayAdapter<String>(inflater.getContext(), R.layout.dialogs_fragment,
                 R.id.user_name, username);
 
-        DialogsListAdapter adapter = new DialogsListAdapter(inflater.getContext(),username,msgs);
-        setListAdapter(adapter);
+        //DialogsListAdapter adapter = new DialogsListAdapter(inflater.getContext(),username,msgs);
+        //setListAdapter(dialogsAdapter);
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
