@@ -66,7 +66,8 @@ public class CustomAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         SetData setData = new SetData();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(style_list_view,null);
+        //View view = inflater.inflate(style_list_view,null);
+        View view = inflater.inflate(R.layout.dialogs_fragment, null);
 
         setData.user_name = (TextView) view.findViewById(R.id.user_name);
         setData.msg = (TextView) view.findViewById(R.id.msg);
@@ -83,37 +84,37 @@ public class CustomAdapter extends BaseAdapter {
                 final int id = list.get(position).message.user_id;
 
                 VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID,id));
-                request.executeWithListener(new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
-
-                        try {
-                            JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
-                            VKApiMessage [] msg = new VKApiMessage[array.length()];
-
-                            for (int i =0;  i < array.length(); i++) {
-                                VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
-                                msg[i] = mes;
-                            }
-
-                            Arrays.sort(messages.toArray(), Collections.reverseOrder());
-
-                            for (VKApiMessage mess : msg) {
-                                if (mess.out) {
-                                    outList.add(mess.body);
-                                } else {
-                                    inList.add(mess.body);
-                                }
-                            }
-                            context.startActivity(new Intent(context,TestSingleDialogActivity.class).putExtra("id",id)
-                                            .putExtra("in",inList).putExtra("out",outList));
-                            System.out.println("START SINGLE!!!");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+//                request.executeWithListener(new VKRequest.VKRequestListener() {
+//                    @Override
+//                    public void onComplete(VKResponse response) {
+//                        super.onComplete(response);
+//
+//                        try {
+//                            JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
+//                            VKApiMessage [] msg = new VKApiMessage[array.length()];
+//
+//                            for (int i =0;  i < array.length(); i++) {
+//                                VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
+//                                msg[i] = mes;
+//                            }
+//
+//                            Arrays.sort(messages.toArray(), Collections.reverseOrder());
+//
+//                            for (VKApiMessage mess : msg) {
+//                                if (mess.out) {
+//                                    outList.add(mess.body);
+//                                } else {
+//                                    inList.add(mess.body);
+//                                }
+//                            }
+//                            context.startActivity(new Intent(context,TestSingleDialogActivity.class).putExtra("id",id)
+//                                            .putExtra("in",inList).putExtra("out",outList));
+//                            System.out.println("START SINGLE!!!");
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
 
 
             }
