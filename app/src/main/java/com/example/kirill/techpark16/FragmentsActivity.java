@@ -33,7 +33,7 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
         SideMenu.getDrawer(this, toolbar).build();
 
 
-        VKSdk.login(this, scope);
+        //VKSdk.login(this, scope);
     }
 
     @Override
