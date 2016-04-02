@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -32,6 +33,14 @@ public class DetailDialogFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         TextView textView = (TextView)view.findViewById(R.id.dialog_detail_texview);
+        Button button = (Button)view.findViewById(R.id.dialog_detail_button);
         textView.setText("Test Text");
+        button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().remove(DetailDialogFragment.this)
+                        .commit();
+            }
+        });
     }
 }
