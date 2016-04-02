@@ -34,7 +34,6 @@ public class DetailDialogFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         TextView textView = (TextView)view.findViewById(R.id.dialog_detail_texview);
         Button button = (Button)view.findViewById(R.id.dialog_detail_button);
-        textView.setText("Test Text");
         button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -42,5 +41,7 @@ public class DetailDialogFragment extends Fragment {
                         .commit();
             }
         });
+
+        textView.setText("Item " + getArguments().getInt(DIALOG_NO));
     }
 }

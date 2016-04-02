@@ -56,7 +56,7 @@ public class SideMenu {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         if (position == 2) {
-                            Intent friendsActivity = new Intent(view.getContext(), FriendListActivity.class);
+                            Intent friendsActivity = new Intent(view.getContext(), TestFriendListActivity.class);
                             activity.startActivity(friendsActivity);
                         } else if (position == 3) {
                             Intent settingsActivity = new Intent(view.getContext(), SettingsActivity.class);
@@ -72,5 +72,7 @@ public class SideMenu {
 
         return result;
     }
+
+
 
 }
