@@ -115,7 +115,6 @@ public class CustomAdapter extends BaseAdapter {
                     }
                 });
 
-                //JSONArray array
 
             }
         });

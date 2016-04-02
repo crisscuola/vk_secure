@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,6 +37,7 @@ public class TestDialogsListActivity extends AppCompatActivity {
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL};
     private ListView listView;
     private Button showMessage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +71,14 @@ public class TestDialogsListActivity extends AppCompatActivity {
 
                 VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
 
-                VKList<VKApiDialog> list = getMessagesResponse.items;
+                final VKList<VKApiDialog> list = getMessagesResponse.items;
 
                 ArrayList<String> messages = new ArrayList<>();
                 ArrayList<String> users = new ArrayList<>();
 
                 for (VKApiDialog msg : list) {
                     users.add(String.valueOf(msg.message.user_id));
+
                     messages.add(msg.message.body);
                 }
 
