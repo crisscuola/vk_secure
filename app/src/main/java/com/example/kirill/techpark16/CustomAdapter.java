@@ -72,7 +72,7 @@ public class CustomAdapter extends BaseAdapter {
         setData.user_name.setText(users.get(position));
         setData.msg.setText(messages.get(position));
 
-        if (list == null)
+        if (list != null)
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,6 +104,7 @@ public class CustomAdapter extends BaseAdapter {
                             }
                             context.startActivity(new Intent(context,TestSingleDialogActivity.class).putExtra("id",id)
                                             .putExtra("in",inList).putExtra("out",outList));
+                            System.out.println("START SINGLE!!!");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
