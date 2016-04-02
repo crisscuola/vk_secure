@@ -1,6 +1,7 @@
 package com.example.kirill.techpark16;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,11 @@ import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiDialog;
+import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -32,6 +37,12 @@ public class CustomAdapter extends BaseAdapter {
         this.messages = messages;
         this.context = context;
         this.list = list;
+    }
+
+    public CustomAdapter(Context context, ArrayList<String> users, ArrayList<String> messages) {
+        this.users = users;
+        this.messages = messages;
+        this.context = context;
     }
 
     @Override
@@ -61,19 +72,45 @@ public class CustomAdapter extends BaseAdapter {
         setData.user_name.setText(users.get(position));
         setData.msg.setText(messages.get(position));
 
+        if (list == null)
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID,list.get(position).message.user_id,
-                        VKApiConst.MESSAGE, "Test msg !"));
+                final ArrayList<String> inList = new ArrayList<>();
+                final ArrayList<String> outList = new ArrayList<>();
+                final int id = list.get(position).message.user_id;
 
+                VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID,id));
                 request.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
-                        System.out.println("Сообщение отправлено");
+
+                        try {
+                            JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
+                            VKApiMessage [] msg = new VKApiMessage[array.length()];
+
+                            for (int i =0;  i < array.length(); i++) {
+                                VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
+                                msg[i] = mes;
+                            }
+
+                            for (VKApiMessage mess : msg) {
+                                if (mess.out) {
+                                    outList.add(mess.body);
+                                } else {
+                                    inList.add(mess.body);
+                                }
+                            }
+                            context.startActivity(new Intent(context,TestSingleDialogActivity.class).putExtra("id",id)
+                                            .putExtra("in",inList).putExtra("out",outList));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
+
+                //JSONArray array
 
             }
         });
