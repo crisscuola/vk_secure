@@ -93,6 +93,7 @@ public class FriendListActivity extends AppCompatActivity{
 
 
                                                 listView.setAdapter(arrayAdapter);
+
                                             }
                                         }
 

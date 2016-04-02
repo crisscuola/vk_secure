@@ -34,6 +34,7 @@ public class CustomAdapter extends BaseAdapter {
 
     private VKList<VKApiDialog> list;
 
+
     public CustomAdapter(Context context, ArrayList<String> users, ArrayList<String> messages, VKList<VKApiDialog> list) {
         this.users = users;
         this.messages = messages;

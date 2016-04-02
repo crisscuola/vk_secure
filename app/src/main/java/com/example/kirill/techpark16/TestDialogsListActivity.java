@@ -62,6 +62,7 @@ public class TestDialogsListActivity extends AppCompatActivity {
 
 
         final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
+
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
