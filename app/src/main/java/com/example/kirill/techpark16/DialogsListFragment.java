@@ -27,13 +27,10 @@ import java.util.ArrayList;
  * Created by kirill on 17.03.16
  */
 public class DialogsListFragment extends ListFragment {
-    String[] numbers_text = new String[]{"one", "two", "three", "four",
-            "five", "six", "seven", "eight", "nine", "ten", "eleven",
-            "twelve", "thirteen", "fourteen", "fifteen"};
 
     static ArrayList<String> msgs = new ArrayList<>();
     static ArrayList<String> username = new ArrayList<>();
-    static DialogsListAdapter dialogsAdapter = null;
+    static VKList<VKApiDialog> dialogsList = new VKList<>();
 
     private onItemSelectedListener mCallback;
 
@@ -55,30 +52,26 @@ public class DialogsListFragment extends ListFragment {
 
                 final VKList<VKApiDialog> list = getMessagesResponse.items;
 
+
                 ArrayList<String> messages = new ArrayList<>();
                 ArrayList<String> users = new ArrayList<>();
 
                 for (VKApiDialog msg : list) {
                     users.add(String.valueOf(msg.message.user_id));
-
                     messages.add(msg.message.body);
-                    DialogsListFragment.msgs.add(msg.message.body);
-                    DialogsListFragment.username.add(String.valueOf(msg.message.user_id));
+
                     Log.i("message", msg.message.body);
                 }
-                DialogsListFragment.dialogsAdapter = new DialogsListAdapter(inflater.getContext(),username,msgs);
-                setListAdapter(new DialogsListAdapter(inflater.getContext(),username,msgs, list));
+                setListAdapter(new DialogsListAdapter(inflater.getContext(), users, messages));
             }
         });
 
-        ArrayAdapter<String> ad = new ArrayAdapter<String>(inflater.getContext(), R.layout.dialogs_fragment,
-                R.id.msg, msgs);
+//        ArrayAdapter<String> ad = new ArrayAdapter<String>(inflater.getContext(), R.layout.dialogs_fragment,
+//                R.id.msg, msgs);
+//
+//        ArrayAdapter<String> ad2 = new ArrayAdapter<String>(inflater.getContext(), R.layout.dialogs_fragment,
+//                R.id.user_name, username);
 
-        ArrayAdapter<String> ad2 = new ArrayAdapter<String>(inflater.getContext(), R.layout.dialogs_fragment,
-                R.id.user_name, username);
-
-        //DialogsListAdapter adapter = new DialogsListAdapter(inflater.getContext(),username,msgs);
-        //setListAdapter(dialogsAdapter);
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
