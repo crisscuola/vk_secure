@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.vk.sdk.api.VKApiConst;
@@ -26,29 +28,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class DialogsListAdapter extends BaseAdapter {
-    private ArrayList<String> users, messages;
+public class DetailDialogAdapter extends BaseAdapter {
+    private ArrayList<String> inList, outList;
     private Context context;
 
-    private VKList<VKApiDialog> list;
 
 
-    public DialogsListAdapter(Context context, ArrayList<String> users, ArrayList<String> messages, VKList<VKApiDialog> list) {
-        this.users = users;
-        this.messages = messages;
-        this.context = context;
-        this.list = list;
-    }
 
-    public DialogsListAdapter(Context context, ArrayList<String> users, ArrayList<String> messages) {
-        this.users = users;
-        this.messages = messages;
+    public DetailDialogAdapter(Context context, ArrayList<String> inList, ArrayList<String> outList) {
+        this.inList = inList;
+        this.outList = outList;
         this.context = context;
     }
 
     @Override
     public int getCount() {
-        return users.size();
+        return inList.size();
     }
 
     @Override
@@ -65,20 +60,20 @@ public class DialogsListAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         SetData setData = new SetData();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //View view = inflater.inflate(style_list_view,null);
+
         View view = inflater.inflate(R.layout.dialogs_fragment, null);
 
-        setData.user_name = (TextView) view.findViewById(R.id.user_name);
-        setData.msg = (TextView) view.findViewById(R.id.msg);
+        setData.inList = (TextView) view.findViewById(R.id.user_name);
+        setData.outList = (TextView) view.findViewById(R.id.msg);
 
-        setData.user_name.setText(users.get(position));
-        setData.msg.setText(messages.get(position));
+//        setData.user_name.setText(inList.get(position));
+//        setData.msg.setText(messages.get(position));
 
 
         return view;
     }
 
     public class SetData {
-        TextView user_name,msg;
+        TextView inList,outList;
     }
 }

@@ -18,9 +18,15 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKApiGetDialogResponse;
+import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Created by kirill on 02.04.16
@@ -56,11 +62,41 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
 
+                final ArrayList<String> inList = new ArrayList<>();
+                final ArrayList<String> outList = new ArrayList<>();
+                try {
+                    JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
+
+                    VKApiMessage[] msg = new VKApiMessage[array.length()];
+
+                    for (int i =0;  i < array.length(); i++) {
+                        VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
+                        msg[i] = mes;
+                    }
+
+                    //Arrays.sort(messages.toArray(), Collections.reverseOrder());
+
+                    for (VKApiMessage mess : msg) {
+                        if (mess.out) {
+                            outList.add(mess.body);
+                        } else {
+                            inList.add(mess.body);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+
+
                 VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
 
                 final VKList<VKApiDialog> list = getMessagesResponse.items;
                 int id = list.get(position).message.user_id;
-                DetailDialogFragment newFragment = DetailDialogFragment.getInstance(id);
+                DetailDialogFragment newFragment = DetailDialogFragment.getInstance(id, inList, outList);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.add(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);
