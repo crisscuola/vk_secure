@@ -66,8 +66,7 @@ public class DialogsListFragment extends ListFragment {
                 ArrayList<String> users = new ArrayList<>();
 
                 for (VKApiDialog msg : list) {
-
-                    //users.add(String.valueOf(msg.message.user_id));
+                    
 
                     users.add(String.valueOf(DialogsListFragment.this.list.getById(msg.message.user_id)));
 
