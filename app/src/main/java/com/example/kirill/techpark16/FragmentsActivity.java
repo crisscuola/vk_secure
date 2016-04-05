@@ -51,9 +51,7 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
     public void onDialogSelected(final int position) {
 
 
-<<<<<<< HEAD
-         final int id = 6759461;
-=======
+
 
         final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
 
@@ -67,7 +65,7 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
 
                 final int id = list.get(position).message.user_id;
 
->>>>>>> 6e4d9ce6e0fcd0394d05025a7e6a2fae3a950c6d
+
 
         VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID,id));
         request.executeWithListener(new VKRequest.VKRequestListener() {
