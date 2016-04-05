@@ -8,8 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.vk.sdk.api.VKApi;
@@ -33,6 +31,7 @@ public class DialogsListFragment extends ListFragment {
     static VKList<VKApiDialog> dialogsList = new VKList<>();
 
     private onItemSelectedListener mCallback;
+    private VKList list;
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -41,6 +40,16 @@ public class DialogsListFragment extends ListFragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name", "order", "hints"));
+
+        request_list_friend.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+
+                super.onComplete(response);
+
+                list = (VKList) response.parsedModel;
 
         final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
         request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -57,12 +66,19 @@ public class DialogsListFragment extends ListFragment {
                 ArrayList<String> users = new ArrayList<>();
 
                 for (VKApiDialog msg : list) {
-                    users.add(String.valueOf(msg.message.user_id));
+
+                    //users.add(String.valueOf(msg.message.user_id));
+
+                    users.add(String.valueOf(DialogsListFragment.this.list.getById(msg.message.user_id)));
+
                     messages.add(msg.message.body);
 
                     Log.i("message", msg.message.body);
                 }
                 setListAdapter(new DialogsListAdapter(inflater.getContext(), users, messages));
+            }
+        });
+
             }
         });
 

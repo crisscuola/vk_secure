@@ -1,16 +1,12 @@
 package com.example.kirill.techpark16;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.vk.sdk.VKScope;
-import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
@@ -25,8 +21,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Created by kirill on 02.04.16
@@ -56,9 +50,19 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
     @Override
     public void onDialogSelected(final int position) {
 
-        //final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
 
-        final int id = 6759461;
+
+        final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
+
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
+
+                final VKList<VKApiDialog> list = getMessagesResponse.items;
+
+                final int id = list.get(position).message.user_id;
 
 
         VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID,id));
@@ -74,12 +78,12 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
 
                     VKApiMessage[] msg = new VKApiMessage[array.length()];
 
-                    for (int i =0;  i < array.length(); i++) {
+                    for (int i = 0; i < array.length(); i++) {
                         VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
                         msg[i] = mes;
                     }
 
-                    //Arrays.sort(messages.toArray(), Collections.reverseOrder());
+
 
                     for (VKApiMessage mess : msg) {
                         if (mess.out) {
@@ -108,7 +112,9 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
 
         });
 
+            }
 
+        });
 
 
     }
