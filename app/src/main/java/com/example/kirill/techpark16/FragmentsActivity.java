@@ -56,7 +56,12 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
     @Override
     public void onDialogSelected(final int position) {
 
-        final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
+        //final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
+
+        final int id = 6759461;
+
+
+        VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID,id));
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -82,20 +87,18 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
                         } else {
                             inList.add(mess.body);
                         }
+
                     }
+                    Log.i("inList", String.valueOf((inList.get(2))));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
 
-
-
-
-
-                VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
-
-                final VKList<VKApiDialog> list = getMessagesResponse.items;
-                int id = list.get(position).message.user_id;
+//                VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
+//
+//                final VKList<VKApiDialog> list = getMessagesResponse.items;
+//                int id = list.get(position).message.user_id;
                 DetailDialogFragment newFragment = DetailDialogFragment.getInstance(id, inList, outList);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.add(R.id.fragment_container, newFragment);

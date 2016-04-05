@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,14 +61,14 @@ public class DetailDialogAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         SetData setData = new SetData();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Log.i("inList3", String.valueOf((inList.get(2))));
+        View view = inflater.inflate(R.layout.dialog_detail_fragment, null);
 
-        View view = inflater.inflate(R.layout.dialogs_fragment, null);
+        setData.inList = (TextView) view.findViewById(R.id.textView5);
+        setData.outList = (TextView) view.findViewById(R.id.textView4);
 
-        setData.inList = (TextView) view.findViewById(R.id.user_name);
-        setData.outList = (TextView) view.findViewById(R.id.msg);
-
-//        setData.user_name.setText(inList.get(position));
-//        setData.msg.setText(messages.get(position));
+        setData.inList.setText(inList.get(position));
+        setData.outList.setText(outList.get(position));
 
 
         return view;

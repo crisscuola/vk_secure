@@ -36,10 +36,13 @@ public class DetailDialogFragment extends ListFragment {
 
     public static DetailDialogFragment getInstance(int dialog_no, ArrayList<String> inList, ArrayList<String> outList){
         DetailDialogFragment detailDialogFragment = new DetailDialogFragment();
+        Log.i("inList2", String.valueOf((inList.get(2))));
         Bundle bundle = new Bundle();
         bundle.putInt(DIALOG_NO, dialog_no);
         bundle.putStringArrayList(IN_LIST, inList);
         bundle.putStringArrayList(OUT_LIST, outList);
+
+
 
         detailDialogFragment.setArguments(bundle);
         return detailDialogFragment;
