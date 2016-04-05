@@ -1,9 +1,7 @@
 package com.example.kirill.techpark16;
 
-;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
@@ -20,7 +17,8 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
 import java.util.ArrayList;
-import java.util.List;
+
+;
 
 /**
  * Created by kirill on 02.04.16
@@ -29,6 +27,11 @@ public class DetailDialogFragment extends ListFragment {
     public static String DIALOG_NO = "dialog_no";
     public static String IN_LIST = "inList";
     public static String OUT_LIST = "outList";
+
+    ArrayList<String> inList = new ArrayList<>();
+    ArrayList<String> outList = new ArrayList<>();
+    int id = 0;
+
 
     EditText text;
     ListView listView;
@@ -53,15 +56,13 @@ public class DetailDialogFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_detail_fragment, null);
 
-        ArrayList<String> inList = getArguments().getStringArrayList(IN_LIST);
-        ArrayList<String> outList = getArguments().getStringArrayList(OUT_LIST);
-
-        final int id = getArguments().getInt(DIALOG_NO);
-
-        //setListAdapter(new DialogsListAdapter(inflater.getContext(), inList, outList));
+        inList = getArguments().getStringArrayList(IN_LIST);
+        outList = getArguments().getStringArrayList(OUT_LIST);
+        id = getArguments().getInt(DIALOG_NO);
 
         text = (EditText) view.findViewById(R.id.textmsg);
         listView = (ListView) view.findViewById(R.id.listmsg);
+
         listView.setAdapter(new DetailDialogAdapter(view.getContext(), inList, outList));
 
         send = (Button) view.findViewById(R.id.sendmsg);
