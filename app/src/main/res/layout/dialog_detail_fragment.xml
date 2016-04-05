@@ -21,6 +21,17 @@
         android:layout_toLeftOf="@+id/sendmsg"
         android:layout_toStartOf="@+id/sendmsg" />
 
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send"
+        android:id="@+id/sendmsg"
+        android:layout_alignBottom="@+id/textmsg"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,15 +50,6 @@
         android:text="Small Text"
         android:id="@+id/textView5"
         android:layout_below="@+id/textView4"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send"
-        android:id="@+id/sendmsg"
-        android:layout_alignBottom="@+id/textmsg"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 

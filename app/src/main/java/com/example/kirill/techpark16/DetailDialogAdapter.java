@@ -64,8 +64,8 @@ public class DetailDialogAdapter extends BaseAdapter {
         Log.i("inList3", String.valueOf((inList.get(2))));
         View view = inflater.inflate(R.layout.dialog_detail_fragment, null);
 
-        setData.inList = (TextView) view.findViewById(R.id.textView5);
-        setData.outList = (TextView) view.findViewById(R.id.textView4);
+        setData.inList = (TextView) view.findViewById(R.id.textView4);
+        setData.outList = (TextView) view.findViewById(R.id.textView5);
 
         setData.inList.setText(inList.get(position));
         setData.outList.setText(outList.get(position));
