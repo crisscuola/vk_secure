@@ -105,6 +105,7 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
 //
 //                final VKList<VKApiDialog> list = getMessagesResponse.items;
 //                int id = list.get(position).message.user_id;
+
                 DetailDialogFragment newFragment = DetailDialogFragment.getInstance(id, inList, outList);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.add(R.id.fragment_container, newFragment);

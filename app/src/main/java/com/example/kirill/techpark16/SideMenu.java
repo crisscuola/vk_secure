@@ -1,11 +1,15 @@
 package com.example.kirill.techpark16;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.kirill.techpark16.OldActivity.SettingsActivity;
+import com.example.kirill.techpark16.TestActivity.TestDialogsListActivity;
+import com.example.kirill.techpark16.TestActivity.TestFriendListActivity;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -21,7 +25,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 /**
  * Created by kirill on 16.03.16.
  */
-public class SideMenu {
+public class SideMenu extends FragmentActivity{
 
     public  static DrawerBuilder getDrawer(final AppCompatActivity activity, Toolbar toolbar) {
 
@@ -58,6 +62,9 @@ public class SideMenu {
                         if (position == 2) {
                             Intent friendsActivity = new Intent(view.getContext(), TestFriendListActivity.class);
                             activity.startActivity(friendsActivity);
+
+//                            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().remove(this).commit();
+
                         } else if (position == 3) {
                             Intent settingsActivity = new Intent(view.getContext(), SettingsActivity.class);
                             activity.startActivity(settingsActivity);

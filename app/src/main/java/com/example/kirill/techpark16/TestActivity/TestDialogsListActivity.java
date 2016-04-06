@@ -1,4 +1,4 @@
-package com.example.kirill.techpark16;
+package com.example.kirill.techpark16.TestActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.kirill.techpark16.CustomAdapter;
+import com.example.kirill.techpark16.OldActivity.FriendListActivity;
+import com.example.kirill.techpark16.R;
+import com.example.kirill.techpark16.SideMenu;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKScope;
