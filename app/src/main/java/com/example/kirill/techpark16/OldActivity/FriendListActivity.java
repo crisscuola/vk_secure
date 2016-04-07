@@ -45,7 +45,8 @@ public class FriendListActivity extends AppCompatActivity{
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        SideMenu.getDrawer(this, toolbar).build();
+        SideMenu sideMenu = new SideMenu();
+        sideMenu.getDrawer(this, toolbar).build();
 
 
         //VKSdk.login(this, scope);

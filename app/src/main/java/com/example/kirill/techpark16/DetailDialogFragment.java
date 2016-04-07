@@ -3,7 +3,6 @@ package com.example.kirill.techpark16;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +38,7 @@ public class DetailDialogFragment extends ListFragment {
 
     public static DetailDialogFragment getInstance(int dialog_no, ArrayList<String> inList, ArrayList<String> outList){
         DetailDialogFragment detailDialogFragment = new DetailDialogFragment();
-        Log.i("inList2", String.valueOf((inList.get(2))));
+//        Log.i("inList2", String.valueOf((inList.get(2))));
         Bundle bundle = new Bundle();
         bundle.putInt(DIALOG_NO, dialog_no);
         bundle.putStringArrayList(IN_LIST, inList);

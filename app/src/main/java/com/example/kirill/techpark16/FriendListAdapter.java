@@ -7,16 +7,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.vk.sdk.api.model.VKList;
 
 /**
  * Created by konstantin on 06.04.16.
  */
 public class FriendListAdapter extends BaseAdapter {
-    private ArrayList<String> friends;
+    private VKList friends;
     private Context context;
 
-    public FriendListAdapter(Context context,ArrayList<String> friends) {
+    public FriendListAdapter(Context context,VKList friends) {
         this.friends = friends;
         this.context = context;
     }
@@ -40,14 +40,13 @@ public class FriendListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        //SetData setData = new SetData();
 
         SetData setData = new SetData();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.friends_fragment, null);
 
         setData.friends = (TextView) view.findViewById(R.id.user_name);
-        setData.friends.setText(friends.get(position));
+//        setData.friends.setText(friends.get(position));
 
         return view;
     }

@@ -1,11 +1,14 @@
 package com.example.kirill.techpark16;
 
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
@@ -25,14 +28,21 @@ import java.util.ArrayList;
 /**
  * Created by kirill on 02.04.16
  */
-public class FragmentsActivity extends AppCompatActivity implements DialogsListFragment.onItemSelectedListener{
+public class FragmentsActivity extends AppCompatActivity implements DialogsListFragment.onItemSelectedListener, FriendListFragment.onFriendSelectedListener {
+    private int pos = 0;
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL};
+
+//    @Override
+//    public void onFriendSelected(int position) {
+//
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragments_activity);
+//        setContentView(R.layout.friends_fragment);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -40,11 +50,43 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
         {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        SideMenu sideMenu =  new SideMenu();
+        DrawerBuilder drawer = sideMenu.getDrawer(this, toolbar);
 
-        SideMenu.getDrawer(this, toolbar).build();
+//        drawer.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+//            @Override
+//            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+//                pos = position;
+//                selectDrawerItem(pos);
+//                Log.i("pos", String.valueOf(position));
+//                return false;
+//            }
+//        });
+        drawer.build();
+    }
 
-
-        //VKSdk.login(this, scope);
+    public static Fragment selectDrawerItem(int position){
+        Fragment fragment = null;
+        Class fragmentClass = null;
+        switch (position){
+            case 1:
+                fragmentClass = DialogsListFragment.class;
+                break;
+            case 2:
+                fragmentClass = FriendListFragment.class;
+                break;
+            default:
+                fragmentClass = DialogsListFragment.class;
+        }
+        try {
+            fragment = (Fragment) fragmentClass.newInstance();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return fragment;
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.fragment_container,fragment).commit();
+//        Log.i("pos", String.valueOf(position));
     }
 
     @Override
@@ -101,10 +143,6 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
                 }
 
 
-//                VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
-//
-//                final VKList<VKApiDialog> list = getMessagesResponse.items;
-//                int id = list.get(position).message.user_id;
 
                 DetailDialogFragment newFragment = DetailDialogFragment.getInstance(id, inList, outList);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -119,6 +157,11 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
 
         });
 
+
+    }
+
+    @Override
+    public void onFriendSelected(int position) {
 
     }
 }

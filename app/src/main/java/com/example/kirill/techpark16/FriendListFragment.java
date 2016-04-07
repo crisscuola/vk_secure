@@ -1,9 +1,9 @@
 package com.example.kirill.techpark16;
 
 import android.app.Activity;
-import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,9 +22,28 @@ import java.util.ArrayList;
  * Created by konstantin on 06.04.16.
  */
 public class FriendListFragment extends ListFragment {
-    private onItemSelectedListener mCallback;
+
+    public static String DIALOG_NO = "dialog_no";
+    public static String IN_LIST = "inList";
+    public static String OUT_LIST = "outList";
+
+    private onFriendSelectedListener mCallback;
     private VKList list;
 
+
+    public static FriendListFragment getInstance(int dialog_no, ArrayList<String> inList, ArrayList<String> outList){
+       FriendListFragment friendListFragment = new FriendListFragment();
+//        Log.i("inList2", String.valueOf((inList.get(2))));
+        Bundle bundle = new Bundle();
+        bundle.putInt(DIALOG_NO, dialog_no);
+        bundle.putStringArrayList(IN_LIST, inList);
+        bundle.putStringArrayList(OUT_LIST, outList);
+
+
+
+        friendListFragment.setArguments(bundle);
+        return friendListFragment;
+    }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -33,8 +52,10 @@ public class FriendListFragment extends ListFragment {
 
 
 
+
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.friends_fragment, null);
 
         VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name", "order", "hints"));
 
@@ -49,13 +70,13 @@ public class FriendListFragment extends ListFragment {
                 //ArrayList<String> messages = new ArrayList<>();
 
 
-                friends = (ArrayList) response.parsedModel;
+//                friends = (ArrayList) response.parsedModel;
 
-               // list = (VKList) response.parsedModel;
+                list = (VKList) response.parsedModel;
 
 
 
-                setListAdapter(new FriendListAdapter(inflater.getContext(), friends));
+                setListAdapter(new FriendListAdapter(inflater.getContext(), list));
 
 
             }
@@ -76,15 +97,16 @@ public class FriendListFragment extends ListFragment {
         if (context instanceof Activity){
             a=(Activity) context;
             try {
-                mCallback = (onItemSelectedListener) a;
+                mCallback = (onFriendSelectedListener) a;
             } catch (ClassCastException e) {
                 throw new ClassCastException(a.toString()
                         + " must implement OnItemSelectedListener");
+
             }
         }
     }
 
-    public interface onItemSelectedListener {
+    public interface onFriendSelectedListener {
         public void onFriendSelected(int position);
     }
 
