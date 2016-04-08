@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".OldActivity.FriendListActivity"/>
         <activity android:name=".OldActivity.SettingsActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".OldActivity.MainActivity" />
         <activity android:name=".TestActivity.TestSingleDialogActivity"/>
         <activity android:name=".TestActivity.TestFriendListActivity"/>
     </application>

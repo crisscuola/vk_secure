@@ -4,12 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.example.kirill.techpark16.OldActivity.DialogsListAdapter;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
@@ -69,7 +69,6 @@ public class DialogsListFragment extends ListFragment {
 
                     messages.add(msg.message.body);
 
-                    Log.i("message", msg.message.body);
                 }
                 setListAdapter(new DialogsListAdapter(inflater.getContext(), users, messages));
             }
@@ -77,12 +76,6 @@ public class DialogsListFragment extends ListFragment {
 
             }
         });
-
-//        ArrayAdapter<String> ad = new ArrayAdapter<String>(inflater.getContext(), R.layout.dialogs_fragment,
-//                R.id.msg, msgs);
-//
-//        ArrayAdapter<String> ad2 = new ArrayAdapter<String>(inflater.getContext(), R.layout.dialogs_fragment,
-//                R.id.user_name, username);
 
 
         return super.onCreateView(inflater, container, savedInstanceState);

@@ -50,7 +50,7 @@ public class SideMenu {
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.drawer_item_dialogs).withIcon(FontAwesome.Icon.faw_comments).withBadge("4").withIdentifier(1),
                         new PrimaryDrawerItem().withName(R.string.drawer_item_friends).withIcon(FontAwesome.Icon.faw_users).withIdentifier(2),
-                        new PrimaryDrawerItem().withName(R.string.drawer_item_settings).withIcon(FontAwesome.Icon.faw_cog),
+                        new PrimaryDrawerItem().withName(R.string.drawer_item_settings).withIcon(FontAwesome.Icon.faw_cog).withIdentifier(3),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem().withName(R.string.drawer_item_contact).withIcon(FontAwesome.Icon.faw_github).withIdentifier(1).withSelectable(true)
                 )
@@ -67,41 +67,23 @@ public class SideMenu {
                                 transaction.replace(R.id.fragment_container, newFragment);
                                 transaction.addToBackStack(null);
                                 transaction.commitAllowingStateLoss();
-
                                 break;
+
                             case 2:
                                 Toast.makeText(activity, "Clicked Friends", Toast.LENGTH_SHORT).show();
 
-
                                 FriendListFragment friendListFragment = FriendListFragment.getInstance(1, new ArrayList<String>(), new ArrayList<String>());
-
-
                                 FragmentTransaction friend_transaction = activity.getSupportFragmentManager().beginTransaction();
-
                                 friend_transaction.replace(R.id.fragment_container, friendListFragment);
                                 friend_transaction.addToBackStack(null);
                                 friend_transaction.commitAllowingStateLoss();
-
-
                                 break;
+
+                            case 3:
+                                Toast.makeText(activity, "Clicked Settings", Toast.LENGTH_SHORT).show();
 
                         }
 
-
-//                        if (position == 2) {
-//                            Intent friendsActivity = new Intent(view.getContext(), TestFriendListActivity.class);
-//                            activity.startActivity(friendsActivity);
-//
-//
-//                        } else if (position == 3) {
-//                            Intent settingsActivity = new Intent(view.getContext(), SettingsActivity.class);
-//                            activity.startActivity(settingsActivity);
-//                        } else if (position == 1) {
-//                            Intent testDialogsListActivity = new Intent(view.getContext(), TestDialogsListActivity.class);
-//                            activity.startActivity(testDialogsListActivity);
-//                        } else if (drawerItem.getIdentifier() == 1) {
-//                            Toast.makeText(activity, "TODO: link to github", Toast.LENGTH_SHORT).show();
-//                        }
                         return false;
                     }
 

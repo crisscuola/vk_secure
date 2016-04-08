@@ -33,16 +33,12 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL};
 
-//    @Override
-//    public void onFriendSelected(int position) {
-//
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragments_activity);
-//        setContentView(R.layout.friends_fragment);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -50,18 +46,9 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
         {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
         SideMenu sideMenu =  new SideMenu();
         DrawerBuilder drawer = sideMenu.getDrawer(this, toolbar);
-
-//        drawer.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-//            @Override
-//            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-//                pos = position;
-//                selectDrawerItem(pos);
-//                Log.i("pos", String.valueOf(position));
-//                return false;
-//            }
-//        });
         drawer.build();
     }
 
@@ -84,9 +71,6 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
             e.printStackTrace();
         }
         return fragment;
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.fragment_container,fragment).commit();
-//        Log.i("pos", String.valueOf(position));
     }
 
     @Override

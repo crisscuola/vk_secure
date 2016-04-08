@@ -1,10 +1,11 @@
-package com.example.kirill.techpark16;
+package com.example.kirill.techpark16.OldActivity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.kirill.techpark16.R;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 

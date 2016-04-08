@@ -87,28 +87,6 @@ public class DetailDialogFragment extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-//        ArrayList<String> inList = getArguments().getStringArrayList(IN_LIST);
-//        ArrayList<String> outList = getArguments().getStringArrayList(OUT_LIST);
-//        int id = getArguments().getInt(DIALOG_NO);
-//
-//        text = (EditText) view.findViewById(R.id.textmsg);
-//        listView = (ListView) view.findViewById(R.id.listmsg);
-//        text.setText(String.valueOf(inList.size()));
-//
-//        //listView.setAdapter(new CustomAdapter(view.getContext(), inList, outList));
-//
-//        //TextView textView = (TextView)view.findViewById(R.id.dialog_detail_texview);
-//        Button button = (Button)view.findViewById(R.id.sendmsg);
-//        button.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v) {
-//                getActivity().getSupportFragmentManager().beginTransaction().remove(DetailDialogFragment.this)
-//                        .commit();
-//            }
-//        });
 
-
-//        button.setText("LOOOL");
-//        //textView.setText("Item " + getArguments().getInt(DIALOG_NO));
     }
 }

@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.kirill.techpark16.CustomAdapter;
+import com.example.kirill.techpark16.OldAdapters.CustomAdapter;
 import com.example.kirill.techpark16.OldActivity.FriendListActivity;
 import com.example.kirill.techpark16.R;
 import com.example.kirill.techpark16.SideMenu;

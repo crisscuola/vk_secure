@@ -1,4 +1,4 @@
-package com.example.kirill.techpark16;
+package com.example.kirill.techpark16.OldAdapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.kirill.techpark16.R;
 import com.example.kirill.techpark16.TestActivity.TestSingleDialogActivity;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;

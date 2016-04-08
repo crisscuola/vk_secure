@@ -7,7 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.example.kirill.techpark16.CustomAdapter;
+import com.example.kirill.techpark16.OldAdapters.CustomAdapter;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
