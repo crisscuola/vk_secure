@@ -3,6 +3,7 @@ package com.example.kirill.techpark16;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,20 +25,21 @@ import java.util.ArrayList;
 public class FriendListFragment extends ListFragment {
 
     public static String DIALOG_NO = "dialog_no";
-    public static String IN_LIST = "inList";
-    public static String OUT_LIST = "outList";
+    public static String FRIEND_LIST = "friends";
 
     private onFriendSelectedListener mCallback;
     private VKList list;
 
 
-    public static FriendListFragment getInstance(int dialog_no, ArrayList<String> inList, ArrayList<String> outList){
+    public static FriendListFragment getInstance(int dialog_no, VKList friends){
        FriendListFragment friendListFragment = new FriendListFragment();
 //        Log.i("inList2", String.valueOf((inList.get(2))));
         Bundle bundle = new Bundle();
         bundle.putInt(DIALOG_NO, dialog_no);
-        bundle.putStringArrayList(IN_LIST, inList);
-        bundle.putStringArrayList(OUT_LIST, outList);
+        Parcelable p = friends;
+        bundle.putParcelable(FRIEND_LIST, p);
+//        bundle.putParcelableArrayList(FRIEND_LIST, friends);
+//        bundle.putStringArrayList(FRIEND_LIST, friends);
 
 
 
@@ -76,7 +78,8 @@ public class FriendListFragment extends ListFragment {
 
 
 
-                setListAdapter(new FriendListAdapter(inflater.getContext(), list));
+
+            //    setListAdapter(new FriendListAdapter(inflater.getContext(), list));
 
 
             }

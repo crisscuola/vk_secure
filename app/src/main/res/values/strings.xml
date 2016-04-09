@@ -8,6 +8,8 @@
     <string name="audio">Audio</string>
     <integer name="com_vk_sdk_AppId">5303858</integer>
     <string name="title_activity_dialogs_test">dialogs_test</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="drawer_item_dialogs">Dialogs</string>
     <string name="drawer_item_friends">Friends</string>

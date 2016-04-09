@@ -40,6 +40,9 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
         setContentView(R.layout.fragments_activity);
 
 
+
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null)

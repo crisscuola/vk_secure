@@ -4,6 +4,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -17,6 +19,12 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKList;
 
 import java.util.ArrayList;
 
@@ -24,8 +32,9 @@ import java.util.ArrayList;
  * Created by kirill on 16.03.16.
  */
 public class SideMenu {
-
+    private VKList list;
     public DrawerBuilder getDrawer(final AppCompatActivity activity, Toolbar toolbar) {
+
 
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(activity)
@@ -62,6 +71,9 @@ public class SideMenu {
                             case 1:
                                 Toast.makeText(activity, "Clicked Dialogs", Toast.LENGTH_SHORT).show();
 
+
+
+
                                 DetailDialogFragment newFragment = DetailDialogFragment.getInstance(1, new ArrayList<String>(), new ArrayList<String>());
                                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.fragment_container, newFragment);
@@ -72,16 +84,46 @@ public class SideMenu {
                             case 2:
                                 Toast.makeText(activity, "Clicked Friends", Toast.LENGTH_SHORT).show();
 
-                                FriendListFragment friendListFragment = FriendListFragment.getInstance(1, new ArrayList<String>(), new ArrayList<String>());
-                                FragmentTransaction friend_transaction = activity.getSupportFragmentManager().beginTransaction();
-                                friend_transaction.replace(R.id.fragment_container, friendListFragment);
-                                friend_transaction.addToBackStack(null);
-                                friend_transaction.commitAllowingStateLoss();
+
+                                VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name", "order", "hints"));
+
+                                request_list_friend.executeWithListener(new VKRequest.VKRequestListener() {
+                                    @Override
+                                    public void onComplete(VKResponse response) {
+
+                                        super.onComplete(response);
+
+
+                                        list = (VKList) response.parsedModel;
+                                        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(activity, android.R.layout.simple_expandable_list_item_1, list);
+
+                                        final ListView listView = (ListView) activity.findViewById(R.id.friends_fragment);
+
+
+
+                                        listView.setAdapter(arrayAdapter);
+
+
+                                        FriendListFragment friendListFragment = FriendListFragment.getInstance(1, list);
+                                        FragmentTransaction friend_transaction = activity.getSupportFragmentManager().beginTransaction();
+                                        friend_transaction.replace(R.id.fragment_container, friendListFragment);
+                                        friend_transaction.addToBackStack(null);
+                                        friend_transaction.commitAllowingStateLoss();
+
+                                    }
+                                });
+
                                 break;
 
                             case 3:
                                 Toast.makeText(activity, "Clicked Settings", Toast.LENGTH_SHORT).show();
 
+                                SettingsFragment settingsFragment = SettingsFragment.getInstance(1, new ArrayList<String>(), new ArrayList<String>());
+                                FragmentTransaction setttings_transaction = activity.getSupportFragmentManager().beginTransaction();
+                                setttings_transaction.replace(R.id.fragment_container, settingsFragment);
+                                setttings_transaction.addToBackStack(null);
+                                setttings_transaction.commitAllowingStateLoss();
+                                break;
                         }
 
                         return false;

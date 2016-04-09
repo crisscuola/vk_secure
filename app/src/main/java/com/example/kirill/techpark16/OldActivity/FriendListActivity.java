@@ -71,11 +71,11 @@ public class FriendListActivity extends AppCompatActivity{
                                             list = (VKList) response.parsedModel;
 
 
-//                                                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(FriendListActivity.this,
-//                                                            android.R.layout.simple_expandable_list_item_1, list);
-//
-//
-//                                                    listView.setAdapter(arrayAdapter);
+                                                    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(FriendListActivity.this,
+                                                            android.R.layout.simple_expandable_list_item_1, list);
+
+
+                                                    listView.setAdapter(arrayAdapter);
                                         }
                                     }
 
