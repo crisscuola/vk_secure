@@ -1,4 +1,4 @@
-package com.example.kirill.techpark16;
+package com.example.kirill.techpark16.OldCLASSES;
 
 
 import android.os.Bundle;
@@ -8,6 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
+import com.example.kirill.techpark16.DetailDialogFragment;
+import com.example.kirill.techpark16.FragmentDialogsList;
+import com.example.kirill.techpark16.FriendListFragment;
+import com.example.kirill.techpark16.R;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.api.VKApi;
@@ -28,7 +32,7 @@ import java.util.ArrayList;
 /**
  * Created by kirill on 02.04.16
  */
-public class FragmentsActivity extends AppCompatActivity implements DialogsListFragment.onItemSelectedListener, FriendListFragment.onFriendSelectedListener {
+public class FragmentsActivity extends AppCompatActivity implements FragmentDialogsList.onItemSelectedListener, FriendListFragment.onFriendSelectedListener {
     private int pos = 0;
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL};
@@ -60,13 +64,13 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
         Class fragmentClass = null;
         switch (position){
             case 1:
-                fragmentClass = DialogsListFragment.class;
+                fragmentClass = FragmentDialogsList.class;
                 break;
             case 2:
                 fragmentClass = FriendListFragment.class;
                 break;
             default:
-                fragmentClass = DialogsListFragment.class;
+                fragmentClass = FragmentDialogsList.class;
         }
         try {
             fragment = (Fragment) fragmentClass.newInstance();
@@ -78,8 +82,6 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
 
     @Override
     public void onDialogSelected(final int position) {
-
-
 
 
         final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
@@ -133,7 +135,7 @@ public class FragmentsActivity extends AppCompatActivity implements DialogsListF
 
                 DetailDialogFragment newFragment = DetailDialogFragment.getInstance(id, inList, outList);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.add(R.id.fragment_container, newFragment);
+                transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

@@ -1,4 +1,4 @@
-package com.example.kirill.techpark16;
+package com.example.kirill.techpark16.OldCLASSES;
 
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.kirill.techpark16.DetailDialogFragment;
+import com.example.kirill.techpark16.FriendListFragment;
+import com.example.kirill.techpark16.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -118,12 +121,7 @@ public class SideMenu {
                             case 3:
                                 Toast.makeText(activity, "Clicked Settings", Toast.LENGTH_SHORT).show();
 
-                                SettingsFragment settingsFragment = SettingsFragment.getInstance(1, new ArrayList<String>(), new ArrayList<String>());
-                                FragmentTransaction setttings_transaction = activity.getSupportFragmentManager().beginTransaction();
-                                setttings_transaction.replace(R.id.fragment_container, settingsFragment);
-                                setttings_transaction.addToBackStack(null);
-                                setttings_transaction.commitAllowingStateLoss();
-                                break;
+
                         }
 
                         return false;

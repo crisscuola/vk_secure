@@ -1,6 +1,5 @@
 package com.example.kirill.techpark16.Test;
 
-import android.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,7 @@ import com.vk.sdk.api.model.VKList;
 /**
  * Created by konstantin on 09.04.16.
  */
-public class FragmentFriendsList extends ListFragment {
+public class FragmentFriendsList extends android.support.v4.app.ListFragment {
 
 
      VKList list = new VKList();
@@ -45,7 +44,7 @@ public class FragmentFriendsList extends ListFragment {
                 super.onComplete(response);
 
                 list = (VKList) response.parsedModel;
-                
+
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list);
                 setListAdapter(adapter);
 

@@ -21,11 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".OldActivity.FriendListActivity"/>
-        <activity android:name=".OldActivity.SettingsActivity" />
-        <activity android:name=".OldActivity.MainActivity" />
-        <activity android:name=".TestActivity.TestSingleDialogActivity"/>
-        <activity android:name=".TestActivity.TestFriendListActivity"/>
+
     </application>
 
 </manifest>

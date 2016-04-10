@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.example.kirill.techpark16.Adapters.DialogsListAdapter;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 /**
  * Created by kirill on 17.03.16
  */
-public class DialogsListFragment extends ListFragment {
+public class FragmentDialogsList extends ListFragment {
 
     private onItemSelectedListener mCallback;
     private VKList list;
@@ -63,7 +64,7 @@ public class DialogsListFragment extends ListFragment {
                 for (VKApiDialog msg : list) {
                     
 
-                    users.add(String.valueOf(DialogsListFragment.this.list.getById(msg.message.user_id)));
+                    users.add(String.valueOf(FragmentDialogsList.this.list.getById(msg.message.user_id)));
 
                     messages.add(msg.message.body);
 

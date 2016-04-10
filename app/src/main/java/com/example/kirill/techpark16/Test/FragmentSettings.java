@@ -1,6 +1,5 @@
 package com.example.kirill.techpark16.Test;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,7 @@ import com.example.kirill.techpark16.R;
 /**
  * Created by konstantin on 09.04.16.
  */
-public class FragmentSettings extends Fragment {
+public class FragmentSettings extends android.support.v4.app.Fragment {
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
