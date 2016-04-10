@@ -24,7 +24,6 @@ import java.util.ArrayList;
  * Created by kirill on 17.03.16
  */
 public class DialogsListFragment extends ListFragment {
-    
 
     private onItemSelectedListener mCallback;
     private VKList list;

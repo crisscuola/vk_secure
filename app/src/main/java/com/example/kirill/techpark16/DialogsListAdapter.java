@@ -8,24 +8,21 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.vk.sdk.api.model.VKApiDialog;
-import com.vk.sdk.api.model.VKList;
-
 import java.util.ArrayList;
 
 public class DialogsListAdapter extends BaseAdapter {
     private ArrayList<String> users, messages;
     private Context context;
 
-    private VKList<VKApiDialog> list;
-
-
-    public DialogsListAdapter(Context context, ArrayList<String> users, ArrayList<String> messages, VKList<VKApiDialog> list) {
-        this.users = users;
-        this.messages = messages;
-        this.context = context;
-        this.list = list;
-    }
+//    private VKList<VKApiDialog> list;
+//
+//
+//    public DialogsListAdapter(Context context, ArrayList<String> users, ArrayList<String> messages, VKList<VKApiDialog> list) {
+//        this.users = users;
+//        this.messages = messages;
+//        this.context = context;
+//        this.list = list;
+//    }
 
     public DialogsListAdapter(Context context, ArrayList<String> users, ArrayList<String> messages) {
         this.users = users;
@@ -53,7 +50,6 @@ public class DialogsListAdapter extends BaseAdapter {
 
         SetData setData = new SetData();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //View view = inflater.inflate(style_list_view,null);
 
         View view = inflater.inflate(R.layout.dialogs_fragment, null);
 

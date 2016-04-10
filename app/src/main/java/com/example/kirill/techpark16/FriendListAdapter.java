@@ -43,10 +43,10 @@ public class FriendListAdapter extends BaseAdapter {
 
         SetData setData = new SetData();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.friends_fragment, null);
+        View view = inflater.inflate(R.layout.test_friend_list, null);
 
         setData.friends = (TextView) view.findViewById(R.id.user_name);
-//        setData.friends.setText(friends.get(position));
+       // setData.friends.setText(friends.get(position));
 
         return view;
     }

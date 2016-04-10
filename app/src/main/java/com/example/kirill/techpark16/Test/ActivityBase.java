@@ -80,7 +80,6 @@ public  class ActivityBase extends AppCompatActivity implements NavigationView.O
             public void onReceive(Context context, Intent intent) {
                 try {
 
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -108,7 +107,6 @@ public  class ActivityBase extends AppCompatActivity implements NavigationView.O
             });
 
             navigationView.setNavigationItemSelectedListener(this);
-
     }
 
     protected Application getApp() {
@@ -177,10 +175,6 @@ public  class ActivityBase extends AppCompatActivity implements NavigationView.O
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-
-
 
     public void sendMessageButton(View view) {
 
