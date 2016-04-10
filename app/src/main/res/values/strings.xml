@@ -11,6 +11,10 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="dialog_list_title">Dialogs</string>
+    <string name="friends_title">Friends</string>
+    <string name="settings_title">Settings</string>
+
     <string name="drawer_item_dialogs">Dialogs</string>
     <string name="drawer_item_friends">Friends</string>
     <string name="drawer_item_settings">Settings</string>

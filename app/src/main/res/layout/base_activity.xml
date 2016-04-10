@@ -14,10 +14,25 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent" android:theme="@style/AppTheme.AppBarOverlay">
 
+
+
             <android.support.v7.widget.Toolbar android:id="@+id/toolbar"
                 android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
                 android:background="@color/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:id="@+id/toolbar_button"
+                    android:drawableRight="@drawable/ic_ab_done"
+                    android:background="@null"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:textColor="#FFF"
+                    android:visibility="invisible"/>
+
+            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
 

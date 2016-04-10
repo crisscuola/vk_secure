@@ -10,5 +10,6 @@ public class Fragments {
     final static int SETTINGS    = 2;
     final static int OTHER       = 3;
     final static int SINGLEDIALOG = 4;
+    final static int SETTINGSDIALOG = 5;
 
 }

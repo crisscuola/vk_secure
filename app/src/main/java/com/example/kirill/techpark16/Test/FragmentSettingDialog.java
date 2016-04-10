@@ -1,6 +1,7 @@
 package com.example.kirill.techpark16.Test;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +9,10 @@ import android.view.ViewGroup;
 import com.example.kirill.techpark16.R;
 
 /**
- * Created by konstantin on 09.04.16.
+ * Created by konstantin on 10.04.16.
  */
-public class FragmentSettings extends android.support.v4.app.Fragment {
+public class FragmentSettingDialog extends Fragment {
+
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -18,7 +20,7 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.test_settings, container, false);
+        View view = inflater.inflate(R.layout.test_gialog_settings, container, false);
 
         return view;
     }

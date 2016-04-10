@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.kirill.techpark16.DetailDialogFragment;
@@ -46,13 +47,14 @@ import java.util.ArrayList;
 public  class ActivityBase extends AppCompatActivity implements FragmentDialogsList.onItemSelectedListener,
         FragmentFriendsList.onItemSelectedListener ,NavigationView.OnNavigationItemSelectedListener {
 
-    Fragment fragmentSet[] = new Fragment[5];
+    Fragment fragmentSet[] = new Fragment[10];
     ActionBarDrawerToggle toggle;
     android.support.v4.app.FragmentTransaction fragmentTransaction;
     Toolbar toolbar;
     DrawerLayout drawer;
     NavigationView navigationView;
     BroadcastReceiver br;
+    Button toolbarButton;
 
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
 
@@ -69,7 +71,23 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         registerReceiver(br, intentFilter);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbarButton = (Button)toolbar.findViewById(R.id.toolbar_button);
+        toolbarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ActivityBase.this, "Clicked BUTTON PLUS", Toast.LENGTH_SHORT).show();
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.FRIENDSLIST]);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                toolbar.setTitle(R.string.friends_title);
+                toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+
+            }
+        });
         setSupportActionBar(toolbar);
+
+
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
@@ -84,12 +102,16 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         fragmentSet[Fragments.FRIENDSLIST] = new FragmentFriendsList();
         fragmentSet[Fragments.SETTINGS] = new FragmentSettings();
         fragmentSet[Fragments.SINGLEDIALOG] = new DetailDialogFragment();
+        fragmentSet[Fragments.SETTINGSDIALOG] = new FragmentSettingDialog();
 
         // Add other fragments
-
+        toolbar.setTitle(R.string.dialog_list_title);
+        toolbar.findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.fragmentPlace, fragmentSet[Fragments.DIALOGSLIST]);
         fragmentTransaction.commit();
+
+
 
 
     }
@@ -114,6 +136,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[newFragment]);
         fragmentTransaction.commit();
+
     }
 
     public void changeToggle(int fragment){
@@ -140,7 +163,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
     @Override
     public void onBackPressed() {
-        if (getFragmentManager().getBackStackEntryCount() > 0 ){
+        if (getFragmentManager().getBackStackEntryCount() > 1 ){
             getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
@@ -150,7 +173,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        //getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -168,6 +191,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.DIALOGSLIST]);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
+                toolbar.setTitle(R.string.dialog_list_title);
+                toolbar.findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
                 break;
 
             case R.id.nav_friends:
@@ -176,6 +201,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.FRIENDSLIST]);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
+                toolbar.setTitle(R.string.friends_title);
+                toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
                 break;
 
             case R.id.nav_settings:
@@ -184,6 +211,10 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.SETTINGS]);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
+                toolbar.setTitle(R.string.settings_title);
+                toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+//                toolbarButton = (Button) toolbar.findViewById(R.id.toolbar_button);
+//                toolbarButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_ab_app, 0, 0, 0);
                 break;
 
             case R.id.nav_other:

@@ -47,37 +47,44 @@ public class FragmentDialogsList extends ListFragment {
 
                 list = (VKList) response.parsedModel;
 
-        final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
-        request.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
+                final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
+                request.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        super.onComplete(response);
 
-                VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
+                        VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
 
-                final VKList<VKApiDialog> list = getMessagesResponse.items;
+                        final VKList<VKApiDialog> list = getMessagesResponse.items;
 
 
-                ArrayList<String> messages = new ArrayList<>();
-                ArrayList<String> users = new ArrayList<>();
+                        ArrayList<String> messages = new ArrayList<>();
+                        ArrayList<String> users = new ArrayList<>();
 
-                for (VKApiDialog msg : list) {
-                    
+                        for (VKApiDialog msg : list) {
 
-                    users.add(String.valueOf(FragmentDialogsList.this.list.getById(msg.message.user_id)));
 
-                    messages.add(msg.message.body);
+                            users.add(String.valueOf(FragmentDialogsList.this.list.getById(msg.message.user_id)));
 
-                }
-                setListAdapter(new DialogsListAdapter(inflater.getContext(), users, messages));
-            }
-        });
+                            messages.add(msg.message.body);
+
+                        }
+                        setListAdapter(new DialogsListAdapter(inflater.getContext(), users, messages));
+                    }
+                });
 
             }
         });
 
 
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle(R.string.dialog_list_title);
+        getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
     }
 
     @Override
