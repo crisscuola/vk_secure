@@ -24,7 +24,7 @@ import java.util.ArrayList;
  * Created by kirill on 02.04.16
  */
 public class DetailDialogFragment extends ListFragment {
-    public static String DIALOG_NO = "dialog_no";
+    public static String USER_ID = "user_id";
     public static String IN_LIST = "inList";
     public static String OUT_LIST = "outList";
 
@@ -37,11 +37,11 @@ public class DetailDialogFragment extends ListFragment {
     ListView listView;
     Button send;
 
-    public static DetailDialogFragment getInstance(int dialog_no, ArrayList<String> inList, ArrayList<String> outList){
+    public static DetailDialogFragment getInstance(int user_id, ArrayList<String> inList, ArrayList<String> outList){
         DetailDialogFragment detailDialogFragment = new DetailDialogFragment();
 //        Log.i("inList2", String.valueOf((inList.get(2))));
         Bundle bundle = new Bundle();
-        bundle.putInt(DIALOG_NO, dialog_no);
+        bundle.putInt(USER_ID, user_id);
         bundle.putStringArrayList(IN_LIST, inList);
         bundle.putStringArrayList(OUT_LIST, outList);
 
@@ -58,7 +58,7 @@ public class DetailDialogFragment extends ListFragment {
 
         inList = getArguments().getStringArrayList(IN_LIST);
         outList = getArguments().getStringArrayList(OUT_LIST);
-        id = getArguments().getInt(DIALOG_NO);
+        id = getArguments().getInt(USER_ID);
 
         text = (EditText) view.findViewById(R.id.textmsg);
         listView = (ListView) view.findViewById(R.id.listmsg);

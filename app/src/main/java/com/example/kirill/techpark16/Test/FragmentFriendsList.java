@@ -1,10 +1,13 @@
 package com.example.kirill.techpark16.Test;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
@@ -20,6 +23,13 @@ public class FragmentFriendsList extends android.support.v4.app.ListFragment {
 
 
      VKList list = new VKList();
+    private onItemSelectedListener mCallback;
+
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        mCallback.onFriendSelected(position);
+    }
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -51,6 +61,27 @@ public class FragmentFriendsList extends android.support.v4.app.ListFragment {
             }
         });
 
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        Activity a;
+
+        if (context instanceof Activity){
+            a=(Activity) context;
+            try {
+                mCallback = (onItemSelectedListener) a;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(a.toString()
+                        + " must implement OnItemSelectedListener");
+            }
+        }
+    }
+
+    public interface onItemSelectedListener {
+        public void onFriendSelected(int position);
     }
 
 }

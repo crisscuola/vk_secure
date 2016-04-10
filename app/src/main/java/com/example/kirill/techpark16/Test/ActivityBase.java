@@ -30,6 +30,7 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKApiGetDialogResponse;
 import com.vk.sdk.api.model.VKApiMessage;
+import com.vk.sdk.api.model.VKApiModel;
 import com.vk.sdk.api.model.VKList;
 
 import org.json.JSONArray;
@@ -42,7 +43,8 @@ import java.util.ArrayList;
 /**
  * Created by konstantin on 09.04.16.
  */
-public  class ActivityBase extends AppCompatActivity implements FragmentDialogsList.onItemSelectedListener, NavigationView.OnNavigationItemSelectedListener {
+public  class ActivityBase extends AppCompatActivity implements FragmentDialogsList.onItemSelectedListener,
+        FragmentFriendsList.onItemSelectedListener ,NavigationView.OnNavigationItemSelectedListener {
 
     Fragment fragmentSet[] = new Fragment[5];
     ActionBarDrawerToggle toggle;
@@ -244,7 +246,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                         }
 
                         DetailDialogFragment newFragment = DetailDialogFragment.getInstance(id, inList, outList);
-                        Toast.makeText(ActivityBase.this, "Clicked SETTINGS", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActivityBase.this, "Clicked SINGLEDIALOG", Toast.LENGTH_SHORT).show();
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
                         fragmentTransaction.addToBackStack(null);
@@ -261,8 +263,48 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
     }
 
+
+
+    @Override
+    public void onFriendSelected(final int position) {
+
+        int id = 1;
+
+        VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name", "order", "hints"));
+
+        request_list_friend.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+
+                super.onComplete(response);
+
+                VKList list = new VKList();
+
+                list = (VKList) response.parsedModel;
+
+
+                int id = 0;
+
+                VKApiModel a = list.get(position);
+                try {
+                     id = a.fields.getInt("id");
+                    Log.i("id2", String.valueOf(a.fields.getInt("id")));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+                FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(id);
+                Toast.makeText(ActivityBase.this, "Clicked SINGLE FRIEND", Toast.LENGTH_SHORT).show();
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+    }
+
     public void sendMessageButton(View view) {
 
     }
-
 }

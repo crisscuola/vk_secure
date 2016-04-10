@@ -78,10 +78,6 @@ public class FriendListFragment extends ListFragment {
 
 
 
-
-            //    setListAdapter(new FriendListAdapter(inflater.getContext(), list));
-
-
             }
         });
 
