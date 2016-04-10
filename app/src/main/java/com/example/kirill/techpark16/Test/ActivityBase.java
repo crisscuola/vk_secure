@@ -45,7 +45,8 @@ import java.util.ArrayList;
  * Created by konstantin on 09.04.16.
  */
 public  class ActivityBase extends AppCompatActivity implements FragmentDialogsList.onItemSelectedListener,
-        FragmentFriendsList.onItemSelectedListener ,NavigationView.OnNavigationItemSelectedListener {
+        FragmentFriendsList.onItemSelectedListener ,NavigationView.OnNavigationItemSelectedListener,
+        FragmentFriendsSend.onItemSelectedListener {
 
     Fragment fragmentSet[] = new Fragment[10];
     ActionBarDrawerToggle toggle;
@@ -55,6 +56,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     NavigationView navigationView;
     BroadcastReceiver br;
     Button toolbarButton;
+    Button toolbarButton_set;
 
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
 
@@ -77,7 +79,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
             public void onClick(View v) {
                 Toast.makeText(ActivityBase.this, "Clicked BUTTON PLUS", Toast.LENGTH_SHORT).show();
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.FRIENDSLIST]);
+                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.FRIENDSEND]);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 toolbar.setTitle(R.string.friends_title);
@@ -85,6 +87,20 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
             }
         });
+        toolbarButton_set = (Button)toolbar.findViewById(R.id.toolbar_button_sett);
+        toolbarButton_set.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(ActivityBase.this, "Clicked BUTTON SETT", Toast.LENGTH_SHORT).show();
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.SETTINGSDIALOG]);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                toolbar.setTitle(R.string.settings_dialog_title);
+                toolbar.findViewById(R.id.toolbar_button_sett).setVisibility(View.INVISIBLE);
+            }
+        });
+
         setSupportActionBar(toolbar);
 
 
@@ -102,7 +118,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         fragmentSet[Fragments.FRIENDSLIST] = new FragmentFriendsList();
         fragmentSet[Fragments.SETTINGS] = new FragmentSettings();
         fragmentSet[Fragments.SINGLEDIALOG] = new DetailDialogFragment();
-        fragmentSet[Fragments.SETTINGSDIALOG] = new FragmentSettingDialog();
+        fragmentSet[Fragments.SETTINGSDIALOG] = new FragmentSettingsDialog();
+        fragmentSet[Fragments.FRIENDSEND] = new FragmentFriendsSend();
 
         // Add other fragments
         toolbar.setTitle(R.string.dialog_list_title);
@@ -335,7 +352,76 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         });
     }
 
+
+
+    @Override
+    public void onFriendSendSelected(final int position) {
+        final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
+
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
+
+                final VKList<VKApiDialog> list = getMessagesResponse.items;
+
+                final int id = list.get(position).message.user_id;
+
+
+                VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id));
+                request.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        super.onComplete(response);
+
+                        final ArrayList<String> inList = new ArrayList<>();
+                        final ArrayList<String> outList = new ArrayList<>();
+                        try {
+                            JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
+
+                            VKApiMessage[] msg = new VKApiMessage[array.length()];
+
+                            for (int i = 0; i < array.length(); i++) {
+                                VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
+                                msg[i] = mes;
+                            }
+
+
+                            for (VKApiMessage mess : msg) {
+                                if (mess.out) {
+                                    outList.add(mess.body);
+                                } else {
+                                    inList.add(mess.body);
+                                }
+
+                            }
+                            Log.i("inList", String.valueOf((inList.get(2))));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        DetailDialogFragment newFragment = DetailDialogFragment.getInstance(id, inList, outList);
+                        Toast.makeText(ActivityBase.this, "Clicked SINGLEDIALOG", Toast.LENGTH_SHORT).show();
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+
+                    }
+
+                });
+
+            }
+
+        });
+
+
+    }
+
     public void sendMessageButton(View view) {
+
+
 
     }
 }

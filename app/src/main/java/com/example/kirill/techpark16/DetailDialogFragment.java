@@ -69,7 +69,7 @@ public class DetailDialogFragment extends ListFragment {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID,id,
+                VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
                         VKApiConst.MESSAGE, text.getText().toString()));
 
                 request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -90,4 +90,12 @@ public class DetailDialogFragment extends ListFragment {
 
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle(R.string.single_dialog_title);
+        getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button_sett).setVisibility(View.VISIBLE);
+    }
+
 }

@@ -31,10 +31,23 @@
                     android:layout_alignParentRight="true"
                     android:textColor="#FFF"
                     android:visibility="invisible"/>
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:id="@+id/toolbar_button_sett"
+                    android:drawableRight="@drawable/ic_ab_app"
+                    android:background="@null"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:textColor="#FFF"
+                    android:visibility="invisible"/>
 
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
+
+
 
         <FrameLayout
             android:layout_below="@+id/AppBar"
