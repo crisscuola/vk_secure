@@ -95,7 +95,7 @@ public class DetailDialogFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         getActivity().setTitle(R.string.single_dialog_title);
-        getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button_sett).setVisibility(View.VISIBLE);
+        getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
     }
 
 }

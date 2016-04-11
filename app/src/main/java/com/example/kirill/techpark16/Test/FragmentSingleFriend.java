@@ -31,16 +31,23 @@ import java.util.ArrayList;
 public class FragmentSingleFriend extends Fragment {
 
     public static String USER_ID = "user_id";
+    public static String FIRST_NAME = "first_name";
+    public static String LAST_NAME = "last_name";
 
     int id = 0;
+    String first_name;
+    String last_name;
     Button send;
 
 
-    public static FragmentSingleFriend getInstance(int user_id){
+    public static FragmentSingleFriend getInstance(int user_id,String first_name, String last_name){
         FragmentSingleFriend detailDialogFragment = new FragmentSingleFriend();
 
         Bundle bundle = new Bundle();
         bundle.putInt(USER_ID, user_id);
+        bundle.putString(FIRST_NAME, first_name);
+        bundle.putString(LAST_NAME,last_name);
+
         detailDialogFragment.setArguments(bundle);
         return detailDialogFragment;
     }
@@ -51,8 +58,13 @@ public class FragmentSingleFriend extends Fragment {
 
         EditText friend_id = (EditText) view.findViewById(R.id.friend_id);
         id = getArguments().getInt(USER_ID);
-        Log.i("id", String.valueOf(id));
-        friend_id.setText(String.valueOf(id));
+        first_name = getArguments().getString(FIRST_NAME);
+        last_name = getArguments().getString(LAST_NAME);
+
+//        Log.i("id", String.valueOf(id));
+
+//        friend_id.setText(String.valueOf(id));
+        friend_id.setText(first_name+" "+last_name);
 
         send = (Button) view.findViewById(R.id.button_write);
         send.setOnClickListener(new View.OnClickListener() {

@@ -31,7 +31,6 @@ public class FragmentSettingsDialog extends Fragment {
             super.onResume();
             getActivity().setTitle(R.string.single_dialog_title);
             getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
-            getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button_sett).setVisibility(View.INVISIBLE);
         }
 
     }

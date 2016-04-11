@@ -77,29 +77,35 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         toolbarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(ActivityBase.this, "Clicked BUTTON PLUS", Toast.LENGTH_SHORT).show();
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.FRIENDSEND]);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                toolbar.setTitle(R.string.friends_title);
-                toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentPlace);
+
+                if (currentFragment instanceof FragmentDialogsList) {
+                    Toast.makeText(ActivityBase.this, "CURRENT DIALOG LIST", Toast.LENGTH_SHORT).show();
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.FRIENDSEND]);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    toolbar.setTitle(R.string.friends_title);
+                    toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+                }
+
+                if(currentFragment instanceof DetailDialogFragment) {
+                    Toast.makeText(ActivityBase.this, "CURRENT DIALOG SINGLE", Toast.LENGTH_SHORT).show();
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.SETTINGSDIALOG]);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    toolbar.setTitle(R.string.friends_title);
+                    toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+                }
+
+
 
             }
         });
-        toolbarButton_set = (Button)toolbar.findViewById(R.id.toolbar_button_sett);
-        toolbarButton_set.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ActivityBase.this, "Clicked BUTTON SETT", Toast.LENGTH_SHORT).show();
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.SETTINGSDIALOG]);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                toolbar.setTitle(R.string.settings_dialog_title);
-                toolbar.findViewById(R.id.toolbar_button_sett).setVisibility(View.INVISIBLE);
-            }
-        });
+
+
 
         setSupportActionBar(toolbar);
 
@@ -341,8 +347,19 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                     e.printStackTrace();
                 }
 
+                String firstname = "";
+                String lastname = "";
 
-                FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(id);
+                try {
+                    firstname = a.fields.getString("first_name");
+                    lastname = a.fields.getString("last_name");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
+                FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(id,firstname,lastname);
                 Toast.makeText(ActivityBase.this, "Clicked SINGLE FRIEND", Toast.LENGTH_SHORT).show();
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
