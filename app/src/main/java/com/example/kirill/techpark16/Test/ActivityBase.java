@@ -18,7 +18,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.kirill.techpark16.DetailDialogFragment;
 import com.example.kirill.techpark16.FragmentDialogsList;
@@ -71,6 +73,14 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         IntentFilter intentFilter = new IntentFilter(BROADCAST_EVENT);
 
         registerReceiver(br, intentFilter);
+
+        ToggleButton toggleButton;
+        toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
+        toggleButton.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener) this);
+
+
+
+
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarButton = (Button)toolbar.findViewById(R.id.toolbar_button);
@@ -136,6 +146,17 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
 
 
+
+    }
+
+
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+            // SET OFLINE
+        }
+        else {
+            //SET ONLINE
+        }
 
     }
 
@@ -438,7 +459,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
     public void sendMessageButton(View view) {
 
-
-
     }
+
+
+
 }
