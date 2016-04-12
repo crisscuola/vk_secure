@@ -19,12 +19,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.kirill.techpark16.DetailDialogFragment;
 import com.example.kirill.techpark16.FragmentDialogsList;
 import com.example.kirill.techpark16.R;
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
@@ -59,6 +61,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     BroadcastReceiver br;
     Button toolbarButton;
     Button toolbarButton_set;
+    TextView nav_username = null;
 
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
 
@@ -67,6 +70,11 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.base_activity);
+        nav_username = (TextView)findViewById(R.id.nav_username);
+
+        int my_id = Integer.parseInt(VKSdk.getAccessToken().userId);
+
+        Log.i("MY_ID", String.valueOf(my_id));
 
         setBroadcastReceiver();
 
@@ -76,7 +84,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         ToggleButton toggleButton;
         toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
-        toggleButton.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener) this);
+//        toggleButton.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener) this);
 
 
 
@@ -153,11 +161,12 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
             // SET OFLINE
-        }
-        else {
-            //SET ONLINE
-        }
 
+        }
+        else{
+                //SET ONLINE
+
+        }
     }
 
     private void setBroadcastReceiver() {
@@ -394,20 +403,34 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
     @Override
     public void onFriendSendSelected(final int position) {
-        final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
+        final VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name", "order", "hints"));
+
 
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-                VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
+//                VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
+//
+//                final VKList<VKApiDialog> list = getMessagesResponse.items;
 
-                final VKList<VKApiDialog> list = getMessagesResponse.items;
+                VKList list = new VKList();
 
-                final int id = list.get(position).message.user_id;
+                list = (VKList) response.parsedModel;
+
+                int id_f = 0;
+
+                VKApiModel a = list.get(position);
+
+                try {
+                    id_f = a.fields.getInt("id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
 
-                VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id));
+                VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id_f));
+                final int finalId_f = id_f;
                 request.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
@@ -438,6 +461,12 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                        String temp ;
+
+                        temp = String.valueOf(finalId_f);
+
+                        int id = Integer.parseInt(temp);
 
                         DetailDialogFragment newFragment = DetailDialogFragment.getInstance(id, inList, outList);
                         Toast.makeText(ActivityBase.this, "Clicked SINGLEDIALOG", Toast.LENGTH_SHORT).show();

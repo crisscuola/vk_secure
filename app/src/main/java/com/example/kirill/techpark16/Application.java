@@ -18,7 +18,7 @@ import javax.crypto.NoSuchPaddingException;
  * Created by konstantin on 19.02.16.
  */
 public class Application extends android.app.Application {
-    private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL};
+    private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL, VKScope.OFFLINE};
 
 
 
