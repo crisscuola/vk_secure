@@ -48,9 +48,9 @@ public class MyDetailDialogAdapter extends BaseAdapter {
         SetData setData = new SetData();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Log.i("inList3", String.valueOf((inList.get(2))));
-        View view = inflater.inflate(R.layout.list_dialog_adapter, null);
+        View view = inflater.inflate(R.layout.myself_dialog, null);
 
-        setData.inList = (TextView) view.findViewById(R.id.textView4);
+        setData.inList = (TextView) view.findViewById(R.id.textView5);
         //setData.outList = (TextView) view.findViewById(R.id.textView5);
 
         setData.inList.setText(inList.get(position));
