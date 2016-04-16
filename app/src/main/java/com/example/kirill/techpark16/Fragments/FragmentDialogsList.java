@@ -1,4 +1,4 @@
-package com.example.kirill.techpark16;
+package com.example.kirill.techpark16.Fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.kirill.techpark16.Adapters.DialogsListAdapter;
+import com.example.kirill.techpark16.R;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;

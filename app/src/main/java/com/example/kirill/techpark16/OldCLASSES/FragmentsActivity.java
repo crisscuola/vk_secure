@@ -8,9 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import com.example.kirill.techpark16.DetailDialogFragment;
-import com.example.kirill.techpark16.FragmentDialogsList;
-import com.example.kirill.techpark16.FriendListFragment;
+import com.example.kirill.techpark16.Fragments.FragmentSingleDialog;
+import com.example.kirill.techpark16.Fragments.FragmentDialogsList;
+import com.example.kirill.techpark16.Fragments.FragmentFriendList;
 import com.example.kirill.techpark16.R;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.vk.sdk.VKScope;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 /**
  * Created by kirill on 02.04.16
  */
-public class FragmentsActivity extends AppCompatActivity implements FragmentDialogsList.onItemSelectedListener, FriendListFragment.onFriendSelectedListener {
+public class FragmentsActivity extends AppCompatActivity implements FragmentDialogsList.onItemSelectedListener, FragmentFriendList.onFriendSelectedListener {
     private int pos = 0;
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL};
@@ -67,7 +67,7 @@ public class FragmentsActivity extends AppCompatActivity implements FragmentDial
                 fragmentClass = FragmentDialogsList.class;
                 break;
             case 2:
-                fragmentClass = FriendListFragment.class;
+                fragmentClass = FragmentFriendList.class;
                 break;
             default:
                 fragmentClass = FragmentDialogsList.class;
@@ -133,7 +133,7 @@ public class FragmentsActivity extends AppCompatActivity implements FragmentDial
 
 
 
-                DetailDialogFragment newFragment = DetailDialogFragment.getInstance(id, inList, outList);
+                FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);

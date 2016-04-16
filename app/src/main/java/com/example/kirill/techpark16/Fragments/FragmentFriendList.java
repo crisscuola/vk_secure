@@ -1,4 +1,4 @@
-package com.example.kirill.techpark16;
+package com.example.kirill.techpark16.Fragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.example.kirill.techpark16.R;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by konstantin on 06.04.16.
  */
-public class FriendListFragment extends ListFragment {
+public class FragmentFriendList extends ListFragment {
 
     public static String DIALOG_NO = "dialog_no";
     public static String FRIEND_LIST = "friends";
@@ -31,8 +32,8 @@ public class FriendListFragment extends ListFragment {
     private VKList list;
 
 
-    public static FriendListFragment getInstance(int dialog_no, VKList friends){
-       FriendListFragment friendListFragment = new FriendListFragment();
+    public static FragmentFriendList getInstance(int dialog_no, VKList friends){
+       FragmentFriendList fragmentFriendList = new FragmentFriendList();
 //        Log.i("inList2", String.valueOf((inList.get(2))));
         Bundle bundle = new Bundle();
         bundle.putInt(DIALOG_NO, dialog_no);
@@ -43,8 +44,8 @@ public class FriendListFragment extends ListFragment {
 
 
 
-        friendListFragment.setArguments(bundle);
-        return friendListFragment;
+        fragmentFriendList.setArguments(bundle);
+        return fragmentFriendList;
     }
 
     @Override

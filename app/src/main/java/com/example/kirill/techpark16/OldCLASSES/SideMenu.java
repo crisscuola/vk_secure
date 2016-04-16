@@ -8,8 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.kirill.techpark16.DetailDialogFragment;
-import com.example.kirill.techpark16.FriendListFragment;
+import com.example.kirill.techpark16.Fragments.FragmentSingleDialog;
+import com.example.kirill.techpark16.Fragments.FragmentFriendList;
 import com.example.kirill.techpark16.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -77,7 +77,7 @@ public class SideMenu {
 
 
 
-                                DetailDialogFragment newFragment = DetailDialogFragment.getInstance(1, new ArrayList<String>(), new ArrayList<String>());
+                                FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(1, new ArrayList<String>(), new ArrayList<String>());
                                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
                                 transaction.replace(R.id.fragment_container, newFragment);
                                 transaction.addToBackStack(null);
@@ -107,9 +107,9 @@ public class SideMenu {
                                         listView.setAdapter(arrayAdapter);
 
 
-                                        FriendListFragment friendListFragment = FriendListFragment.getInstance(1, list);
+                                        FragmentFriendList fragmentFriendList = FragmentFriendList.getInstance(1, list);
                                         FragmentTransaction friend_transaction = activity.getSupportFragmentManager().beginTransaction();
-                                        friend_transaction.replace(R.id.fragment_container, friendListFragment);
+                                        friend_transaction.replace(R.id.fragment_container, fragmentFriendList);
                                         friend_transaction.addToBackStack(null);
                                         friend_transaction.commitAllowingStateLoss();
 

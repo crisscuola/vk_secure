@@ -1,4 +1,4 @@
-package com.example.kirill.techpark16.Test;
+package com.example.kirill.techpark16.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

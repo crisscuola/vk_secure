@@ -1,4 +1,4 @@
-package com.example.kirill.techpark16.Test;
+package com.example.kirill.techpark16.Fragments;
 
 /**
  * Created by konstantin on 09.04.16.

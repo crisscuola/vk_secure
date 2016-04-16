@@ -1,9 +1,8 @@
-package com.example.kirill.techpark16.Test;
+package com.example.kirill.techpark16.Fragments;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,17 +18,18 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 
 /**
- * Created by konstantin on 10.04.16.
+ * Created by konstantin on 09.04.16.
  */
-public class FragmentFriendsSend extends ListFragment {
+public class FragmentFriendsList extends android.support.v4.app.ListFragment {
 
-    VKList list = new VKList();
+
+     VKList list = new VKList();
     private onItemSelectedListener mCallback;
 
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        mCallback.onFriendSendSelected(position);
+        mCallback.onFriendSelected(position);
     }
 
     public void onCreate(Bundle savedInstanceState){
@@ -89,8 +89,7 @@ public class FragmentFriendsSend extends ListFragment {
     }
 
     public interface onItemSelectedListener {
-        public void onFriendSendSelected(int position);
+        public void onFriendSelected(int position);
     }
 
 }
-

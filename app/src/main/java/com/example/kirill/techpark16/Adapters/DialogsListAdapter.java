@@ -16,16 +16,6 @@ public class DialogsListAdapter extends BaseAdapter {
     private ArrayList<String> users, messages;
     private Context context;
 
-//    private VKList<VKApiDialog> list;
-//
-//
-//    public DialogsListAdapter(Context context, ArrayList<String> users, ArrayList<String> messages, VKList<VKApiDialog> list) {
-//        this.users = users;
-//        this.messages = messages;
-//        this.context = context;
-//        this.list = list;
-//    }
-
     public DialogsListAdapter(Context context, ArrayList<String> users, ArrayList<String> messages) {
         this.users = users;
         this.messages = messages;

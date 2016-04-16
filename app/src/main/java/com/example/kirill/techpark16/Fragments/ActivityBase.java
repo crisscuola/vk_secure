@@ -1,4 +1,4 @@
-package com.example.kirill.techpark16.Test;
+package com.example.kirill.techpark16.Fragments;
 
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -22,8 +22,6 @@ import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.example.kirill.techpark16.DetailDialogFragment;
-import com.example.kirill.techpark16.FragmentDialogsList;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
@@ -42,7 +40,6 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
-//import android.app.Fragment;
 
 /**
  * Created by konstantin on 09.04.16.
@@ -84,7 +81,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 list = (VKList) response.parsedModel;
 
                String a = String.valueOf(list.getById(my_id));
-               Log.i("KOSTYA", a);
             }
         });
 
@@ -119,10 +115,11 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                     toolbar.setTitle(R.string.friends_title);
+                    toolbar.setTitle(R.string.send);
                     toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
                 }
 
-                if (currentFragment instanceof DetailDialogFragment) {
+                if (currentFragment instanceof FragmentSingleDialog) {
                     Toast.makeText(ActivityBase.this, "CURRENT DIALOG SINGLE", Toast.LENGTH_SHORT).show();
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.SETTINGSDIALOG]);
@@ -131,15 +128,11 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                     toolbar.setTitle(R.string.friends_title);
                     toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
                 }
-
-
             }
         });
 
 
-
         setSupportActionBar(toolbar);
-
 
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -160,7 +153,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         fragmentSet[Fragments.DIALOGSLIST] = new FragmentDialogsList();
         fragmentSet[Fragments.FRIENDSLIST] = new FragmentFriendsList();
         fragmentSet[Fragments.SETTINGS] = new FragmentSettings();
-        fragmentSet[Fragments.SINGLEDIALOG] = new DetailDialogFragment();
+        fragmentSet[Fragments.SINGLEDIALOG] = new FragmentSingleDialog();
         fragmentSet[Fragments.SETTINGSDIALOG] = new FragmentSettingsDialog();
         fragmentSet[Fragments.FRIENDSEND] = new FragmentFriendsSend();
 
@@ -180,11 +173,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
             // SET OFLINE
-
         }
         else{
                 //SET ONLINE
-
         }
     }
 
@@ -255,7 +246,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         int id = item.getItemId();
 
-
         switch (id) {
             case R.id.nav_dialogs:
                 Toast.makeText(ActivityBase.this, "Clicked DIALOGS", Toast.LENGTH_SHORT).show();
@@ -315,8 +305,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
                 final int id = list.get(position).message.user_id;
 
-
-
                 VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id));
                 request.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
@@ -335,21 +323,19 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                                 msg[i] = mes;
                             }
 
-
                             for (VKApiMessage mess : msg) {
                                 if (mess.out) {
                                     outList.add(mess.body);
                                 } else {
                                     inList.add(mess.body);
                                 }
-
                             }
-                            Log.i("inList", String.valueOf((inList.get(2))));
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
-                        DetailDialogFragment newFragment = DetailDialogFragment.getInstance(id, inList, outList);
+                        FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList);
                         Toast.makeText(ActivityBase.this, "Clicked SINGLEDIALOG", Toast.LENGTH_SHORT).show();
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
@@ -357,11 +343,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                         fragmentTransaction.commit();
 
                     }
-
                 });
-
             }
-
         });
 
 
@@ -371,8 +354,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
     @Override
     public void onFriendSelected(final int position) {
-
-        //int id = 1;
 
         VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name", "order", "hints"));
 
@@ -385,7 +366,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 VKList list = new VKList();
 
                 list = (VKList) response.parsedModel;
-
 
                 int id = 0;
 
@@ -406,8 +386,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
 
                 FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(id,firstname,lastname);
                 Toast.makeText(ActivityBase.this, "Clicked SINGLE FRIEND", Toast.LENGTH_SHORT).show();
@@ -430,9 +408,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-//                VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
-//
-//                final VKList<VKApiDialog> list = getMessagesResponse.items;
 
                 VKList list = new VKList();
 
@@ -447,7 +422,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
 
                 VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id_f));
                 final int finalId_f = id_f;
@@ -468,16 +442,14 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                                 msg[i] = mes;
                             }
 
-
                             for (VKApiMessage mess : msg) {
                                 if (mess.out) {
                                     outList.add(mess.body);
                                 } else {
                                     inList.add(mess.body);
                                 }
-
                             }
-                            Log.i("inList", String.valueOf((inList.get(2))));
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -488,7 +460,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
                         int id = Integer.parseInt(temp);
 
-                        DetailDialogFragment newFragment = DetailDialogFragment.getInstance(id, inList, outList);
+                        FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList);
                         Toast.makeText(ActivityBase.this, "Clicked SINGLEDIALOG", Toast.LENGTH_SHORT).show();
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
@@ -496,14 +468,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                         fragmentTransaction.commit();
 
                     }
-
                 });
-
             }
-
         });
-
-
     }
 
     public void sendMessageButton(View view) {

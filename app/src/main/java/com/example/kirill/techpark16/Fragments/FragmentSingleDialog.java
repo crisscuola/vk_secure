@@ -1,4 +1,4 @@
-package com.example.kirill.techpark16;
+package com.example.kirill.techpark16.Fragments;
 
 
 import android.os.Bundle;
@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
+import com.example.kirill.techpark16.Adapters.MyselfSingleDialogAdapter;
+import com.example.kirill.techpark16.R;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
@@ -24,7 +27,7 @@ import java.util.ArrayList;
 /**
  * Created by kirill on 02.04.16
  */
-public class DetailDialogFragment extends ListFragment {
+public class FragmentSingleDialog extends ListFragment {
     public static String USER_ID = "user_id";
     public static String IN_LIST = "inList";
     public static String OUT_LIST = "outList";
@@ -38,8 +41,8 @@ public class DetailDialogFragment extends ListFragment {
     ListView listView;
     Button send;
 
-    public static DetailDialogFragment getInstance(int user_id, ArrayList<String> inList, ArrayList<String> outList){
-        DetailDialogFragment detailDialogFragment = new DetailDialogFragment();
+    public static FragmentSingleDialog getInstance(int user_id, ArrayList<String> inList, ArrayList<String> outList){
+        FragmentSingleDialog fragmentSingleDialog = new FragmentSingleDialog();
 //        Log.i("inList2", String.valueOf((inList.get(2))));
         Bundle bundle = new Bundle();
         bundle.putInt(USER_ID, user_id);
@@ -48,8 +51,8 @@ public class DetailDialogFragment extends ListFragment {
 
 
 
-        detailDialogFragment.setArguments(bundle);
-        return detailDialogFragment;
+        fragmentSingleDialog.setArguments(bundle);
+        return fragmentSingleDialog;
     }
 
     @Nullable
@@ -65,10 +68,10 @@ public class DetailDialogFragment extends ListFragment {
         listView = (ListView) view.findViewById(R.id.listmsg);
 
         if (id == Integer.parseInt(VKSdk.getAccessToken().userId)) {
-            listView.setAdapter(new MyDetailDialogAdapter(view.getContext(), inList));
+            listView.setAdapter(new MyselfSingleDialogAdapter(view.getContext(), inList));
         } else {
 
-            listView.setAdapter(new DetailDialogAdapter(view.getContext(), inList, outList));
+            listView.setAdapter(new SingleDialogAdapter(view.getContext(), inList, outList));
         }
         send = (Button) view.findViewById(R.id.sendmsg);
         send.setOnClickListener(new View.OnClickListener() {

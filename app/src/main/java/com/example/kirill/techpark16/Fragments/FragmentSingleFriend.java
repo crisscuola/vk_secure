@@ -1,4 +1,4 @@
-package com.example.kirill.techpark16.Test;
+package com.example.kirill.techpark16.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.kirill.techpark16.DetailDialogFragment;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
@@ -105,7 +104,7 @@ public class FragmentSingleFriend extends Fragment {
 
 
                         Toast.makeText(getActivity(), "Clicked WRITE MESSAGE", Toast.LENGTH_SHORT).show();
-                        DetailDialogFragment newFragment = DetailDialogFragment.getInstance(id, inList, outList);
+                        FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList);
                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.fragmentPlace, newFragment);
                         transaction.addToBackStack(null);

@@ -1,4 +1,4 @@
-package com.example.kirill.techpark16;
+package com.example.kirill.techpark16.Adapters;
 
 
 import android.content.Context;
@@ -9,20 +9,21 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.kirill.techpark16.R;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class DetailDialogAdapter extends BaseAdapter {
-    private ArrayList<String> inList, outList;
+public class MyselfSingleDialogAdapter extends BaseAdapter {
+    private ArrayList<String> inList;
     private Context context;
 
 
 
 
-    public DetailDialogAdapter(Context context, ArrayList<String> inList, ArrayList<String> outList) {
+    public MyselfSingleDialogAdapter(Context context, ArrayList<String> inList) {
         this.inList = inList;
-        this.outList = outList;
         this.context = context;
     }
 
@@ -45,24 +46,21 @@ public class DetailDialogAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         Arrays.sort(inList.toArray(), Collections.reverseOrder());
-        Arrays.sort(outList.toArray(), Collections.reverseOrder());
 
         SetData setData = new SetData();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Log.i("inList3", String.valueOf((inList.get(2))));
-        View view = inflater.inflate(R.layout.list_dialog_adapter, null);
+        View view = inflater.inflate(R.layout.myself_dialog, null);
 
-        setData.inList = (TextView) view.findViewById(R.id.textView4);
-        setData.outList = (TextView) view.findViewById(R.id.textView5);
+        setData.inList = (TextView) view.findViewById(R.id.textView5);
 
         setData.inList.setText(inList.get(position));
-        setData.outList.setText(outList.get(position));
 
 
         return view;
     }
 
     public class SetData {
-        TextView inList,outList;
+        TextView inList;
     }
 }
