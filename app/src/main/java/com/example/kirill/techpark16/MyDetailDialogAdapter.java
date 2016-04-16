@@ -54,7 +54,7 @@ public class MyDetailDialogAdapter extends BaseAdapter {
         //setData.outList = (TextView) view.findViewById(R.id.textView5);
 
         setData.inList.setText(inList.get(position));
-        
+
 
         return view;
     }

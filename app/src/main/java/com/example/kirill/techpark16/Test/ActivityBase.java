@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -61,6 +60,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     BroadcastReceiver br;
     Button toolbarButton;
     Button toolbarButton_set;
+    private VKList list;
 
 
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
@@ -70,16 +70,23 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.base_activity);
-       TextView nav_username ;
-        nav_username = (TextView)findViewById(R.id.nav_username);
 
-        int my_id = Integer.parseInt(VKSdk.getAccessToken().userId);
+        final int my_id = Integer.parseInt(VKSdk.getAccessToken().userId);
+
+        VKRequest my_request = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, my_id ,VKApiConst.FIELDS, "first_name, last_name"));
+
+        my_request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
 
 
+                list = (VKList) response.parsedModel;
 
-        //nav_username.setText("AAA");
-
-//        setContentView(R.layout.base_activity);
+               String a = String.valueOf(list.getById(my_id));
+               Log.i("KOSTYA", a);
+            }
+        });
 
 
         setBroadcastReceiver();
@@ -365,7 +372,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     @Override
     public void onFriendSelected(final int position) {
 
-        int id = 1;
+        //int id = 1;
 
         VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name", "order", "hints"));
 
