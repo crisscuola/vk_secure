@@ -10,7 +10,8 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listmsg" />
+        android:id="@+id/listmsg"
+        android:layout_above="@+id/textmsg" />
 
     <EditText
         android:layout_width="wrap_content"

@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.kirill.techpark16.Adapters.DialogsListAdapter;
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
@@ -63,10 +65,20 @@ public class FragmentDialogsList extends ListFragment {
 
                         for (VKApiDialog msg : list) {
 
+                            int my_id = Integer.parseInt(VKSdk.getAccessToken().userId);
 
                             users.add(String.valueOf(FragmentDialogsList.this.list.getById(msg.message.user_id)));
 
+                            Log.i("USERS", String.valueOf(FragmentDialogsList.this.list.getById(msg.message.user_id)));
+
+                            if (msg.message.user_id == my_id) {
+
+                           // users.add(String.valueOf(my_id));
+
+                            }
+
                             messages.add(msg.message.body);
+
 
                         }
                         setListAdapter(new DialogsListAdapter(inflater.getContext(), users, messages));

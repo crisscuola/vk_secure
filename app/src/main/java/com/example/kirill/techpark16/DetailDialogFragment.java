@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
@@ -63,8 +64,12 @@ public class DetailDialogFragment extends ListFragment {
         text = (EditText) view.findViewById(R.id.textmsg);
         listView = (ListView) view.findViewById(R.id.listmsg);
 
-        listView.setAdapter(new DetailDialogAdapter(view.getContext(), inList, outList));
+        if (id == Integer.parseInt(VKSdk.getAccessToken().userId)) {
+            listView.setAdapter(new MyDetailDialogAdapter(view.getContext(), inList));
+        } else {
 
+            listView.setAdapter(new DetailDialogAdapter(view.getContext(), inList, outList));
+        }
         send = (Button) view.findViewById(R.id.sendmsg);
         send.setOnClickListener(new View.OnClickListener() {
             @Override

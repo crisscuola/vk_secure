@@ -61,7 +61,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     BroadcastReceiver br;
     Button toolbarButton;
     Button toolbarButton_set;
-    TextView nav_username = null;
+
 
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
 
@@ -70,11 +70,17 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.base_activity);
+       TextView nav_username ;
         nav_username = (TextView)findViewById(R.id.nav_username);
 
         int my_id = Integer.parseInt(VKSdk.getAccessToken().userId);
 
-        Log.i("MY_ID", String.valueOf(my_id));
+
+
+        //nav_username.setText("AAA");
+
+//        setContentView(R.layout.base_activity);
+
 
         setBroadcastReceiver();
 
@@ -92,6 +98,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbarButton = (Button)toolbar.findViewById(R.id.toolbar_button);
+
         toolbarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,7 +115,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                     toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
                 }
 
-                if(currentFragment instanceof DetailDialogFragment) {
+                if (currentFragment instanceof DetailDialogFragment) {
                     Toast.makeText(ActivityBase.this, "CURRENT DIALOG SINGLE", Toast.LENGTH_SHORT).show();
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.SETTINGSDIALOG]);
@@ -117,7 +124,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                     toolbar.setTitle(R.string.friends_title);
                     toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
                 }
-
 
 
             }
@@ -134,6 +140,12 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+//        TextView nav_username1;
+//        nav_username1 = (TextView)findViewById(R.id.nav_username);
+//        Log.i("aaa",nav_username1.getText().toString());
+        //my_id = Integer.parseInt(VKSdk.getAccessToken().userId);
+        //nav_username.setText(String.valueOf("a"));
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -295,6 +307,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 final VKList<VKApiDialog> list = getMessagesResponse.items;
 
                 final int id = list.get(position).message.user_id;
+
 
 
                 VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id));
