@@ -50,7 +50,7 @@ public class MyselfSingleDialogAdapter extends BaseAdapter {
         SetData setData = new SetData();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Log.i("inList3", String.valueOf((inList.get(2))));
-        View view = inflater.inflate(R.layout.myself_dialog, null);
+        View view = inflater.inflate(R.layout.fragment_dialog_myself, null);
 
         setData.inList = (TextView) view.findViewById(R.id.textView5);
 

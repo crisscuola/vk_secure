@@ -21,7 +21,7 @@ public class FragmentSettingsDialog extends Fragment {
 
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-            View view = inflater.inflate(R.layout.test_gialog_settings, container, false);
+            View view = inflater.inflate(R.layout.fragment_dialog_settings, container, false);
 
             return view;
         }

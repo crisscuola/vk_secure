@@ -41,7 +41,7 @@ public class FragmentsActivity extends AppCompatActivity implements FragmentDial
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragments_activity);
+//        setContentView(R.layout.fragments_activity);
 
 
 
@@ -135,7 +135,7 @@ public class FragmentsActivity extends AppCompatActivity implements FragmentDial
 
                 FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList);
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, newFragment);
+//                transaction.replace(R.id.fragment_container, newFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

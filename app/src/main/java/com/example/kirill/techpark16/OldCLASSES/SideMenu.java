@@ -5,11 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.kirill.techpark16.Fragments.FragmentSingleDialog;
 import com.example.kirill.techpark16.Fragments.FragmentFriendList;
+import com.example.kirill.techpark16.Fragments.FragmentSingleDialog;
 import com.example.kirill.techpark16.R;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -58,7 +57,7 @@ public class SideMenu {
                 .withActivity(activity)
                 .withToolbar(toolbar)
                 .withActionBarDrawerToggle(true)
-                .withHeader(R.layout.drawer_header)
+//                .withHeader(R.layout.drawer_header)
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.drawer_item_dialogs).withIcon(FontAwesome.Icon.faw_comments).withBadge("4").withIdentifier(1),
                         new PrimaryDrawerItem().withName(R.string.drawer_item_friends).withIcon(FontAwesome.Icon.faw_users).withIdentifier(2),
@@ -79,7 +78,7 @@ public class SideMenu {
 
                                 FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(1, new ArrayList<String>(), new ArrayList<String>());
                                 FragmentTransaction transaction = activity.getSupportFragmentManager().beginTransaction();
-                                transaction.replace(R.id.fragment_container, newFragment);
+//                                transaction.replace(R.id.fragment_container, newFragment);
                                 transaction.addToBackStack(null);
                                 transaction.commitAllowingStateLoss();
                                 break;
@@ -100,16 +99,16 @@ public class SideMenu {
                                         list = (VKList) response.parsedModel;
                                         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(activity, android.R.layout.simple_expandable_list_item_1, list);
 
-                                        final ListView listView = (ListView) activity.findViewById(R.id.friends_fragment);
+//                                        final ListView listView = (ListView) activity.findViewById(R.id.friends_fragment);
 
 
 
-                                        listView.setAdapter(arrayAdapter);
+//                                        listView.setAdapter(arrayAdapter);
 
 
                                         FragmentFriendList fragmentFriendList = FragmentFriendList.getInstance(1, list);
                                         FragmentTransaction friend_transaction = activity.getSupportFragmentManager().beginTransaction();
-                                        friend_transaction.replace(R.id.fragment_container, fragmentFriendList);
+//                                        friend_transaction.replace(R.id.fragment_container, fragmentFriendList);
                                         friend_transaction.addToBackStack(null);
                                         friend_transaction.commitAllowingStateLoss();
 

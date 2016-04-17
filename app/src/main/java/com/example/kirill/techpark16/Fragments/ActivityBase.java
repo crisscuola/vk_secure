@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.kirill.techpark16.R;
@@ -109,7 +108,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentPlace);
 
                 if (currentFragment instanceof FragmentDialogsList) {
-                    Toast.makeText(ActivityBase.this, "CURRENT DIALOG LIST", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(ActivityBase.this, "CURRENT DIALOG LIST", Toast.LENGTH_SHORT).show();
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.FRIENDSEND]);
                     fragmentTransaction.addToBackStack(null);
@@ -120,7 +119,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 }
 
                 if (currentFragment instanceof FragmentSingleDialog) {
-                    Toast.makeText(ActivityBase.this, "CURRENT DIALOG SINGLE", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(ActivityBase.this, "CURRENT DIALOG SINGLE", Toast.LENGTH_SHORT).show();
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.SETTINGSDIALOG]);
                     fragmentTransaction.addToBackStack(null);
@@ -248,7 +247,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         switch (id) {
             case R.id.nav_dialogs:
-                Toast.makeText(ActivityBase.this, "Clicked DIALOGS", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ActivityBase.this, "Clicked DIALOGS", Toast.LENGTH_SHORT).show();
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.DIALOGSLIST]);
                 fragmentTransaction.addToBackStack(null);
@@ -258,7 +257,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 break;
 
             case R.id.nav_friends:
-                Toast.makeText(ActivityBase.this, "Clicked FRIENDS", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ActivityBase.this, "Clicked FRIENDS", Toast.LENGTH_SHORT).show();
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.FRIENDSLIST]);
                 fragmentTransaction.addToBackStack(null);
@@ -268,7 +267,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 break;
 
             case R.id.nav_settings:
-                Toast.makeText(ActivityBase.this, "Clicked SETTINGS", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ActivityBase.this, "Clicked SETTINGS", Toast.LENGTH_SHORT).show();
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.SETTINGS]);
                 fragmentTransaction.addToBackStack(null);
@@ -279,10 +278,10 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 //                toolbarButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_ab_app, 0, 0, 0);
                 break;
 
-            case R.id.nav_other:
-                Toast.makeText(ActivityBase.this, "Clicked OTHER", Toast.LENGTH_SHORT).show();
-
-                break;
+//            case R.id.nav_other:
+//                Toast.makeText(ActivityBase.this, "Clicked OTHER", Toast.LENGTH_SHORT).show();
+//
+//                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -336,7 +335,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                         }
 
                         FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList);
-                        Toast.makeText(ActivityBase.this, "Clicked SINGLEDIALOG", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(ActivityBase.this, "Clicked SINGLEDIALOG", Toast.LENGTH_SHORT).show();
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
                         fragmentTransaction.addToBackStack(null);
@@ -388,7 +387,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 }
 
                 FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(id,firstname,lastname);
-                Toast.makeText(ActivityBase.this, "Clicked SINGLE FRIEND", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ActivityBase.this, "Clicked SINGLE FRIEND", Toast.LENGTH_SHORT).show();
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
                 fragmentTransaction.addToBackStack(null);
@@ -461,7 +460,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                         int id = Integer.parseInt(temp);
 
                         FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList);
-                        Toast.makeText(ActivityBase.this, "Clicked SINGLEDIALOG", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(ActivityBase.this, "Clicked SINGLEDIALOG", Toast.LENGTH_SHORT).show();
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
                         fragmentTransaction.addToBackStack(null);

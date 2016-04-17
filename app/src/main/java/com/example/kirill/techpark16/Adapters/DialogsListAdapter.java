@@ -43,7 +43,7 @@ public class DialogsListAdapter extends BaseAdapter {
         SetData setData = new SetData();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.dialogs_fragment, null);
+        View view = inflater.inflate(R.layout.fragment_dialogs_list, null);
 
         setData.user_name = (TextView) view.findViewById(R.id.user_name);
         setData.msg = (TextView) view.findViewById(R.id.msg);

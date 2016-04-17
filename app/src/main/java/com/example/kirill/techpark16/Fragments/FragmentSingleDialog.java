@@ -15,10 +15,12 @@ import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
 import com.example.kirill.techpark16.Adapters.MyselfSingleDialogAdapter;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKList;
 
 import java.util.ArrayList;
 
@@ -41,15 +43,17 @@ public class FragmentSingleDialog extends ListFragment {
     ListView listView;
     Button send;
 
+    static int title_id;
+    VKList list_s;
+
     public static FragmentSingleDialog getInstance(int user_id, ArrayList<String> inList, ArrayList<String> outList){
         FragmentSingleDialog fragmentSingleDialog = new FragmentSingleDialog();
-//        Log.i("inList2", String.valueOf((inList.get(2))));
         Bundle bundle = new Bundle();
         bundle.putInt(USER_ID, user_id);
         bundle.putStringArrayList(IN_LIST, inList);
         bundle.putStringArrayList(OUT_LIST, outList);
 
-
+        title_id = user_id;
 
         fragmentSingleDialog.setArguments(bundle);
         return fragmentSingleDialog;
@@ -58,7 +62,7 @@ public class FragmentSingleDialog extends ListFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_detail_fragment, null);
+        View view = inflater.inflate(R.layout.fragment_single_dialog, null);
 
         inList = getArguments().getStringArrayList(IN_LIST);
         outList = getArguments().getStringArrayList(OUT_LIST);
@@ -102,7 +106,20 @@ public class FragmentSingleDialog extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        getActivity().setTitle(R.string.single_dialog_title);
+        final String[] name_id = {""};
+
+        VKRequest my_request = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, title_id, VKApiConst.FIELDS, "first_name, last_name"));
+        my_request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                list_s = (VKList) response.parsedModel;
+
+                name_id[0] = String.valueOf(FragmentSingleDialog.this.list_s.getById(title_id));
+                getActivity().setTitle(name_id[0]);
+            }
+        });
+
         getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
     }
 

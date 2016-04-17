@@ -9,15 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kirill.techpark16.R;
+import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiMessage;
+import com.vk.sdk.api.model.VKList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +40,8 @@ public class FragmentSingleFriend extends Fragment {
     String last_name;
     Button send;
 
+    static int title_id;
+    VKList list_s;
 
     public static FragmentSingleFriend getInstance(int user_id,String first_name, String last_name){
         FragmentSingleFriend detailDialogFragment = new FragmentSingleFriend();
@@ -47,15 +51,18 @@ public class FragmentSingleFriend extends Fragment {
         bundle.putString(FIRST_NAME, first_name);
         bundle.putString(LAST_NAME,last_name);
 
+        title_id = user_id;
+
         detailDialogFragment.setArguments(bundle);
         return detailDialogFragment;
     }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.single_friend_fragment, null);
+        View view = inflater.inflate(R.layout.fragment_single_friend, null);
 
-        EditText friend_id = (EditText) view.findViewById(R.id.friend_id);
+//        EditText friend_id = (EditText) view.findViewById(R.id.friend_id);
+        TextView friend_name = (TextView) view.findViewById(R.id.friends_name);
         id = getArguments().getInt(USER_ID);
         first_name = getArguments().getString(FIRST_NAME);
         last_name = getArguments().getString(LAST_NAME);
@@ -63,7 +70,7 @@ public class FragmentSingleFriend extends Fragment {
 //        Log.i("id", String.valueOf(id));
 
 //        friend_id.setText(String.valueOf(id));
-        friend_id.setText(first_name+" "+last_name);
+        friend_name.setText(first_name + " " + last_name);
 
         send = (Button) view.findViewById(R.id.button_write);
         send.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +93,6 @@ public class FragmentSingleFriend extends Fragment {
                                 VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
                                 msg[i] = mes;
                             }
-
 
 
                             for (VKApiMessage mess : msg) {
@@ -114,12 +120,31 @@ public class FragmentSingleFriend extends Fragment {
                 });
 
 
-
             }
         });
 
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        final String[] name_id = {""};
+
+        VKRequest my_request = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, title_id, VKApiConst.FIELDS, "first_name, last_name"));
+        my_request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                list_s = (VKList) response.parsedModel;
+
+                name_id[0] = String.valueOf(FragmentSingleFriend.this.list_s.getById(title_id));
+                getActivity().setTitle(name_id[0]);
+            }
+        });
+
+        getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
     }
 
     @Override

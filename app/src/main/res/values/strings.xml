@@ -16,7 +16,7 @@
     <string name="settings_title">Settings</string>
     <string name="single_dialog_title">SingleDialog</string>>
     <string name="settings_dialog_title">Settings dialog</string>
-    <string name="send">Send To...</string>
+    <string name="send">Send Message To...</string>
 
     <string name="drawer_item_dialogs">Dialogs</string>
     <string name="drawer_item_friends">Friends</string>

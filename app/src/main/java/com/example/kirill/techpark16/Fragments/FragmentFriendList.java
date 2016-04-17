@@ -58,7 +58,7 @@ public class FragmentFriendList extends ListFragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.friends_fragment, null);
+        View view = inflater.inflate(R.layout.fragment_friends_list, null);
 
         VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name", "order", "hints"));
 

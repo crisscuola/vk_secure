@@ -18,7 +18,7 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.test_settings, container, false);
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         return view;
     }
