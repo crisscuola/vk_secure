@@ -1,5 +1,6 @@
 package com.example.kirill.techpark16.Fragments;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -35,21 +36,23 @@ public class FragmentSingleFriend extends Fragment {
     public static String FIRST_NAME = "first_name";
     public static String LAST_NAME = "last_name";
 
+
     int id = 0;
     String first_name;
     String last_name;
+    Drawable avatar;
     Button send;
 
     static int title_id;
     VKList list_s;
 
-    public static FragmentSingleFriend getInstance(int user_id,String first_name, String last_name){
+    public static FragmentSingleFriend getInstance(int user_id, String first_name, String last_name){
         FragmentSingleFriend detailDialogFragment = new FragmentSingleFriend();
 
         Bundle bundle = new Bundle();
         bundle.putInt(USER_ID, user_id);
         bundle.putString(FIRST_NAME, first_name);
-        bundle.putString(LAST_NAME,last_name);
+        bundle.putString(LAST_NAME, last_name);
 
         title_id = user_id;
 
@@ -61,16 +64,14 @@ public class FragmentSingleFriend extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_single_friend, null);
 
-//        EditText friend_id = (EditText) view.findViewById(R.id.friend_id);
         TextView friend_name = (TextView) view.findViewById(R.id.friends_name);
+
         id = getArguments().getInt(USER_ID);
         first_name = getArguments().getString(FIRST_NAME);
         last_name = getArguments().getString(LAST_NAME);
 
-//        Log.i("id", String.valueOf(id));
-
-//        friend_id.setText(String.valueOf(id));
         friend_name.setText(first_name + " " + last_name);
+
 
         send = (Button) view.findViewById(R.id.button_write);
         send.setOnClickListener(new View.OnClickListener() {

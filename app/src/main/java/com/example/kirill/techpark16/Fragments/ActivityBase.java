@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -108,7 +109,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentPlace);
 
                 if (currentFragment instanceof FragmentDialogsList) {
-//                    Toast.makeText(ActivityBase.this, "CURRENT DIALOG LIST", Toast.LENGTH_SHORT).show();
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.FRIENDSEND]);
                     fragmentTransaction.addToBackStack(null);
@@ -119,7 +119,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 }
 
                 if (currentFragment instanceof FragmentSingleDialog) {
-//                    Toast.makeText(ActivityBase.this, "CURRENT DIALOG SINGLE", Toast.LENGTH_SHORT).show();
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.SETTINGSDIALOG]);
                     fragmentTransaction.addToBackStack(null);
@@ -140,11 +139,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-//        TextView nav_username1;
-//        nav_username1 = (TextView)findViewById(R.id.nav_username);
-//        Log.i("aaa",nav_username1.getText().toString());
-        //my_id = Integer.parseInt(VKSdk.getAccessToken().userId);
-        //nav_username.setText(String.valueOf("a"));
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -172,6 +166,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (isChecked) {
             // SET OFLINE
+            
         }
         else{
                 //SET ONLINE
@@ -247,7 +242,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         switch (id) {
             case R.id.nav_dialogs:
-//                Toast.makeText(ActivityBase.this, "Clicked DIALOGS", Toast.LENGTH_SHORT).show();
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.DIALOGSLIST]);
                 fragmentTransaction.addToBackStack(null);
@@ -257,7 +251,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 break;
 
             case R.id.nav_friends:
-//                Toast.makeText(ActivityBase.this, "Clicked FRIENDS", Toast.LENGTH_SHORT).show();
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.FRIENDSLIST]);
                 fragmentTransaction.addToBackStack(null);
@@ -267,7 +260,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 break;
 
             case R.id.nav_settings:
-//                Toast.makeText(ActivityBase.this, "Clicked SETTINGS", Toast.LENGTH_SHORT).show();
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.SETTINGS]);
                 fragmentTransaction.addToBackStack(null);
@@ -335,7 +327,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                         }
 
                         FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList);
-//                        Toast.makeText(ActivityBase.this, "Clicked SINGLEDIALOG", Toast.LENGTH_SHORT).show();
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
                         fragmentTransaction.addToBackStack(null);
@@ -379,15 +370,17 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 String firstname = "";
                 String lastname = "";
 
+                Drawable avatar = null;
+
                 try {
                     firstname = a.fields.getString("first_name");
                     lastname = a.fields.getString("last_name");
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
                 FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(id,firstname,lastname);
-//                Toast.makeText(ActivityBase.this, "Clicked SINGLE FRIEND", Toast.LENGTH_SHORT).show();
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
                 fragmentTransaction.addToBackStack(null);
@@ -460,7 +453,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                         int id = Integer.parseInt(temp);
 
                         FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList);
-//                        Toast.makeText(ActivityBase.this, "Clicked SINGLEDIALOG", Toast.LENGTH_SHORT).show();
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
                         fragmentTransaction.addToBackStack(null);
