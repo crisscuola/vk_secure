@@ -1,11 +1,8 @@
 package com.example.kirill.techpark16;
 
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.KeyPair;

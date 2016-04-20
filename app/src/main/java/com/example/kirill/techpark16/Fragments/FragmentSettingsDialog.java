@@ -49,7 +49,6 @@ public class FragmentSettingsDialog extends Fragment {
                     request_key.executeWithListener(new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
-                           // VKList list = new VKList();
 
                             list_s = (VKList) response.parsedModel;
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,15 @@ import com.example.kirill.techpark16.Adapters.DialogsListAdapter;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKApiGetDialogResponse;
 import com.vk.sdk.api.model.VKList;
+
+import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -41,6 +45,31 @@ public class FragmentDialogsList extends ListFragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+
+        final VKRequest request = new VKRequest("status.get", VKParameters.from(VKApiConst.USER_ID, 20759745));
+
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                String str = "no";
+                Log.i("len", String.valueOf(response.json.length()));
+                try {
+                    str = (String)response.json.getJSONObject("response").get("text");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.i("len", str);
+
+            }
+            @Override
+            public void onError(VKError error) {
+                Log.i("len", String.valueOf(error.errorCode));
+            }
+        });
+
+
         final VKRequest request_dialogs_one = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
 
         request_dialogs_one.executeWithListener(new VKRequest.VKRequestListener() {
@@ -48,7 +77,6 @@ public class FragmentDialogsList extends ListFragment {
             public void onComplete(VKResponse response) {
 
                 super.onComplete(response);
-
                 VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
 
                 final VKList<VKApiDialog> list = getMessagesResponse.items;

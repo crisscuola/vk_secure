@@ -5,20 +5,12 @@ import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
 
 /**
  * Created by konstantin on 19.02.16.
  */
 public class Application extends android.app.Application {
-    private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL, VKScope.OFFLINE};
+    private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL, VKScope.OFFLINE, VKScope.STATUS};
 
 
 

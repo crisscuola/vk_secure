@@ -14,7 +14,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +22,8 @@ import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import com.example.kirill.techpark16.R;
+import com.example.kirill.techpark16.RSAEncryption;
+import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
@@ -57,8 +58,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     BroadcastReceiver br;
     Button toolbarButton;
     Button toolbarButton_set;
-    private VKList list;
-
+    private VKList list,list_aaa;
+    String stat = "a";
+    private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL, VKScope.OFFLINE, VKScope.STATUS};
 
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
 
@@ -70,19 +72,20 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         final int my_id = Integer.parseInt(VKSdk.getAccessToken().userId);
 
-        VKRequest my_request = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, my_id ,VKApiConst.FIELDS, "first_name, last_name"));
-
-        my_request.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
 
 
-                list = (VKList) response.parsedModel;
+//        VKSdk.login(this, scope);
 
-               String a = String.valueOf(list.getById(my_id));
-            }
-        });
+
+        RSAEncryption rsaInstance = new RSAEncryption();
+
+        try {
+            rsaInstance.generateKeys();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
 
         setBroadcastReceiver();
@@ -362,7 +365,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 VKApiModel a = list.get(position);
                 try {
                      id = a.fields.getInt("id");
-                    Log.i("id2", String.valueOf(a.fields.getInt("id")));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
