@@ -39,6 +39,9 @@ public class RSAEncryption {
         publicKeyBytes = kp.getPublic().getEncoded();
         this.setPublicKey(publicKeyBytes);
         privateKey = kp.getPrivate();
+
+
+
     }
 
     public void saveKeys(){

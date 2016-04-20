@@ -62,6 +62,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     Button toolbarButton_set;
     private VKList list,list_aaa;
     String stat = "a";
+    static RSAEncryption rsaInstance = new RSAEncryption();
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL, VKScope.OFFLINE, VKScope.STATUS};
 
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
@@ -79,7 +80,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 //        VKSdk.login(this, scope);
 
 
-        RSAEncryption rsaInstance = new RSAEncryption();
+
 
         try {
             rsaInstance.generateKeys();

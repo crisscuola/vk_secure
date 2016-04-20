@@ -4,6 +4,7 @@ package com.example.kirill.techpark16.Fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
 import com.example.kirill.techpark16.Adapters.MyselfSingleDialogAdapter;
+import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
+import com.example.kirill.techpark16.Application;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
@@ -22,6 +24,7 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 ;
@@ -81,8 +84,37 @@ public class FragmentSingleDialog extends ListFragment {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String message_send = text.getText().toString();
+                byte [] msg_bytes = new byte[0];
+
+                try {
+                    msg_bytes = Application.rsaInstance.encrypt(message_send);
+                   // message_send = ActivityBase.rsaInstance.decrypt(msg_bytes);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    message_send = new String (msg_bytes, "UTF-8");
+                    Log.i("msg", message_send);
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                String crypt_message = String.valueOf((outList.get(0)));
+
+                try {
+                    String final_message =  ActivityBase.rsaInstance.decrypt(crypt_message.getBytes("UTF-8"));
+                    Log.i("msg", final_message);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+
                 VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
-                        VKApiConst.MESSAGE, text.getText().toString()));
+                                VKApiConst.MESSAGE, message_send));
 
                 request.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override

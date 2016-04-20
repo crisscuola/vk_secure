@@ -2,7 +2,6 @@ package com.example.kirill.techpark16.Adapters;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +50,7 @@ public class SingleDialogAdapter extends BaseAdapter {
 
         SetData setData = new SetData();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        Log.i("inList3", String.valueOf((inList.get(2))));
+//        Log.i("outList", String.valueOf((outList.get(0))));
         View view = inflater.inflate(R.layout.list_dialog_adapter, null);
 
         setData.inList = (TextView) view.findViewById(R.id.textView4);
