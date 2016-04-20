@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 import com.example.kirill.techpark16.R;
@@ -115,8 +114,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         registerReceiver(br, intentFilter);
 
         ToggleButton toggleButton;
-        toggleButton = (ToggleButton) findViewById(R.id.toggleButton);
-//        toggleButton.setOnCheckedChangeListener((CompoundButton.OnCheckedChangeListener) this);
+
 
 
 
@@ -142,6 +140,13 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 }
 
                 if (currentFragment instanceof FragmentSingleDialog) {
+
+                    int id = 0;
+
+                    id = FragmentSingleDialog.title_id;
+
+
+                    FragmentSingleDialog newFragment = FragmentSettingsDialog.getInstance(id);
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.SETTINGSDIALOG]);
                     fragmentTransaction.addToBackStack(null);
@@ -186,15 +191,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     }
 
 
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (isChecked) {
-            // SET OFLINE
-            
-        }
-        else{
-                //SET ONLINE
-        }
-    }
 
     private void setBroadcastReceiver() {
         br = new BroadcastReceiver() {

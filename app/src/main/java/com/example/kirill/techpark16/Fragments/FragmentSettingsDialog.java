@@ -25,7 +25,19 @@ import org.json.JSONException;
 public class FragmentSettingsDialog extends Fragment {
 
         private Button pull_key;
-         VKList list_s;
+        VKList list_s;
+        static int title_id;
+
+    public static FragmentSingleDialog getInstance(int user_id){
+        FragmentSingleDialog fragmentSingleDialog = new FragmentSingleDialog();
+        Bundle bundle = new Bundle();
+
+        title_id = user_id;
+
+        fragmentSingleDialog.setArguments(bundle);
+        return fragmentSingleDialog;
+    }
+
 
         public void onCreate(Bundle savedInstanceState){
             super.onCreate(savedInstanceState);
@@ -39,7 +51,7 @@ public class FragmentSettingsDialog extends Fragment {
 
             pull_key = (Button) view.findViewById(R.id.pull_key);
 
-            final int id_user = 20759745;
+            final int id_user = title_id;
 
             pull_key.setOnClickListener(new View.OnClickListener() {
                 @Override
