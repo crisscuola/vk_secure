@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -39,6 +41,7 @@ import com.vk.sdk.api.model.VKList;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 
@@ -85,8 +88,25 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         catch (Exception e) {
             e.printStackTrace();
         }
+        String status = "lol";
+        try {
+            status = new String(rsaInstance.getPublicKey().getEncoded(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        final VKRequest request = new VKRequest("status.set", VKParameters.from("text", status));
 
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
 
+            }
+            @Override
+            public void onError(VKError error) {
+                Log.i("len", String.valueOf(error.errorCode));
+            }
+        });
 
         setBroadcastReceiver();
 
