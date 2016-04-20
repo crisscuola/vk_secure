@@ -1,6 +1,5 @@
 package com.example.kirill.techpark16.Fragments;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.api.VKApi;
@@ -40,7 +38,6 @@ public class FragmentSingleFriend extends Fragment {
     int id = 0;
     String first_name;
     String last_name;
-    Drawable avatar;
     Button send;
 
     static int title_id;
@@ -110,7 +107,6 @@ public class FragmentSingleFriend extends Fragment {
                         }
 
 
-                        Toast.makeText(getActivity(), "Clicked WRITE MESSAGE", Toast.LENGTH_SHORT).show();
                         FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList);
                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.fragmentPlace, newFragment);

@@ -10,4 +10,19 @@
         android:text="SETTINGS DIALOG!"
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pull Key!"
+        android:id="@+id/pull_key"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/user_status"
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>
