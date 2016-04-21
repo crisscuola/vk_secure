@@ -88,30 +88,35 @@ public class FragmentSingleDialog extends ListFragment {
             public void onClick(View v) {
 
                 String message_send = text.getText().toString();
-                byte [] msg_bytes = new byte[0];
 
+                Log.d("base64_src",message_send);
+                String output = null;
+                String base64_input = null;
+                String base64_output = null;
+                byte[] msg_bytes = null;
+                byte[] msg_bytes_get = null;
                 try {
-                    msg_bytes = Application.rsaInstance.encrypt(message_send);
-                   // message_send = ActivityBase.rsaInstance.decrypt(msg_bytes);
+                    msg_bytes = ActivityBase.rsaInstance.encrypt(message_send);
+                    base64_input = Base64.encodeToString(msg_bytes, Base64.DEFAULT);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+                Log.d("base64_encoded",base64_input);
+                base64_output = String.valueOf((outList.get(4)));
+                Log.d("base64_output",base64_output);
+                msg_bytes_get = Base64.decode(base64_output, Base64.DEFAULT);
+                try {
+                    base64_output = ActivityBase.rsaInstance.decrypt(msg_bytes_get);
+                    Log.d("base64_encoded",base64_output);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                message_send = Base64.encodeToString(msg_bytes,Base64.DEFAULT);
-
-                String crypt_message = String.valueOf((outList.get(0)));
-                byte[] msg = Base64.decode(crypt_message, Base64.DEFAULT);
-                try {
-                    String final_message =  ActivityBase.rsaInstance.decrypt(msg);
-                    Log.i("msg", final_message);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
 
 
                 VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
-                                VKApiConst.MESSAGE, message_send));
+                                VKApiConst.MESSAGE, base64_input));
 
                 request.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
