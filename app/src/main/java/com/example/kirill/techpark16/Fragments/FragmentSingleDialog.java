@@ -4,6 +4,8 @@ package com.example.kirill.techpark16.Fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,17 +97,12 @@ public class FragmentSingleDialog extends ListFragment {
                     e.printStackTrace();
                 }
 
-                try {
-                    message_send = new String (msg_bytes, "UTF-8");
-                    Log.i("msg", message_send);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
+                message_send = Base64.encodeToString(msg_bytes,Base64.DEFAULT);
 
                 String crypt_message = String.valueOf((outList.get(0)));
-
+                byte[] msg = Base64.decode(crypt_message, Base64.DEFAULT);
                 try {
-                    String final_message =  ActivityBase.rsaInstance.decrypt(crypt_message.getBytes("UTF-8"));
+                    String final_message =  ActivityBase.rsaInstance.decrypt(msg);
                     Log.i("msg", final_message);
                 } catch (Exception e) {
                     e.printStackTrace();

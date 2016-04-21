@@ -90,7 +90,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         }
         String status = "lol";
         try {
-            status = new String(rsaInstance.getPublicKey().getEncoded(), "UTF-8");
+            status = new String(rsaInstance.getPublicKey().getEncoded(), "UTF-8");ф
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
