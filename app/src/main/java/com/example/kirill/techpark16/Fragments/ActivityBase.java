@@ -67,7 +67,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     String stat = "a";
     static RSAEncryption rsaInstance = new RSAEncryption();
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL, VKScope.OFFLINE, VKScope.STATUS};
-
+    static FullEncryption encryptor = new FullEncryption();
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
 
     @Override

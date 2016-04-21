@@ -30,12 +30,12 @@ public class FullEncryption {
     }
 
     public String encode(String inputMessage) throws Exception {
-        byte[] msgBytes = this.rsaInstance.encrypt(inputMessage);
+        byte[] msgBytes = rsaInstance.encrypt(inputMessage);
         return Base64.encodeToString(msgBytes, Base64.DEFAULT);
     }
 
-    public String decode(String inputMessage) throws Exception {
+    public String decode(String inputMessage)  throws Exception{
         byte[] msgBytes = Base64.decode(inputMessage, Base64.DEFAULT);
-        return this.rsaInstance.decrypt(msgBytes);
+        return rsaInstance.decrypt(msgBytes);
     }
 }

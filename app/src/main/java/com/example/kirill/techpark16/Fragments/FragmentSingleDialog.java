@@ -36,7 +36,7 @@ import java.util.ArrayList;
  * Created by kirill on 02.04.16
  */
 public class FragmentSingleDialog extends ListFragment {
-    FullEncryption encryptor = new FullEncryption();
+
 
     public static String USER_ID = "user_id";
     public static String IN_LIST = "inList";
@@ -98,12 +98,22 @@ public class FragmentSingleDialog extends ListFragment {
                 byte[] msg_bytes_get = null;
 
                 try {
-                    messageToSend = encryptor.encode(messageToSend);
+                    messageToSend = ActivityBase.encryptor.encode(messageToSend);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
                 Log.d("msg_sent", messageToSend);
+
+
+                messageReceived = String.valueOf((outList.get(4)));
+                Log.d("msg_output_vk", messageReceived);
+                try {
+                    messageReceived = ActivityBase.encryptor.decode(messageReceived);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Log.d("msg_decrypted", messageReceived);
 
                 request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
                         VKApiConst.MESSAGE, messageToSend));
@@ -117,15 +127,6 @@ public class FragmentSingleDialog extends ListFragment {
                 });
 
 
-
-                messageReceived = String.valueOf((outList.get(4)));
-                Log.d("msg_received1", messageReceived);
-                try {
-                    messageReceived = encryptor.decode(messageReceived);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Log.d("msg_received2", messageReceived);
 
             }
         });
