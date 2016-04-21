@@ -17,6 +17,7 @@ import android.widget.ListView;
 import com.example.kirill.techpark16.Adapters.MyselfSingleDialogAdapter;
 import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
 import com.example.kirill.techpark16.Application;
+import com.example.kirill.techpark16.FullEncryption;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
@@ -27,14 +28,16 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
-
-;
 
 /**
  * Created by kirill on 02.04.16
  */
 public class FragmentSingleDialog extends ListFragment {
+    FullEncryption encryptor = new FullEncryption();
+
     public static String USER_ID = "user_id";
     public static String IN_LIST = "inList";
     public static String OUT_LIST = "outList";
@@ -51,7 +54,7 @@ public class FragmentSingleDialog extends ListFragment {
     static int title_id;
     VKList list_s;
 
-    public static FragmentSingleDialog getInstance(int user_id, ArrayList<String> inList, ArrayList<String> outList){
+    public static FragmentSingleDialog getInstance(int user_id, ArrayList<String> inList, ArrayList<String> outList) {
         FragmentSingleDialog fragmentSingleDialog = new FragmentSingleDialog();
         Bundle bundle = new Bundle();
         bundle.putInt(USER_ID, user_id);
@@ -66,7 +69,7 @@ public class FragmentSingleDialog extends ListFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_single_dialog, null);
 
         inList = getArguments().getStringArrayList(IN_LIST);
@@ -85,38 +88,25 @@ public class FragmentSingleDialog extends ListFragment {
         send = (Button) view.findViewById(R.id.sendmsg);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v){
 
-                String message_send = text.getText().toString();
+                VKRequest request;
+                String messageToSend = text.getText().toString();
+                String messageReceived = null;
 
-                Log.d("base64_src",message_send);
-                String output = null;
-                String base64_input = null;
-                String base64_output = null;
                 byte[] msg_bytes = null;
                 byte[] msg_bytes_get = null;
+
                 try {
-                    msg_bytes = ActivityBase.rsaInstance.encrypt(message_send);
-                    base64_input = Base64.encodeToString(msg_bytes, Base64.DEFAULT);
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-                Log.d("base64_encoded",base64_input);
-                base64_output = String.valueOf((outList.get(4)));
-                Log.d("base64_output",base64_output);
-                msg_bytes_get = Base64.decode(base64_output, Base64.DEFAULT);
-                try {
-                    base64_output = ActivityBase.rsaInstance.decrypt(msg_bytes_get);
-                    Log.d("base64_encoded",base64_output);
+                    messageToSend = encryptor.encode(messageToSend);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
+                Log.d("msg_sent", messageToSend);
 
-
-
-                VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
-                                VKApiConst.MESSAGE, base64_input));
+                request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
+                        VKApiConst.MESSAGE, messageToSend));
 
                 request.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
@@ -125,6 +115,18 @@ public class FragmentSingleDialog extends ListFragment {
                         System.out.println("Сообщение отправлено");
                     }
                 });
+
+
+
+                messageReceived = String.valueOf((outList.get(4)));
+                Log.d("msg_received1", messageReceived);
+                try {
+                    messageReceived = encryptor.decode(messageReceived);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Log.d("msg_received2", messageReceived);
+
             }
         });
 

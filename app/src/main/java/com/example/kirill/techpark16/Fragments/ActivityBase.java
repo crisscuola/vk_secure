@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ToggleButton;
 
+import com.example.kirill.techpark16.FullEncryption;
 import com.example.kirill.techpark16.R;
 import com.example.kirill.techpark16.RSAEncryption;
 import com.vk.sdk.VKScope;
@@ -41,6 +42,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 
 
@@ -78,22 +81,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
 
 //        VKSdk.login(this, scope);
-
-
-
-
-        try {
-            rsaInstance.generateKeys();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        String status = "";
-        try {
-            status = new String(rsaInstance.getPublicKey().getEncoded(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        String status = "Test status.";
         final VKRequest request = new VKRequest("status.set", VKParameters.from("text", status));
 
         request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -147,6 +135,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                     id = FragmentSingleDialog.title_id;
 
 
+
                     FragmentSingleDialog newFragment = FragmentSettingsDialog.getInstance(id);
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.SETTINGSDIALOG]);
@@ -175,6 +164,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         fragmentSet[Fragments.DIALOGSLIST] = new FragmentDialogsList();
         fragmentSet[Fragments.FRIENDSLIST] = new FragmentFriendsList();
         fragmentSet[Fragments.SETTINGS] = new FragmentSettings();
+        fragmentSet[Fragments.SINGLEDIALOG] = null;
         fragmentSet[Fragments.SINGLEDIALOG] = new FragmentSingleDialog();
         fragmentSet[Fragments.SETTINGSDIALOG] = new FragmentSettingsDialog();
         fragmentSet[Fragments.FRIENDSEND] = new FragmentFriendsSend();
@@ -346,6 +336,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                             e.printStackTrace();
                         }
 
+
                         FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList);
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
@@ -381,7 +372,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
                 VKApiModel a = list.get(position);
                 try {
-                     id = a.fields.getInt("id");
+                    id = a.fields.getInt("id");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -399,7 +390,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                     e.printStackTrace();
                 }
 
-                FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(id,firstname,lastname);
+                FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(id, firstname, lastname);
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
                 fragmentTransaction.addToBackStack(null);
@@ -470,6 +461,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                         temp = String.valueOf(finalId_f);
 
                         int id = Integer.parseInt(temp);
+
 
                         FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList);
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();

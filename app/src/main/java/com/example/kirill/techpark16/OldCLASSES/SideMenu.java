@@ -28,6 +28,8 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 
 /**
@@ -72,8 +74,6 @@ public class SideMenu {
                         switch ((int) drawerItem.getIdentifier()) {
                             case 1:
                                 Toast.makeText(activity, "Clicked Dialogs", Toast.LENGTH_SHORT).show();
-
-
 
 
                                 FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(1, new ArrayList<String>(), new ArrayList<String>());
