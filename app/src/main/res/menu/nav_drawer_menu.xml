@@ -3,13 +3,13 @@
 
     <group android:checkableBehavior="single">
         <item android:id="@+id/nav_dialogs"
-            android:title="Dialogs" />
+            android:title="Диалоги" />
 
         <item android:id="@+id/nav_friends"
-            android:title="Friends" />
+            android:title="Друзья" />
 
         <item android:id="@+id/nav_settings"
-            android:title="Settings" />
+            android:title="Настройки" />
 
         <!--<item android:id="@+id/nav_other"-->
             <!--android:title="Other" />-->
