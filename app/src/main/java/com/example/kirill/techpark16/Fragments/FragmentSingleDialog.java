@@ -86,6 +86,7 @@ public class FragmentSingleDialog extends ListFragment {
                 VKRequest request;
                 String messageToSend = text.getText().toString();
                 String messageReceived = null;
+                String messageSent = null;
 
                 byte[] msg_bytes = null;
                 byte[] msg_bytes_get = null;
@@ -109,6 +110,15 @@ public class FragmentSingleDialog extends ListFragment {
                     e.printStackTrace();
                 }
                 Log.d("msg_decrypted", messageReceived);
+
+                messageSent = String.valueOf(inList.get(4));
+                Log.d("msg_sent", messageSent);
+                try {
+                    messageSent = ActivityBase.encryptor.decode(messageSent);
+                    Log.d("msg_sent_decoded", messageSent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
                         VKApiConst.MESSAGE, messageToSend));

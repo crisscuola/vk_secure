@@ -38,4 +38,9 @@ public class FullEncryption {
         byte[] msgBytes = Base64.decode(inputMessage, Base64.DEFAULT);
         return rsaInstance.decrypt(msgBytes);
     }
+
+    public String getPublicKey(){
+        byte[] pk = rsaInstance.getPublicKey().getEncoded();
+        return Base64.encodeToString(pk, Base64.DEFAULT);
+    }
 }

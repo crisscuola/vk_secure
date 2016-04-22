@@ -2,6 +2,7 @@ package com.example.kirill.techpark16.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,11 @@ import com.vk.sdk.api.model.VKList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 
 /**
  * Created by konstantin on 10.04.16.
@@ -83,7 +89,7 @@ public class FragmentSettingsDialog extends Fragment {
                         }
                     });
 
-                    final VKRequest request_key  = new VKRequest("notes.get", VKParameters.from("user_id", 6759461));
+                    final VKRequest request_key  = new VKRequest("notes.get", VKParameters.from("user_id", id_user));
 
                     request_key.executeWithListener(new VKRequest.VKRequestListener() {
                         @Override
@@ -95,11 +101,13 @@ public class FragmentSettingsDialog extends Fragment {
 
                                 JSONObject note_get = array.getJSONObject(0);
 
+                                String pkBase64 = String.valueOf(note_get.get("title"));
+                                byte[] pkBytes = Base64.decode(pkBase64, Base64.DEFAULT);
+                                ActivityBase.pk = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(pkBytes));
                                 Log.i("get_note", String.valueOf(note_get.get("title")));
 
 
-
-                            } catch (JSONException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
 

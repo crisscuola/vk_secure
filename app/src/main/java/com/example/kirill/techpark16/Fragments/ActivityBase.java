@@ -40,6 +40,7 @@ import com.vk.sdk.api.model.VKList;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 
 
@@ -59,6 +60,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     BroadcastReceiver br;
     Button toolbarButton;
 
+    static PublicKey pk;
     static RSAEncryption rsaInstance = new RSAEncryption();
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL, VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
     static FullEncryption encryptor = new FullEncryption();
@@ -90,9 +92,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 //            }
 //        });
 
+        String a = encryptor.getPublicKey();
 
-
-        final VKRequest note_request = new VKRequest("notes.add", VKParameters.from("title","key", "text", "public_key"));
+        final VKRequest note_request = new VKRequest("notes.add", VKParameters.from("title",a , "text", "public_key"));
 
         note_request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
