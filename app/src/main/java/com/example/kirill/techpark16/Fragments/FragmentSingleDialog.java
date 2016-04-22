@@ -94,7 +94,7 @@ public class FragmentSingleDialog extends ListFragment {
 
 
                 try {
-                    messageToSend = ActivityBase.encryptor.encode(messageToSend);
+                    messageToSend = ActivityBase.encryptionFriend.encode(messageToSend);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -114,7 +114,7 @@ public class FragmentSingleDialog extends ListFragment {
                 messageSent = String.valueOf(inList.get(4));
                 Log.d("msg_sent", messageSent);
                 try {
-                    messageSent = ActivityBase.encryptionFriend.decode(messageSent);
+                    messageSent = ActivityBase.encryptor.decode(messageSent);
                     Log.d("msg_sent_decoded", messageSent);
                 } catch (Exception e) {
                     e.printStackTrace();
