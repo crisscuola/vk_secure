@@ -8,6 +8,7 @@ import com.example.kirill.techpark16.Fragments.ActivityBase;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 
 import javax.crypto.BadPaddingException;
@@ -42,5 +43,9 @@ public class FullEncryption {
     public String getPublicKey(){
         byte[] pk = rsaInstance.getPublicKey().getEncoded();
         return Base64.encodeToString(pk, Base64.DEFAULT);
+    }
+
+    public void setPublicKey(byte[] pk) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        rsaInstance.setPublicKey(pk);
     }
 }

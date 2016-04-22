@@ -103,7 +103,8 @@ public class FragmentSettingsDialog extends Fragment {
 
                                 String pkBase64 = String.valueOf(note_get.get("title"));
                                 byte[] pkBytes = Base64.decode(pkBase64, Base64.DEFAULT);
-                                ActivityBase.pk = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(pkBytes));
+                                ActivityBase.encryptionFriend.setPublicKey(pkBytes);
+
                                 Log.i("get_note", String.valueOf(note_get.get("title")));
 
 
