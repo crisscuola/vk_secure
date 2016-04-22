@@ -4,8 +4,6 @@ package com.example.kirill.techpark16.Fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
-
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +14,6 @@ import android.widget.ListView;
 
 import com.example.kirill.techpark16.Adapters.MyselfSingleDialogAdapter;
 import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
-import com.example.kirill.techpark16.Application;
-import com.example.kirill.techpark16.FullEncryption;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
@@ -27,9 +23,6 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 
 /**
@@ -96,6 +89,8 @@ public class FragmentSingleDialog extends ListFragment {
 
                 byte[] msg_bytes = null;
                 byte[] msg_bytes_get = null;
+
+
 
                 try {
                     messageToSend = ActivityBase.encryptor.encode(messageToSend);

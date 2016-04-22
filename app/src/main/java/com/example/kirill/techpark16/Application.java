@@ -12,7 +12,7 @@ import java.io.UnsupportedEncodingException;
  * Created by konstantin on 19.02.16.
  */
 public class Application extends android.app.Application {
-    private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL, VKScope.OFFLINE, VKScope.STATUS};
+    private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL, VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
     static public RSAEncryption rsaInstance = new RSAEncryption();
 
 
@@ -27,6 +27,7 @@ public class Application extends android.app.Application {
         super.onCreate();
         vkAccessTokenTracker.startTracking();
         VKSdk.initialize(this);
+
 
         try {
             rsaInstance.generateKeys();

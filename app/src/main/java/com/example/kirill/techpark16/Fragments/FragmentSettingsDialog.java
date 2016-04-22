@@ -2,6 +2,7 @@ package com.example.kirill.techpark16.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,9 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiModel;
 import com.vk.sdk.api.model.VKList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by konstantin on 10.04.16.
@@ -56,9 +59,9 @@ public class FragmentSettingsDialog extends Fragment {
             pull_key.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    VKRequest request_key = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, id_user, VKApiConst.FIELDS, "status"));
+                    VKRequest request_status = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, id_user, VKApiConst.FIELDS, "status"));
 
-                    request_key.executeWithListener(new VKRequest.VKRequestListener() {
+                    request_status.executeWithListener(new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
 
@@ -79,6 +82,31 @@ public class FragmentSettingsDialog extends Fragment {
                             super.onComplete(response);
                         }
                     });
+
+                    final VKRequest request_key  = new VKRequest("notes.get", VKParameters.from("user_id", 6759461));
+
+                    request_key.executeWithListener(new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+
+                            try {
+                                JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
+
+                                JSONObject note_get = array.getJSONObject(0);
+
+                                Log.i("get_note", String.valueOf(note_get.get("title")));
+
+
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+
+
                 }
             });
 

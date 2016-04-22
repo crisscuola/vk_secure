@@ -50,7 +50,7 @@ public class SingleDialogAdapter extends BaseAdapter {
 
         SetData setData = new SetData();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        Log.i("outList", String.valueOf((outList.get(0))));
+
         View view = inflater.inflate(R.layout.list_dialog_adapter, null);
 
         setData.inList = (TextView) view.findViewById(R.id.textView4);

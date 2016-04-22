@@ -81,7 +81,7 @@ public class RSAEncryption {
         return privateKey;
     }
 
-    public PublicKey getPublicKey() {
+    public  PublicKey getPublicKey() {
         return publicKey;
     }
 

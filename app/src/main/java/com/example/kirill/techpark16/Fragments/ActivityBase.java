@@ -19,7 +19,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ToggleButton;
 
 import com.example.kirill.techpark16.FullEncryption;
 import com.example.kirill.techpark16.R;
@@ -41,9 +40,6 @@ import com.vk.sdk.api.model.VKList;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 
 
@@ -62,11 +58,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     NavigationView navigationView;
     BroadcastReceiver br;
     Button toolbarButton;
-    Button toolbarButton_set;
-    private VKList list,list_aaa;
-    String stat = "a";
+
     static RSAEncryption rsaInstance = new RSAEncryption();
-    private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL, VKScope.OFFLINE, VKScope.STATUS};
+    private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL, VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
     static FullEncryption encryptor = new FullEncryption();
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
 
@@ -74,26 +68,44 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        VKSdk.login(this, scope);
+
         setContentView(R.layout.base_activity);
 
         final int my_id = Integer.parseInt(VKSdk.getAccessToken().userId);
 
+//        String status = "Test status.";
+//        final VKRequest request = new VKRequest("status.set", VKParameters.from("text", status));
+//
+//        request.executeWithListener(new VKRequest.VKRequestListener() {
+//            @Override
+//            public void onComplete(VKResponse response) {
+//                super.onComplete(response);
+//
+//            }
+//
+//            @Override
+//            public void onError(VKError error) {
+//                Log.i("len", String.valueOf(error.errorCode));
+//            }
+//        });
 
 
-//        VKSdk.login(this, scope);
-        String status = "Test status.";
-        final VKRequest request = new VKRequest("status.set", VKParameters.from("text", status));
 
-        request.executeWithListener(new VKRequest.VKRequestListener() {
+        final VKRequest note_request = new VKRequest("notes.add", VKParameters.from("title","key", "text", "public_key"));
+
+        note_request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-
             }
+
+
             @Override
             public void onError(VKError error) {
-                Log.i("len", String.valueOf(error.errorCode));
+                Log.i("notes", String.valueOf(error.errorCode));
             }
+
         });
 
         setBroadcastReceiver();
@@ -101,12 +113,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         IntentFilter intentFilter = new IntentFilter(BROADCAST_EVENT);
 
         registerReceiver(br, intentFilter);
-
-        ToggleButton toggleButton;
-
-
-
-
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
