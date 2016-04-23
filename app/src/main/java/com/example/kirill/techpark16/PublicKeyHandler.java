@@ -17,6 +17,7 @@ public class PublicKeyHandler {
     public static PublicKey downloadFriendPublicKey(int id) throws InvalidKeySpecException, NoSuchAlgorithmException {
         String pk = "here's gonna be friend's public key from server";
         byte[] pkBytes = Base64.decode(pk, Base64.DEFAULT);
+
         ActivityBase.encryptor.setPublicKey(pkBytes);
         return ActivityBase.encryptor.rsaInstance.getPublicKey();
     }
