@@ -136,7 +136,6 @@ public class FragmentSingleDialog extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-
     }
 
     @Override
@@ -158,5 +157,4 @@ public class FragmentSingleDialog extends ListFragment {
 
         getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
     }
-
 }
