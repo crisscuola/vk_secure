@@ -91,8 +91,6 @@ public class FragmentSingleDialog extends ListFragment {
                 byte[] msg_bytes = null;
                 byte[] msg_bytes_get = null;
 
-
-
                 try {
                     messageToSend = ActivityBase.encryptionFriend.encode(messageToSend);
                 } catch (Exception e) {
@@ -100,7 +98,6 @@ public class FragmentSingleDialog extends ListFragment {
                 }
 
                 Log.d("msg_sent", messageToSend);
-
 
                 messageReceived = String.valueOf((outList.get(4)));
                 Log.d("msg_output_vk", messageReceived);
@@ -130,9 +127,6 @@ public class FragmentSingleDialog extends ListFragment {
                         System.out.println("Сообщение отправлено");
                     }
                 });
-
-
-
             }
         });
 

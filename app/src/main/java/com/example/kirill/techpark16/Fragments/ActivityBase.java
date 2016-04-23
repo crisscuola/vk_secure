@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -65,6 +64,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL, VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
     static FullEncryption encryptor = new FullEncryption();
     static FullEncryption encryptionFriend = new FullEncryption();
+
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
 
     @Override
@@ -128,8 +128,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentPlace);
 
                 if (currentFragment instanceof FragmentDialogsList) {
+
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.FRIENDSEND]);
+                    fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.FRIENDSEND]);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                     toolbar.setTitle(R.string.friends_title);
@@ -139,15 +140,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
                 if (currentFragment instanceof FragmentSingleDialog) {
 
-                    int id = 0;
-
-                    id = FragmentSingleDialog.title_id;
-
-
-
-                    FragmentSingleDialog newFragment = FragmentSettingsDialog.getInstance(id);
                     fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.SETTINGSDIALOG]);
+                    fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.SETTINGSDIALOG]);
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                     toolbar.setTitle(R.string.friends_title);
@@ -170,19 +164,19 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        fragmentSet[Fragments.DIALOGSLIST] = new FragmentDialogsList();
-        fragmentSet[Fragments.FRIENDSLIST] = new FragmentFriendsList();
-        fragmentSet[Fragments.SETTINGS] = new FragmentSettings();
-        fragmentSet[Fragments.SINGLEDIALOG] = null;
-        fragmentSet[Fragments.SINGLEDIALOG] = new FragmentSingleDialog();
-        fragmentSet[Fragments.SETTINGSDIALOG] = new FragmentSettingsDialog();
-        fragmentSet[Fragments.FRIENDSEND] = new FragmentFriendsSend();
+        fragmentSet[FragmentsConst.DIALOGSLIST] = new FragmentDialogsList();
+        fragmentSet[FragmentsConst.FRIENDSLIST] = new FragmentFriendsList();
+        fragmentSet[FragmentsConst.SETTINGS] = new FragmentSettings();
+        fragmentSet[FragmentsConst.SINGLEDIALOG] = null;
+        fragmentSet[FragmentsConst.SINGLEDIALOG] = new FragmentSingleDialog();
+        fragmentSet[FragmentsConst.SETTINGSDIALOG] = new FragmentSettingsDialog();
+        fragmentSet[FragmentsConst.FRIENDSEND] = new FragmentFriendsSend();
 
-        // Add other fragments
+
         toolbar.setTitle(R.string.dialog_list_title);
         toolbar.findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragmentPlace, fragmentSet[Fragments.DIALOGSLIST]);
+        fragmentTransaction.add(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
         fragmentTransaction.commit();
 
 
@@ -262,7 +256,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         switch (id) {
             case R.id.nav_dialogs:
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.DIALOGSLIST]);
+                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 toolbar.setTitle(R.string.dialog_list_title);
@@ -271,7 +265,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
             case R.id.nav_friends:
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.FRIENDSLIST]);
+                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.FRIENDSLIST]);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 toolbar.setTitle(R.string.friends_title);
@@ -280,19 +274,14 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
             case R.id.nav_settings:
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[Fragments.SETTINGS]);
+                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.SETTINGS]);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 toolbar.setTitle(R.string.settings_title);
                 toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
-//                toolbarButton = (Button) toolbar.findViewById(R.id.toolbar_button);
-//                toolbarButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_ab_app, 0, 0, 0);
+
                 break;
 
-//            case R.id.nav_other:
-//                Toast.makeText(ActivityBase.this, "Clicked OTHER", Toast.LENGTH_SHORT).show();
-//
-//                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -379,9 +368,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
                 int id = 0;
 
-                VKApiModel a = list.get(position);
+                VKApiModel model = list.get(position);
                 try {
-                    id = a.fields.getInt("id");
+                    id = model.fields.getInt("id");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -389,11 +378,10 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 String firstname = "";
                 String lastname = "";
 
-                Drawable avatar = null;
 
                 try {
-                    firstname = a.fields.getString("first_name");
-                    lastname = a.fields.getString("last_name");
+                    firstname = model.fields.getString("first_name");
+                    lastname = model.fields.getString("last_name");
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -426,10 +414,10 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
                 int id_f = 0;
 
-                VKApiModel a = list.get(position);
+                VKApiModel model = list.get(position);
 
                 try {
-                    id_f = a.fields.getInt("id");
+                    id_f = model.fields.getInt("id");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

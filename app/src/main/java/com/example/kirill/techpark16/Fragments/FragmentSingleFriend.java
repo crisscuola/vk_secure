@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -61,12 +63,38 @@ public class FragmentSingleFriend extends Fragment {
         View view = inflater.inflate(R.layout.fragment_single_friend, null);
 
         TextView friend_name = (TextView) view.findViewById(R.id.friends_name);
+        final TextView friend_status = (TextView) view.findViewById(R.id.friends_status);
 
         id = getArguments().getInt(USER_ID);
         first_name = getArguments().getString(FIRST_NAME);
         last_name = getArguments().getString(LAST_NAME);
 
         friend_name.setText(first_name + " " + last_name);
+
+        final VKRequest request = new VKRequest("status.get", VKParameters.from(VKApiConst.USER_ID, id));
+
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+
+                String status = "";
+                Log.i("len", String.valueOf(response.json.length()));
+                try {
+
+                    status = (String) response.json.getJSONObject("response").get("text");
+                    friend_status.setText(status);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(VKError error) {
+                Log.i("len", String.valueOf(error.errorCode));
+            }
+        });
 
 
         send = (Button) view.findViewById(R.id.button_write);

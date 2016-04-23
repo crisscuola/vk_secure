@@ -23,11 +23,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
-
 /**
  * Created by konstantin on 10.04.16.
  */
@@ -75,6 +70,8 @@ public class FragmentSettingsDialog extends Fragment {
 
                             final String[] status = {""};
 
+
+
                             VKApiModel a = list_s.get(0);
 
                             try {
@@ -103,6 +100,7 @@ public class FragmentSettingsDialog extends Fragment {
 
                                 String pkBase64 = String.valueOf(note_get.get("title"));
                                 byte[] pkBytes = Base64.decode(pkBase64, Base64.DEFAULT);
+
                                 ActivityBase.encryptionFriend.setPublicKey(pkBytes);
 
                                 Log.i("get_note", String.valueOf(note_get.get("title")));

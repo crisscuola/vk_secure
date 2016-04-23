@@ -67,7 +67,6 @@ public class FragmentFriendsSend extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        //getActivity().setTitle(R.string.friends_title);
         getActivity().setTitle(R.string.send);
         getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
     }
@@ -76,14 +75,14 @@ public class FragmentFriendsSend extends ListFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        Activity a;
+        Activity activity;
 
         if (context instanceof Activity){
-            a=(Activity) context;
+            activity=(Activity) context;
             try {
-                mCallback = (onItemSelectedListener) a;
+                mCallback = (onItemSelectedListener) activity;
             } catch (ClassCastException e) {
-                throw new ClassCastException(a.toString()
+                throw new ClassCastException(activity.toString()
                         + " must implement OnItemSelectedListener");
             }
         }

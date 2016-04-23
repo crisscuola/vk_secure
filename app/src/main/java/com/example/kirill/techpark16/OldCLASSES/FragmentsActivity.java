@@ -8,11 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
-import com.example.kirill.techpark16.Fragments.FragmentSingleDialog;
 import com.example.kirill.techpark16.Fragments.FragmentDialogsList;
-import com.example.kirill.techpark16.Fragments.FragmentFriendList;
+import com.example.kirill.techpark16.Fragments.FragmentSingleDialog;
 import com.example.kirill.techpark16.R;
-import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
@@ -32,7 +30,7 @@ import java.util.ArrayList;
 /**
  * Created by kirill on 02.04.16
  */
-public class FragmentsActivity extends AppCompatActivity implements FragmentDialogsList.onItemSelectedListener, FragmentFriendList.onFriendSelectedListener {
+public class FragmentsActivity extends AppCompatActivity implements FragmentDialogsList.onItemSelectedListener {
     private int pos = 0;
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL};
@@ -54,9 +52,7 @@ public class FragmentsActivity extends AppCompatActivity implements FragmentDial
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        SideMenu sideMenu =  new SideMenu();
-        DrawerBuilder drawer = sideMenu.getDrawer(this, toolbar);
-        drawer.build();
+
     }
 
     public static Fragment selectDrawerItem(int position){
@@ -67,7 +63,7 @@ public class FragmentsActivity extends AppCompatActivity implements FragmentDial
                 fragmentClass = FragmentDialogsList.class;
                 break;
             case 2:
-                fragmentClass = FragmentFriendList.class;
+
                 break;
             default:
                 fragmentClass = FragmentDialogsList.class;
@@ -149,8 +145,5 @@ public class FragmentsActivity extends AppCompatActivity implements FragmentDial
 
     }
 
-    @Override
-    public void onFriendSelected(int position) {
 
-    }
 }

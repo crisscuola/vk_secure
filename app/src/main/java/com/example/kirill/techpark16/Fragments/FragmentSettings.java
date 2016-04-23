@@ -29,8 +29,8 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
         set_off.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final VKRequest request = new VKRequest("account.setOffline");
-                request.executeWithListener(new VKRequest.VKRequestListener() {
+                final VKRequest request_offline = new VKRequest("account.setOffline");
+                request_offline.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);

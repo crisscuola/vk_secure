@@ -3,7 +3,7 @@ package com.example.kirill.techpark16.Fragments;
 /**
  * Created by konstantin on 09.04.16.
  */
-public class Fragments {
+public class FragmentsConst {
 
     final static int DIALOGSLIST = 0;
     final static int FRIENDSLIST = 1;
