@@ -99,9 +99,8 @@ public class FragmentSettingsDialog extends Fragment {
                                 JSONObject note_get = array.getJSONObject(0);
 
                                 String pkBase64 = String.valueOf(note_get.get("title"));
-                                byte[] pkBytes = Base64.decode(pkBase64, Base64.DEFAULT);
 
-                                ActivityBase.encryptionFriend.setPublicKey(pkBytes);
+                                ActivityBase.encryptionFriend.setPublicKey(pkBase64);
 
                                 Log.i("get_note", String.valueOf(note_get.get("title")));
 

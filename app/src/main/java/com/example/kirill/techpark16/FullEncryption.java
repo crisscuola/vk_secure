@@ -45,7 +45,8 @@ public class FullEncryption {
         return Base64.encodeToString(pk, Base64.DEFAULT);
     }
 
-    public void setPublicKey(byte[] pk) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        rsaInstance.setPublicKey(pk);
+    public void setPublicKey(String pk) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        byte[] pkBytes = Base64.decode(pk, Base64.DEFAULT);
+        rsaInstance.setPublicKey(pkBytes);
     }
 }

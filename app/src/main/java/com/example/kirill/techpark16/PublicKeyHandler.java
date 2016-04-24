@@ -15,14 +15,20 @@ import java.security.spec.InvalidKeySpecException;
 public class PublicKeyHandler {
 
     public static PublicKey downloadFriendPublicKey(int id) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        String pk = "here's gonna be friend's public key from server";
-        byte[] pkBytes = Base64.decode(pk, Base64.DEFAULT);
+//        if (serverKey) {
+//            download();
+//        } else {
+//            getFromDB();
+//        }
+//        return PublicKey;
 
-        ActivityBase.encryptor.setPublicKey(pkBytes);
+        String pk = "here's gonna be friend's public key from server";
+
+        ActivityBase.encryptor.setPublicKey(pk);
         return ActivityBase.encryptor.rsaInstance.getPublicKey();
     }
 
-    public static int uploadPublicKey(){
+    public static int uploadMyPublicKey(){
         PublicKey pk = ActivityBase.encryptor.rsaInstance.getPublicKey();
         return 1;
     }
