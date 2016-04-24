@@ -1,5 +1,6 @@
 package com.example.kirill.techpark16;
 
+import com.orm.SugarApp;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKScope;
@@ -11,9 +12,8 @@ import java.io.UnsupportedEncodingException;
 /**
  * Created by konstantin on 19.02.16.
  */
-public class Application extends android.app.Application {
+public class Application extends SugarApp {
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL, VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
-    static public RSAEncryption rsaInstance = new RSAEncryption();
 
 
     VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
@@ -28,18 +28,10 @@ public class Application extends android.app.Application {
         vkAccessTokenTracker.startTracking();
         VKSdk.initialize(this);
 
+    }
 
-        try {
-            rsaInstance.generateKeys();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        String status = "lol";
-        try {
-            status = new String(rsaInstance.getPublicKey().getEncoded(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
     }
 }

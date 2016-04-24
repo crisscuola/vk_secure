@@ -19,7 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+
 import com.example.kirill.techpark16.FullEncryption;
+import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
 import com.example.kirill.techpark16.RSAEncryption;
 import com.vk.sdk.VKScope;
@@ -41,6 +43,7 @@ import org.json.JSONException;
 
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -59,6 +62,17 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     BroadcastReceiver br;
     Button toolbarButton;
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        List<PublicKeysTable> keys = PublicKeysTable.find(PublicKeysTable.class, "id > 0");
+//        for (PublicKeysTable key:keys
+//             ) {
+//            key.delete();
+//        }
+
+    }
+
     static PublicKey pk;
     static RSAEncryption rsaInstance = new RSAEncryption();
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL, VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
@@ -71,27 +85,13 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        VKSdk.login(this, scope);
+    VKSdk.login(this, scope);
 
         setContentView(R.layout.base_activity);
 
-        final int my_id = Integer.parseInt(VKSdk.getAccessToken().userId);
 
-//        String status = "Test status.";
-//        final VKRequest request = new VKRequest("status.set", VKParameters.from("text", status));
-//
-//        request.executeWithListener(new VKRequest.VKRequestListener() {
-//            @Override
-//            public void onComplete(VKResponse response) {
-//                super.onComplete(response);
-//
-//            }
-//
-//            @Override
-//            public void onError(VKError error) {
-//                Log.i("len", String.valueOf(error.errorCode));
-//            }
-//        });
+//        final int my_id = Integer.parseInt(VKSdk.getAccessToken().userId);
+
 
         String a = encryptor.getPublicKey();
 
