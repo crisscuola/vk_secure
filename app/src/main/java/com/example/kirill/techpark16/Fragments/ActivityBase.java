@@ -140,8 +140,11 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
                     if (currentFragment instanceof FragmentSingleDialog) {
 
+                        int id = FragmentSingleDialog.title_id;
+
+                        FragmentSettingsDialog newFragment = FragmentSettingsDialog.getInstance(id);
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.SETTINGSDIALOG]);
+                        fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
                         toolbar.setTitle(R.string.friends_title);

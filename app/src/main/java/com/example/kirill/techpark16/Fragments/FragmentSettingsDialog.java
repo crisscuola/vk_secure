@@ -2,7 +2,6 @@ package com.example.kirill.techpark16.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,16 +10,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.kirill.techpark16.R;
-import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKApiModel;
 import com.vk.sdk.api.model.VKList;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -32,14 +27,14 @@ public class FragmentSettingsDialog extends Fragment {
         VKList list_s;
         static int title_id;
 
-    public static FragmentSingleDialog getInstance(int user_id){
-        FragmentSingleDialog fragmentSingleDialog = new FragmentSingleDialog();
+    public static FragmentSettingsDialog getInstance(int user_id){
+        FragmentSettingsDialog fragmentSettingsDialog = new FragmentSettingsDialog();
         Bundle bundle = new Bundle();
 
         title_id = user_id;
 
-        fragmentSingleDialog.setArguments(bundle);
-        return fragmentSingleDialog;
+        fragmentSettingsDialog.setArguments(bundle);
+        return fragmentSettingsDialog;
     }
 
 
@@ -61,7 +56,9 @@ public class FragmentSettingsDialog extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    final VKRequest request_key  = new VKRequest("notes.get", VKParameters.from("user_id", 6759461));
+                    Log.i("SETIDCHECK", String.valueOf(title_id));
+
+                    final VKRequest request_key  = new VKRequest("notes.get", VKParameters.from("user_id", title_id));
 
                     request_key.executeWithListener(new VKRequest.VKRequestListener() {
                         @Override
