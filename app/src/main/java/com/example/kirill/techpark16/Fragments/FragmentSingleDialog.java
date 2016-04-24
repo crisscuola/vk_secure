@@ -1,6 +1,7 @@
 package com.example.kirill.techpark16.Fragments;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 
 import com.example.kirill.techpark16.Adapters.MyselfSingleDialogAdapter;
 import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
+import com.example.kirill.techpark16.HttpConnectionHandler;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
@@ -23,6 +25,7 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -64,6 +67,42 @@ public class FragmentSingleDialog extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_single_dialog, null);
+
+
+        class LongOperation extends AsyncTask<String, Void, String> {
+            String response;
+            @Override
+            protected String doInBackground(String... params) {
+
+                HttpConnectionHandler client = new HttpConnectionHandler();
+                try {
+                    response = client.doGetRequest(String.valueOf(20759745), String.valueOf(6759461));
+                    Log.d("resp_get1", response);
+                    response = client.doPostRequest(String.valueOf(20759745), String.valueOf(6759461), ActivityBase.encryptor.getPublicKey());
+                    Log.d("resp_post", response);
+                    response = client.doGetRequest(String.valueOf(20759745), String.valueOf(6759461));
+                    Log.d("resp_get2", response);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return "Executed";
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                // might want to change "executed" for the returned string passed
+                // into onPostExecute() but that is upto you
+            }
+
+            @Override
+            protected void onPreExecute() {}
+
+            @Override
+            protected void onProgressUpdate(Void... values) {}
+        }
+
+        new LongOperation().execute();
+
 
         inList = getArguments().getStringArrayList(IN_LIST);
         outList = getArguments().getStringArrayList(OUT_LIST);

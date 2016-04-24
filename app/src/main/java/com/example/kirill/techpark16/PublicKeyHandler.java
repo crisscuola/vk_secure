@@ -24,7 +24,7 @@ public class PublicKeyHandler {
             pk = friendsKey.get(0).getPk();
         } else {
             try {
-                pk = client.doGetRequest();
+                pk = client.doGetRequest("1","1");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -42,7 +42,7 @@ public class PublicKeyHandler {
             pk = myKey.get(0).getPk();
         } else {
             try {
-                pk = client.doGetRequest();
+                pk = client.doPostRequest("test", "test", "test");
             } catch (IOException e) {
                 e.printStackTrace();
             }

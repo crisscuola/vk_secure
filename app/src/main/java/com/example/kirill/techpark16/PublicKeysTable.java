@@ -5,6 +5,7 @@ import com.orm.SugarRecord;
 /**
  * Created by kirill on 24.04.16
  */
+//TODO: avatar field
 public class PublicKeysTable extends SugarRecord {
     Integer userId;
     String pk;

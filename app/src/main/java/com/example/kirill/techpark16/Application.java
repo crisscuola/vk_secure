@@ -1,11 +1,15 @@
 package com.example.kirill.techpark16;
 
+import android.util.Log;
+
 import com.example.kirill.techpark16.Fragments.ActivityBase;
 import com.orm.SugarApp;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
+
+import java.io.IOException;
 
 
 /**
@@ -30,6 +34,7 @@ public class Application extends SugarApp {
         if (VKSdk.getAccessToken() != null) {
             ActivityBase.MY_ID = Integer.parseInt(VKSdk.getAccessToken().userId);
         }
+
 
     }
 

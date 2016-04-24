@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.kirill.techpark16.FullEncryption;
+import com.example.kirill.techpark16.HttpConnectionHandler;
 import com.example.kirill.techpark16.R;
 import com.example.kirill.techpark16.RSAEncryption;
 import com.vk.sdk.VKScope;
@@ -39,6 +41,7 @@ import com.vk.sdk.api.model.VKList;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.security.PublicKey;
 import java.util.ArrayList;
 
@@ -92,30 +95,29 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         }
 
 
-
-            String a = encryptor.getPublicKey();
-
-            final VKRequest note_request = new VKRequest("notes.add", VKParameters.from("title", a, "text", "public_key"));
-
-            note_request.executeWithListener(new VKRequest.VKRequestListener() {
-                @Override
-                public void onComplete(VKResponse response) {
-                    super.onComplete(response);
-                }
-
-
-                @Override
-                public void onError(VKError error) {
-                    Log.i("notes", String.valueOf(error.errorCode));
-                }
-
-            });
+//            String a = encryptor.getPublicKey();
+//
+//            final VKRequest note_request = new VKRequest("notes.add", VKParameters.from("title", a, "text", "public_key"));
+//
+//            note_request.executeWithListener(new VKRequest.VKRequestListener() {
+//                @Override
+//                public void onComplete(VKResponse response) {
+//                    super.onComplete(response);
+//                }
+//
+//
+//                @Override
+//                public void onError(VKError error) {
+//                    Log.i("notes", String.valueOf(error.errorCode));
+//                }
+//
+//            });
 
             setBroadcastReceiver();
 
             IntentFilter intentFilter = new IntentFilter(BROADCAST_EVENT);
 
-            registerReceiver(br, intentFilter);
+            //registerReceiver(br, intentFilter);
 
 
             toolbar = (Toolbar) findViewById(R.id.toolbar);
