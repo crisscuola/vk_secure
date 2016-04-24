@@ -50,9 +50,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         FragmentFriendsList.onItemSelectedListener ,NavigationView.OnNavigationItemSelectedListener,
         FragmentFriendsSend.onItemSelectedListener {
 
-//    final static public int MY_ID = Integer.parseInt(VKSdk.getAccessToken().userId);
+    static public int MY_ID = 0;
 
-    final static public int MY_ID = 1;
+
 
     Fragment fragmentSet[] = new Fragment[10];
     ActionBarDrawerToggle toggle;
@@ -87,9 +87,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.base_activity);
-        
+
         if (VKSdk.getAccessToken() != null) {
-            Log.i("TOKEN", "YES");
+            MY_ID = Integer.parseInt(VKSdk.getAccessToken().userId);
 
         } else {
             VKSdk.login(this, scope);
@@ -183,9 +183,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
         fragmentTransaction.commit();
-
-
-
 
     }
 
