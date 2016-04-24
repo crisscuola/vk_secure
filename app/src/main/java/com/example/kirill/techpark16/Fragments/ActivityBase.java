@@ -51,9 +51,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         FragmentFriendsSend.onItemSelectedListener {
 
     static public int MY_ID = 0;
-
-
-
     Fragment fragmentSet[] = new Fragment[10];
     ActionBarDrawerToggle toggle;
     android.support.v4.app.FragmentTransaction fragmentTransaction;
@@ -89,100 +86,99 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         setContentView(R.layout.base_activity);
 
         if (VKSdk.getAccessToken() != null) {
-            MY_ID = Integer.parseInt(VKSdk.getAccessToken().userId);
-
+        Log.i("TOKEN", String.valueOf(MY_ID));
         } else {
-            VKSdk.login(this, scope);
+        VKSdk.login(this, scope);
         }
 
-//        final int my_id = Integer.parseInt(VKSdk.getAccessToken().userId);
 
 
-        String a = encryptor.getPublicKey();
+            String a = encryptor.getPublicKey();
 
-        final VKRequest note_request = new VKRequest("notes.add", VKParameters.from("title",a , "text", "public_key"));
+            final VKRequest note_request = new VKRequest("notes.add", VKParameters.from("title", a, "text", "public_key"));
 
-        note_request.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-            }
-
-
-            @Override
-            public void onError(VKError error) {
-                Log.i("notes", String.valueOf(error.errorCode));
-            }
-
-        });
-
-        setBroadcastReceiver();
-
-        IntentFilter intentFilter = new IntentFilter(BROADCAST_EVENT);
-
-        registerReceiver(br, intentFilter);
-
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbarButton = (Button)toolbar.findViewById(R.id.toolbar_button);
-
-        toolbarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentPlace);
-
-                if (currentFragment instanceof FragmentDialogsList) {
-
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.FRIENDSEND]);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    toolbar.setTitle(R.string.friends_title);
-                    toolbar.setTitle(R.string.send);
-                    toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+            note_request.executeWithListener(new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
                 }
 
-                if (currentFragment instanceof FragmentSingleDialog) {
 
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.SETTINGSDIALOG]);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    toolbar.setTitle(R.string.friends_title);
-                    toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+                @Override
+                public void onError(VKError error) {
+                    Log.i("notes", String.valueOf(error.errorCode));
                 }
-            }
-        });
+
+            });
+
+            setBroadcastReceiver();
+
+            IntentFilter intentFilter = new IntentFilter(BROADCAST_EVENT);
+
+            registerReceiver(br, intentFilter);
 
 
-        setSupportActionBar(toolbar);
+            toolbar = (Toolbar) findViewById(R.id.toolbar);
+            toolbarButton = (Button) toolbar.findViewById(R.id.toolbar_button);
+
+            toolbarButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentPlace);
+
+                    if (currentFragment instanceof FragmentDialogsList) {
+
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.FRIENDSEND]);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                        toolbar.setTitle(R.string.friends_title);
+                        toolbar.setTitle(R.string.send);
+                        toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+                    }
+
+                    if (currentFragment instanceof FragmentSingleDialog) {
+
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.SETTINGSDIALOG]);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                        toolbar.setTitle(R.string.friends_title);
+                        toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
 
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+            setSupportActionBar(toolbar);
 
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        fragmentSet[FragmentsConst.DIALOGSLIST] = new FragmentDialogsList();
-        fragmentSet[FragmentsConst.FRIENDSLIST] = new FragmentFriendsList();
-        fragmentSet[FragmentsConst.SETTINGS] = new FragmentSettings();
-        fragmentSet[FragmentsConst.SINGLEDIALOG] = null;
-        fragmentSet[FragmentsConst.SINGLEDIALOG] = new FragmentSingleDialog();
-        fragmentSet[FragmentsConst.SETTINGSDIALOG] = new FragmentSettingsDialog();
-        fragmentSet[FragmentsConst.FRIENDSEND] = new FragmentFriendsSend();
+            drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
 
 
-        toolbar.setTitle(R.string.dialog_list_title);
-        toolbar.findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
-        fragmentTransaction.commit();
+            navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+
+            fragmentSet[FragmentsConst.DIALOGSLIST] = new FragmentDialogsList();
+            fragmentSet[FragmentsConst.FRIENDSLIST] = new FragmentFriendsList();
+            fragmentSet[FragmentsConst.SETTINGS] = new FragmentSettings();
+            fragmentSet[FragmentsConst.SINGLEDIALOG] = null;
+            fragmentSet[FragmentsConst.SINGLEDIALOG] = new FragmentSingleDialog();
+            fragmentSet[FragmentsConst.SETTINGSDIALOG] = new FragmentSettingsDialog();
+            fragmentSet[FragmentsConst.FRIENDSEND] = new FragmentFriendsSend();
+
+
+            toolbar.setTitle(R.string.dialog_list_title);
+            toolbar.findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
+            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
+            fragmentTransaction.commit();
+
 
     }
 
