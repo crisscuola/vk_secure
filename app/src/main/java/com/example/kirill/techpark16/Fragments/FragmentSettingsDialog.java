@@ -60,33 +60,8 @@ public class FragmentSettingsDialog extends Fragment {
             pull_key.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    VKRequest request_status = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, id_user, VKApiConst.FIELDS, "status"));
 
-                    request_status.executeWithListener(new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(VKResponse response) {
-
-                            list_s = (VKList) response.parsedModel;
-
-                            final String[] status = {""};
-
-
-
-                            VKApiModel a = list_s.get(0);
-
-                            try {
-                                status[0] = a.fields.getString("status");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                            user_status.setText(status[0]);
-
-                            super.onComplete(response);
-                        }
-                    });
-
-                    final VKRequest request_key  = new VKRequest("notes.get", VKParameters.from("user_id", id_user));
+                    final VKRequest request_key  = new VKRequest("notes.get", VKParameters.from("user_id", 6759461));
 
                     request_key.executeWithListener(new VKRequest.VKRequestListener() {
                         @Override
@@ -95,6 +70,7 @@ public class FragmentSettingsDialog extends Fragment {
 
                             try {
                                 JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
+                                Log.d("get_note_len", String.valueOf(array.length()));
 
                                 JSONObject note_get = array.getJSONObject(0);
 

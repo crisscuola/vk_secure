@@ -4,33 +4,49 @@ import android.util.Base64;
 
 import com.example.kirill.techpark16.Fragments.ActivityBase;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kirill on 22.04.16
  */
-//TODO: requests to server
 public class PublicKeyHandler {
+    public static HttpConnectionHandler client = new HttpConnectionHandler();
 
-    public static PublicKey downloadFriendPublicKey(int id) throws InvalidKeySpecException, NoSuchAlgorithmException {
-//        if (serverKey) {
-//            download();
-//        } else {
-//            getFromDB();
-//        }
-//        return PublicKey;
-
-        String pk = "here's gonna be friend's public key from server";
-
-        ActivityBase.encryptor.setPublicKey(pk);
-        return ActivityBase.encryptor.rsaInstance.getPublicKey();
+    public static String downloadFriendPublicKey(int id) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        List<PublicKeysTable> friendsKey = new ArrayList<>();
+        String pk = "";
+        friendsKey = PublicKeysTable.find(PublicKeysTable.class, "id = ?", String.valueOf(id));
+        if (friendsKey.size() != 0){
+            pk = friendsKey.get(0).getPk();
+        } else {
+            try {
+                pk = client.doGetRequest();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ActivityBase.encryptor.setPublicKey(pk);
+            PublicKeysTable key = new PublicKeysTable(id, pk);
+            key.save();
+        }
+        return pk;
     }
 
-    public static int uploadMyPublicKey(){
-        PublicKey pk = ActivityBase.encryptor.rsaInstance.getPublicKey();
-        return 1;
+    public static String uploadMyPublicKey() {
+        String pk = "";
+        List<PublicKeysTable> myKey = PublicKeysTable.find(PublicKeysTable.class, "id = ?", String.valueOf(ActivityBase.MY_ID));
+        if (myKey.size() != 0) {
+            pk = myKey.get(0).getPk();
+        } else {
+            try {
+                pk = client.doGetRequest();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return pk;
     }
-
 }

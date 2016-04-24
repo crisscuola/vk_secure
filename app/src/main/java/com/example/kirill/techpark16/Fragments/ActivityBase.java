@@ -53,6 +53,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         FragmentFriendsList.onItemSelectedListener ,NavigationView.OnNavigationItemSelectedListener,
         FragmentFriendsSend.onItemSelectedListener {
 
+    final static public int MY_ID = Integer.parseInt(VKSdk.getAccessToken().userId);
+
     Fragment fragmentSet[] = new Fragment[10];
     ActionBarDrawerToggle toggle;
     android.support.v4.app.FragmentTransaction fragmentTransaction;
