@@ -19,9 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-
 import com.example.kirill.techpark16.FullEncryption;
-import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
 import com.example.kirill.techpark16.RSAEncryption;
 import com.vk.sdk.VKScope;
@@ -43,7 +41,6 @@ import org.json.JSONException;
 
 import java.security.PublicKey;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -53,7 +50,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         FragmentFriendsList.onItemSelectedListener ,NavigationView.OnNavigationItemSelectedListener,
         FragmentFriendsSend.onItemSelectedListener {
 
-    final static public int MY_ID = Integer.parseInt(VKSdk.getAccessToken().userId);
+//    final static public int MY_ID = Integer.parseInt(VKSdk.getAccessToken().userId);
+
+    final static public int MY_ID = 1;
 
     Fragment fragmentSet[] = new Fragment[10];
     ActionBarDrawerToggle toggle;
@@ -87,10 +86,14 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-    VKSdk.login(this, scope);
-
         setContentView(R.layout.base_activity);
+        
+        if (VKSdk.getAccessToken() != null) {
+            Log.i("TOKEN", "YES");
 
+        } else {
+            VKSdk.login(this, scope);
+        }
 
 //        final int my_id = Integer.parseInt(VKSdk.getAccessToken().userId);
 
