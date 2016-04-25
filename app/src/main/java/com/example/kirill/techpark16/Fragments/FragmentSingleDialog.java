@@ -73,6 +73,9 @@ public class FragmentSingleDialog extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_single_dialog, null);
 
+        inList = getArguments().getStringArrayList(IN_LIST);
+        outList = getArguments().getStringArrayList(OUT_LIST);
+        id = getArguments().getInt(USER_ID);
 
         class LongOperation extends AsyncTask<String, Void, String> {
             String response;
@@ -82,13 +85,14 @@ public class FragmentSingleDialog extends ListFragment {
 
                 HttpConnectionHandler client = new HttpConnectionHandler();
                 try {
-                    response = client.doGetRequest(String.valueOf(6759461));
+                    response = client.doGetRequest(String.valueOf(id));
                     Log.d("resp_get1", response);
-                    response = client.doPostRequest(String.valueOf(6759461), ActivityBase.publicKey);
+                    response = client.doPostRequest(String.valueOf(id), ActivityBase.publicKey);
                     json = new JSONObject(response);
                     Log.d("resp_post", response);
-                    response = client.doGetRequest(String.valueOf(6759461));
+                    response = client.doGetRequest(String.valueOf(id));
                     Log.d("resp_get2", response);
+                    Log.d("resp_id", String.valueOf(id));
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -111,11 +115,6 @@ public class FragmentSingleDialog extends ListFragment {
         }
 
         new LongOperation().execute();
-
-
-        inList = getArguments().getStringArrayList(IN_LIST);
-        outList = getArguments().getStringArrayList(OUT_LIST);
-        id = getArguments().getInt(USER_ID);
 
         text = (EditText) view.findViewById(R.id.textmsg);
         listView = (ListView) view.findViewById(R.id.listmsg);
