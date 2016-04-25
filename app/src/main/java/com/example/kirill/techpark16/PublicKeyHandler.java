@@ -26,6 +26,7 @@ public class PublicKeyHandler {
         friendsKey = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?", String.valueOf(friendId));
         if (friendsKey.size() != 0){
             pk = friendsKey.get(0).getPk();
+            Log.d("resp",pk);
         } else {
             try {
                 pk = requestPublicKeyFromServer(friendId);

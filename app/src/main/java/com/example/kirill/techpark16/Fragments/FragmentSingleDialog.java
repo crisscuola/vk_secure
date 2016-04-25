@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.kirill.techpark16.Adapters.MyselfSingleDialogAdapter;
 import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
@@ -140,9 +141,13 @@ public class FragmentSingleDialog extends ListFragment {
                 String messageToSend = text.getText().toString();
 
                 try {
-                    Log.d("resp_friend_pk_fragm", friendKey);
-                    ActivityBase.encryptor.setPublicKey(friendKey);
-                    messageToSend = ActivityBase.encryptor.encode(messageToSend);
+                    if (!friendKey.equals("none")) {
+                        Log.d("resp_friend_pk_fragm", friendKey);
+                        ActivityBase.encryptor.setPublicKey(friendKey);
+                        messageToSend = ActivityBase.encryptor.encode(messageToSend);
+                    } else {
+                        Toast.makeText(getContext(),"The friend hasn't started the dialog.",Toast.LENGTH_SHORT).show();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
