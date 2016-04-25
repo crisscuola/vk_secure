@@ -22,6 +22,7 @@ import android.widget.Button;
 
 import com.example.kirill.techpark16.FullEncryption;
 import com.example.kirill.techpark16.HttpConnectionHandler;
+import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
 import com.example.kirill.techpark16.RSAEncryption;
 import com.vk.sdk.VKScope;
@@ -42,8 +43,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -63,6 +67,15 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     BroadcastReceiver br;
     Button toolbarButton;
 
+
+    private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL,
+            VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
+    public static FullEncryption encryptor = new FullEncryption();
+    static FullEncryption encryptionFriend = new FullEncryption();
+    static String publicKey;
+    final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
+
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -73,14 +86,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 //        }
 
     }
-
-    static PublicKey pk;
-    static RSAEncryption rsaInstance = new RSAEncryption();
-    private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL, VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
-    public static FullEncryption encryptor = new FullEncryption();
-    static FullEncryption encryptionFriend = new FullEncryption();
-
-    final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,24 +99,25 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         VKSdk.login(this, scope);
         }
 
-
-//            String a = encryptor.getPublicKey();
-//
-//            final VKRequest note_request = new VKRequest("notes.add", VKParameters.from("title", a, "text", "public_key"));
-//
-//            note_request.executeWithListener(new VKRequest.VKRequestListener() {
-//                @Override
-//                public void onComplete(VKResponse response) {
-//                    super.onComplete(response);
-//                }
-//
-//
-//                @Override
-//                public void onError(VKError error) {
-//                    Log.i("notes", String.valueOf(error.errorCode));
-//                }
-//
-//            });
+        List<PublicKeysTable> myPk = PublicKeysTable.find(PublicKeysTable.class,"user_id = ?", String.valueOf(0));
+        if (myPk.size() == 0) {
+            try {
+                encryptor.rsaInstance.generateKeys();
+                publicKey = encryptor.getPublicKey();
+                PublicKeysTable pk = new PublicKeysTable(0, publicKey);
+                pk.save();
+                pk = new PublicKeysTable(-1, encryptor.getPrivateKey());
+                pk.save();
+            } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+                e.printStackTrace();
+            }
+        } else {
+            publicKey = myPk.get(0).getPk();
+        }
+        Log.d("pk_publ", publicKey);
+        List<PublicKeysTable> priv = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?", String.valueOf(-1));
+        Log.d("pk_from_DB", "publ: " + publicKey
+                + " priv: " + priv.get(0).getPk());
 
             setBroadcastReceiver();
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VK Sucure</string>
+    <string name="app_name">VK Secure</string>
     <string name="action_settings">Settings</string>
     <string name="btn1text">To 2nd activity</string>
     <string name="btn2text">To main activity</string>

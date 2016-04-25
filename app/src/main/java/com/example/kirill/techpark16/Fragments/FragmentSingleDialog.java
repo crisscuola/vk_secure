@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.example.kirill.techpark16.Adapters.MyselfSingleDialogAdapter;
 import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
 import com.example.kirill.techpark16.HttpConnectionHandler;
+import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
@@ -27,6 +28,10 @@ import com.vk.sdk.api.model.VKList;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by kirill on 02.04.16
@@ -71,18 +76,22 @@ public class FragmentSingleDialog extends ListFragment {
 
         class LongOperation extends AsyncTask<String, Void, String> {
             String response;
+            JSONObject json;
             @Override
             protected String doInBackground(String... params) {
 
                 HttpConnectionHandler client = new HttpConnectionHandler();
                 try {
-                    response = client.doGetRequest(String.valueOf(20759745), String.valueOf(6759461));
+                    response = client.doGetRequest(String.valueOf(6759461));
                     Log.d("resp_get1", response);
-                    response = client.doPostRequest(String.valueOf(20759745), String.valueOf(6759461), ActivityBase.encryptor.getPublicKey());
+                    response = client.doPostRequest(String.valueOf(6759461), ActivityBase.publicKey);
+                    json = new JSONObject(response);
                     Log.d("resp_post", response);
-                    response = client.doGetRequest(String.valueOf(20759745), String.valueOf(6759461));
+                    response = client.doGetRequest(String.valueOf(6759461));
                     Log.d("resp_get2", response);
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 return "Executed";
@@ -124,11 +133,6 @@ public class FragmentSingleDialog extends ListFragment {
 
                 VKRequest request;
                 String messageToSend = text.getText().toString();
-                String messageReceived = null;
-                String messageSent = null;
-
-                byte[] msg_bytes = null;
-                byte[] msg_bytes_get = null;
 
                 try {
                     messageToSend = ActivityBase.encryptionFriend.encode(messageToSend);
@@ -136,25 +140,7 @@ public class FragmentSingleDialog extends ListFragment {
                     e.printStackTrace();
                 }
 
-                Log.d("msg_sent", messageToSend);
 
-                messageReceived = String.valueOf((outList.get(4)));
-                Log.d("msg_output_vk", messageReceived);
-                try {
-                    messageReceived = ActivityBase.encryptor.decode(messageReceived);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Log.d("msg_decrypted", messageReceived);
-
-                messageSent = String.valueOf(inList.get(4));
-                Log.d("msg_sent", messageSent);
-                try {
-                    messageSent = ActivityBase.encryptor.decode(messageSent);
-                    Log.d("msg_sent_decoded", messageSent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
                 request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
                         VKApiConst.MESSAGE, messageToSend));
@@ -163,7 +149,6 @@ public class FragmentSingleDialog extends ListFragment {
                     @Override
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
-                        System.out.println("Сообщение отправлено");
                     }
                 });
             }

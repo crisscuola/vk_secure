@@ -33,6 +33,9 @@ public class RSAEncryption {
     Cipher cipherToEncrypt, cipherToDecrypt;
     String encryptedString, decryptedString;
 
+    public RSAEncryption(){
+    }
+
     public void generateKeys() throws NoSuchAlgorithmException, InvalidKeySpecException {
         kpg = KeyPairGenerator.getInstance("RSA");
         kpg.initialize(1024);
@@ -40,9 +43,7 @@ public class RSAEncryption {
         publicKeyBytes = kp.getPublic().getEncoded();
         this.setPublicKey(publicKeyBytes);
         privateKey = kp.getPrivate();
-
-
-
+        Log.d("pk", "keys generated");
     }
 
     public void saveKeys(){

@@ -2,6 +2,8 @@ package com.example.kirill.techpark16;
 
 import android.util.Log;
 
+import com.example.kirill.techpark16.Fragments.ActivityBase;
+
 import java.io.IOException;
 
 import okhttp3.FormBody;
@@ -24,14 +26,14 @@ public class HttpConnectionHandler {
         client = new OkHttpClient();
     }
 
-    public String doGetRequest(String myId, String friendId) throws IOException {
+    public String doGetRequest(String friendId) throws IOException {
 
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(URL)
                 .addPathSegment(PATH_1)
                 .addPathSegment(PATH_2)
-                .addQueryParameter("my_id", myId)
+                .addQueryParameter("my_id", String.valueOf(ActivityBase.MY_ID))
                 .addQueryParameter("to_id", friendId)
                 .build();
 
@@ -43,7 +45,7 @@ public class HttpConnectionHandler {
         return response.body().string();
     }
 
-    public String doPostRequest(String myId, String friendId, String pk) throws IOException {
+    public String doPostRequest(String friendId, String pk) throws IOException {
 
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
@@ -55,7 +57,7 @@ public class HttpConnectionHandler {
 
 
         RequestBody formBody = new FormBody.Builder()
-                .add("my_id", myId)
+                .add("my_id", String.valueOf(ActivityBase.MY_ID))
                 .add("to_id", friendId)
                 .add("key", pk)
                 .build();
