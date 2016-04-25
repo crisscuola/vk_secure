@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.example.kirill.techpark16.Adapters.MyselfSingleDialogAdapter;
 import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
 import com.example.kirill.techpark16.HttpConnectionHandler;
+import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.VKSdk;
@@ -27,6 +28,8 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +48,7 @@ public class FragmentSingleDialog extends ListFragment {
 
     ArrayList<String> inList = new ArrayList<>();
     ArrayList<String> outList = new ArrayList<>();
-    int id = 0;
+    int id;
 
 
     EditText text;
@@ -54,6 +57,8 @@ public class FragmentSingleDialog extends ListFragment {
 
     static int title_id;
     VKList list_s;
+
+    String friendKey;
 
     public static FragmentSingleDialog getInstance(int user_id, ArrayList<String> inList, ArrayList<String> outList) {
         FragmentSingleDialog fragmentSingleDialog = new FragmentSingleDialog();
@@ -68,6 +73,34 @@ public class FragmentSingleDialog extends ListFragment {
         return fragmentSingleDialog;
     }
 
+    private class LongOperation extends AsyncTask<String, Void, String> {
+        String response;
+        JSONObject json;
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                friendKey = PublicKeyHandler.downloadFriendPublicKey(id);
+                Log.d("resp_db_len", String.valueOf(PublicKeysTable.listAll(PublicKeysTable.class).size()));
+            } catch ( NoSuchAlgorithmException | InvalidKeySpecException e) {
+                e.printStackTrace();
+            }
+            return friendKey;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            // might want to change "executed" for the returned string passed
+            // into onPostExecute() but that is upto you
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -77,42 +110,15 @@ public class FragmentSingleDialog extends ListFragment {
         outList = getArguments().getStringArrayList(OUT_LIST);
         id = getArguments().getInt(USER_ID);
 
-        class LongOperation extends AsyncTask<String, Void, String> {
-            String response;
-            JSONObject json;
-            @Override
-            protected String doInBackground(String... params) {
-
-                HttpConnectionHandler client = new HttpConnectionHandler();
-                try {
-                    response = client.doGetRequest(String.valueOf(id));
-                    Log.d("resp_get1", response);
-                    response = client.doPostRequest(String.valueOf(id), ActivityBase.publicKey);
-                    json = new JSONObject(response);
-                    Log.d("resp_post", response);
-                    response = client.doGetRequest(String.valueOf(id));
-                    Log.d("resp_get2", response);
-                    Log.d("resp_id", String.valueOf(id));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return "Executed";
+        Log.d("inList_size", String.valueOf(inList.size()));
+        for (String msg : inList){
+            try {
+                Log.d("inList_decr", ActivityBase.encryptor.decode(msg));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            @Override
-            protected void onPostExecute(String result) {
-                // might want to change "executed" for the returned string passed
-                // into onPostExecute() but that is upto you
-            }
-
-            @Override
-            protected void onPreExecute() {}
-
-            @Override
-            protected void onProgressUpdate(Void... values) {}
         }
+
 
         new LongOperation().execute();
 
@@ -134,7 +140,9 @@ public class FragmentSingleDialog extends ListFragment {
                 String messageToSend = text.getText().toString();
 
                 try {
-                    messageToSend = ActivityBase.encryptionFriend.encode(messageToSend);
+                    Log.d("resp_friend_pk_fragm", friendKey);
+                    ActivityBase.encryptor.setPublicKey(friendKey);
+                    messageToSend = ActivityBase.encryptor.encode(messageToSend);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

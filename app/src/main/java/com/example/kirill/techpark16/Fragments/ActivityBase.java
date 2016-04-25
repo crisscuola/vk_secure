@@ -25,6 +25,7 @@ import com.example.kirill.techpark16.HttpConnectionHandler;
 import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
 import com.example.kirill.techpark16.RSAEncryption;
+import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
@@ -71,21 +72,39 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL,
             VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
     public static FullEncryption encryptor = new FullEncryption();
-    static FullEncryption encryptionFriend = new FullEncryption();
-    static String publicKey;
+    public static String publicKey;
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
 
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-//        List<PublicKeysTable> keys = PublicKeysTable.find(PublicKeysTable.class, "id > 0");
-//        for (PublicKeysTable key:keys
-//             ) {
-//            key.delete();
-//        }
+    private class PublicKeyChecking extends AsyncTask<Object, Void, Void> {
 
+        @Override
+        protected Void doInBackground(Object[] params) {
+            List<PublicKeysTable> myPk = PublicKeysTable.find(PublicKeysTable.class,"user_id = ?", String.valueOf(0));
+            if (myPk.size() == 0) {
+                try {
+                    encryptor.rsaInstance.generateKeys();
+                    publicKey = encryptor.getPublicKey();
+                    PublicKeysTable pk = new PublicKeysTable(0, publicKey);
+                    pk.save();
+                    pk = new PublicKeysTable(-1, encryptor.getPrivateKey());
+                    pk.save();
+                } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                publicKey = myPk.get(0).getPk();
+            }
+            Log.d("pk_publ", publicKey);
+            List<PublicKeysTable> priv = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?", String.valueOf(-1));
+            encryptor.rsaInstance.setPrivateKey(priv.get(0).getPk());
+            Log.d("pk_from_DB", "publ: " + publicKey
+                    + " priv: " + priv.get(0).getPk());
+
+            return null;
+        }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,107 +112,88 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         setContentView(R.layout.base_activity);
 
-        if (VKSdk.getAccessToken() != null) {
-        Log.i("TOKEN", String.valueOf(MY_ID));
-        } else {
-        VKSdk.login(this, scope);
-        }
+        if (VKAccessToken.currentToken() == null)
+            VKSdk.login(this, scope);
 
-        List<PublicKeysTable> myPk = PublicKeysTable.find(PublicKeysTable.class,"user_id = ?", String.valueOf(0));
-        if (myPk.size() == 0) {
-            try {
-                encryptor.rsaInstance.generateKeys();
-                publicKey = encryptor.getPublicKey();
-                PublicKeysTable pk = new PublicKeysTable(0, publicKey);
-                pk.save();
-                pk = new PublicKeysTable(-1, encryptor.getPrivateKey());
-                pk.save();
-            } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-                e.printStackTrace();
+        new PublicKeyChecking().execute();
+
+        setBroadcastReceiver();
+
+        IntentFilter intentFilter = new IntentFilter(BROADCAST_EVENT);
+
+        //registerReceiver(br, intentFilter);
+
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbarButton = (Button) toolbar.findViewById(R.id.toolbar_button);
+
+        toolbarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentPlace);
+
+            if (currentFragment instanceof FragmentDialogsList) {
+
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.FRIENDSEND]);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                toolbar.setTitle(R.string.friends_title);
+                toolbar.setTitle(R.string.send);
+                toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
             }
-        } else {
-            publicKey = myPk.get(0).getPk();
-        }
-        Log.d("pk_publ", publicKey);
-        List<PublicKeysTable> priv = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?", String.valueOf(-1));
-        Log.d("pk_from_DB", "publ: " + publicKey
-                + " priv: " + priv.get(0).getPk());
 
-            setBroadcastReceiver();
+            if (currentFragment instanceof FragmentSingleDialog) {
 
-            IntentFilter intentFilter = new IntentFilter(BROADCAST_EVENT);
+                int id = FragmentSingleDialog.title_id;
 
-            //registerReceiver(br, intentFilter);
-
-
-            toolbar = (Toolbar) findViewById(R.id.toolbar);
-            toolbarButton = (Button) toolbar.findViewById(R.id.toolbar_button);
-
-            toolbarButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentPlace);
-
-                    if (currentFragment instanceof FragmentDialogsList) {
-
-                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.FRIENDSEND]);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
-                        toolbar.setTitle(R.string.friends_title);
-                        toolbar.setTitle(R.string.send);
-                        toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
-                    }
-
-                    if (currentFragment instanceof FragmentSingleDialog) {
-
-                        int id = FragmentSingleDialog.title_id;
-
-                        FragmentSettingsDialog newFragment = FragmentSettingsDialog.getInstance(id);
-                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
-                        toolbar.setTitle(R.string.friends_title);
-                        toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
-                    }
-                }
-            });
+                FragmentSettingsDialog newFragment = FragmentSettingsDialog.getInstance(id);
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                toolbar.setTitle(R.string.friends_title);
+                toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+            }
+            }
+        });
 
 
-            setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
 
 
-            drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            toggle = new ActionBarDrawerToggle(
-                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            drawer.setDrawerListener(toggle);
-            toggle.syncState();
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
 
-            navigationView = (NavigationView) findViewById(R.id.nav_view);
-            navigationView.setNavigationItemSelectedListener(this);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
-            fragmentSet[FragmentsConst.DIALOGSLIST] = new FragmentDialogsList();
-            fragmentSet[FragmentsConst.FRIENDSLIST] = new FragmentFriendsList();
-            fragmentSet[FragmentsConst.SETTINGS] = new FragmentSettings();
-            fragmentSet[FragmentsConst.SINGLEDIALOG] = null;
-            fragmentSet[FragmentsConst.SINGLEDIALOG] = new FragmentSingleDialog();
-            fragmentSet[FragmentsConst.SETTINGSDIALOG] = new FragmentSettingsDialog();
-            fragmentSet[FragmentsConst.FRIENDSEND] = new FragmentFriendsSend();
+        fragmentSet[FragmentsConst.DIALOGSLIST] = new FragmentDialogsList();
+        fragmentSet[FragmentsConst.FRIENDSLIST] = new FragmentFriendsList();
+        fragmentSet[FragmentsConst.SETTINGS] = new FragmentSettings();
+        fragmentSet[FragmentsConst.SINGLEDIALOG] = null;
+        fragmentSet[FragmentsConst.SINGLEDIALOG] = new FragmentSingleDialog();
+        fragmentSet[FragmentsConst.SETTINGSDIALOG] = new FragmentSettingsDialog();
+        fragmentSet[FragmentsConst.FRIENDSEND] = new FragmentFriendsSend();
 
 
-            toolbar.setTitle(R.string.dialog_list_title);
-            toolbar.findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
-            fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
-            fragmentTransaction.commit();
-
+        toolbar.setTitle(R.string.dialog_list_title);
+        toolbar.findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
+        fragmentTransaction.commit();
 
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
 
     private void setBroadcastReceiver() {
         br = new BroadcastReceiver() {

@@ -58,32 +58,32 @@ public class FragmentSettingsDialog extends Fragment {
 
                     Log.i("SETIDCHECK", String.valueOf(title_id));
 
-                    final VKRequest request_key  = new VKRequest("notes.get", VKParameters.from("user_id", title_id));
-
-                    request_key.executeWithListener(new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(VKResponse response) {
-                            super.onComplete(response);
-
-                            try {
-                                JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
-                                Log.d("get_note_len", String.valueOf(array.length()));
-
-                                JSONObject note_get = array.getJSONObject(0);
-
-                                String pkBase64 = String.valueOf(note_get.get("title"));
-
-                                ActivityBase.encryptionFriend.setPublicKey(pkBase64);
-
-                                Log.i("get_note", String.valueOf(note_get.get("title")));
-
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    });
+//                    final VKRequest request_key  = new VKRequest("notes.get", VKParameters.from("user_id", title_id));
+//
+//                    request_key.executeWithListener(new VKRequest.VKRequestListener() {
+//                        @Override
+//                        public void onComplete(VKResponse response) {
+//                            super.onComplete(response);
+//
+//                            try {
+//                                JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
+//                                Log.d("get_note_len", String.valueOf(array.length()));
+//
+//                                JSONObject note_get = array.getJSONObject(0);
+//
+//                                String pkBase64 = String.valueOf(note_get.get("title"));
+//
+//                                ActivityBase.encryptionFriend.setPublicKey(pkBase64);
+//
+//                                Log.i("get_note", String.valueOf(note_get.get("title")));
+//
+//
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//
+//                        }
+//                    });
 
 
                 }

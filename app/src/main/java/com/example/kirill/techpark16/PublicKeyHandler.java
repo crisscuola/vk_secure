@@ -29,8 +29,8 @@ public class PublicKeyHandler {
         } else {
             try {
                 pk = requestPublicKeyFromServer(friendId);
+                Log.d("resp_friend_pk", pk);
                 if (!pk.equals("none")){
-                    ActivityBase.encryptor.setPublicKey(pk);
                     PublicKeysTable key = new PublicKeysTable(friendId, pk);
                     key.save();
                 }
@@ -44,11 +44,15 @@ public class PublicKeyHandler {
     //TODO: finish this method
     public static String uploadMyPublicKey(int friendId) {
         String pk = "no";
-        String myPk = ActivityBase.encryptor.getPublicKey();
-
+        String myPk = ActivityBase.publicKey;
+        JSONObject json;
         try {
-            pk = client.doPostRequest(String.valueOf(friendId), myPk);
-        } catch (IOException e) {
+            String response = client.doPostRequest(String.valueOf(friendId), myPk);
+            json = new JSONObject(response);
+            pk = json.getString("key");
+            Log.d("resp_upload", pk);
+
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
 
@@ -63,11 +67,15 @@ public class PublicKeyHandler {
         int status = json.getInt("status");
         if (status == 2) {
             uploadMyPublicKey(friendId);
+            Log.d("resp", "status=2");
             //show message: friend hasn't started dialog yet
         } else if (status == 1) {
+            Log.d("resp", "status=1");
             //show message: friend hasn't started dialog yet
         } else if (status == 0) {
             key = json.getString("key");
+            Log.d("resp_st0", key);
+            //uploadMyPK()
         }
         return key;
     }
