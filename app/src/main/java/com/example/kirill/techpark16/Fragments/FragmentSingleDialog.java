@@ -4,7 +4,9 @@ package com.example.kirill.techpark16.Fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +18,6 @@ import android.widget.Toast;
 
 import com.example.kirill.techpark16.Adapters.MyselfSingleDialogAdapter;
 import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
-import com.example.kirill.techpark16.HttpConnectionHandler;
 import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
@@ -28,19 +29,16 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 
-import java.io.IOException;
+import org.json.JSONObject;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Created by kirill on 02.04.16
  */
-public class FragmentSingleDialog extends ListFragment {
+public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLayout.OnRefreshListener {
 
 
     public static String USER_ID = "user_id";
@@ -61,6 +59,8 @@ public class FragmentSingleDialog extends ListFragment {
 
     String friendKey;
 
+    private static SwipeRefreshLayout mswipeRefreshLayout;
+
     public static FragmentSingleDialog getInstance(int user_id, ArrayList<String> inList, ArrayList<String> outList) {
         FragmentSingleDialog fragmentSingleDialog = new FragmentSingleDialog();
         Bundle bundle = new Bundle();
@@ -72,6 +72,14 @@ public class FragmentSingleDialog extends ListFragment {
 
         fragmentSingleDialog.setArguments(bundle);
         return fragmentSingleDialog;
+    }
+
+    @Override
+    public void onRefresh() {
+       Log.i("REFRESH", "REFRESH");
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
     }
 
     private class LongOperation extends AsyncTask<String, Void, String> {
@@ -106,6 +114,9 @@ public class FragmentSingleDialog extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_single_dialog, null);
+
+        mswipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
+        mswipeRefreshLayout.setOnRefreshListener(this);
 
         inList = getArguments().getStringArrayList(IN_LIST);
         outList = getArguments().getStringArrayList(OUT_LIST);
