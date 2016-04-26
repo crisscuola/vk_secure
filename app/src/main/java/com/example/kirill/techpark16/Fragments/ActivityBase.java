@@ -22,6 +22,7 @@ import android.widget.Button;
 
 import com.example.kirill.techpark16.FullEncryption;
 import com.example.kirill.techpark16.HttpConnectionHandler;
+import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
 import com.example.kirill.techpark16.RSAEncryption;
@@ -52,7 +53,7 @@ import java.util.List;
 
 
 /**
- * Created by konstantin on 09.04.16.
+ * Created by konstantin on 09.04.16
  */
 public  class ActivityBase extends AppCompatActivity implements FragmentDialogsList.onItemSelectedListener,
         FragmentFriendsList.onItemSelectedListener ,NavigationView.OnNavigationItemSelectedListener,
@@ -85,6 +86,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 try {
                     encryptor.rsaInstance.generateKeys();
                     publicKey = encryptor.getPublicKey();
+                    PublicKeyHandler.deleteMyPublicKey();
                     PublicKeysTable pk = new PublicKeysTable(0, publicKey);
                     pk.save();
                     pk = new PublicKeysTable(-1, encryptor.getPrivateKey());

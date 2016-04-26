@@ -20,6 +20,7 @@ public class HttpConnectionHandler {
     final static String URL = "www.sermalenk.myjino.ru";
     final static String PATH_1 = "dialog";
     final static String PATH_2 = "key";
+    final static String PATH_DELETE = "delete";
     OkHttpClient client;
 
     public HttpConnectionHandler(){
@@ -74,4 +75,35 @@ public class HttpConnectionHandler {
 
         return  response.body().string();
     }
+
+    public String doPostRequest() throws IOException {
+
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("http")
+                .host(URL)
+                .addPathSegment(PATH_1)
+                .addPathSegment(PATH_2)
+                .addPathSegment(PATH_DELETE)
+                .addPathSegment("")
+                .build();
+
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("my_id", String.valueOf(ActivityBase.MY_ID))
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+        Response response = client.newCall(request).execute();
+        String responseStr = response.body().string();
+
+        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+        return  responseStr;
+    }
+
+
 }

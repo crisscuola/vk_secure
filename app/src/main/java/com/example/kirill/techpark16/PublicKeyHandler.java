@@ -43,7 +43,7 @@ public class PublicKeyHandler {
         return pk;
     }
     //TODO: finish this method
-    public static String uploadMyPublicKey(int friendId) {
+    private static String uploadMyPublicKey(int friendId) {
         String pk = "no";
         String myPk = ActivityBase.publicKey;
         JSONObject json;
@@ -67,7 +67,7 @@ public class PublicKeyHandler {
         JSONObject json = new JSONObject(response);
         int status = json.getInt("status");
         if (status == 2) {
-            uploadMyPublicKey(friendId);
+            key = uploadMyPublicKey(friendId);
             Log.d("resp", "status=2");
             //show message: friend hasn't started dialog yet
         } else if (status == 1) {
@@ -79,5 +79,16 @@ public class PublicKeyHandler {
             //uploadMyPK()
         }
         return key;
+    }
+
+    public static String deleteMyPublicKey() {
+        String response = "none";
+        try {
+            response =  client.doPostRequest();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Log.d("pk_del", response);
+        return response;
     }
 }
