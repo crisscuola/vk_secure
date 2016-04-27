@@ -29,8 +29,10 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
@@ -91,9 +93,8 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
 
             try {
                 friendKey = PublicKeyHandler.downloadFriendPublicKey(id);
-                Log.d("resp_id", String.valueOf(id));
                 Log.d("resp_db_len", String.valueOf(PublicKeysTable.listAll(PublicKeysTable.class).size()));
-            } catch ( NoSuchAlgorithmException | InvalidKeySpecException e) {
+            } catch ( NoSuchAlgorithmException | InvalidKeySpecException | JSONException | IOException e) {
                 e.printStackTrace();
             }
             return friendKey;
@@ -124,7 +125,15 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
         outList = getArguments().getStringArrayList(OUT_LIST);
         id = getArguments().getInt(USER_ID);
 
-        Log.d("inList_size", String.valueOf(inList.size()));
+        String str = inList.get(1);
+
+        new LongOperation().execute();
+
+        try {
+            Log.d("inList_enc", ActivityBase.encryptor.decode(str));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         for (String msg : inList){
             try {
                 Log.d("inList_decr", ActivityBase.encryptor.decode(msg));
@@ -133,8 +142,6 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
             }
         }
 
-
-        new LongOperation().execute();
 
         text = (EditText) view.findViewById(R.id.textmsg);
         listView = (ListView) view.findViewById(R.id.listmsg);
@@ -155,25 +162,27 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
 
                 try {
                     if (!friendKey.equals("none")) {
-                        Log.d("resp_friend_pk_fragm", friendKey);
                         ActivityBase.encryptor.setPublicKey(friendKey);
                         messageToSend = ActivityBase.encryptor.encode(messageToSend);
+                        text.setText("");
+
+                        request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
+                                VKApiConst.MESSAGE, messageToSend));
+
+                        request.executeWithListener(new VKRequest.VKRequestListener() {
+                            @Override
+                            public void onComplete(VKResponse response) {
+                                super.onComplete(response);
+                            }
+                        });
+
                     } else {
                         Toast.makeText(getContext(),"The friend hasn't started the dialog.",Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                text.setText("");
-                request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
-                        VKApiConst.MESSAGE, messageToSend));
 
-                request.executeWithListener(new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
-                    }
-                });
             }
         });
 

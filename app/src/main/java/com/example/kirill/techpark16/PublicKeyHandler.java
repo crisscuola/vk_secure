@@ -20,13 +20,21 @@ import java.util.List;
 public class PublicKeyHandler {
     public static HttpConnectionHandler client = new HttpConnectionHandler();
 
-    public static String downloadFriendPublicKey(int friendId) throws InvalidKeySpecException, NoSuchAlgorithmException {
+    public static String downloadFriendPublicKey(int friendId) throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, JSONException {
         List<PublicKeysTable> friendsKey = new ArrayList<>();
         String pk = "";
         friendsKey = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?", String.valueOf(friendId));
         if (friendsKey.size() != 0){
             pk = friendsKey.get(0).getPk();
             Log.d("resp",pk);
+            String response = client.doGetRequest(String.valueOf(friendId));
+            JSONObject json = new JSONObject(response);
+            int status = json.getInt("status");
+            boolean myKey = json.getBoolean("my_key");
+            if (status == 0 && !myKey){
+                String key = uploadMyPublicKey(friendId);
+                Log.d("resp_st0", key);
+            }
         } else {
             try {
                 pk = requestPublicKeyFromServer(friendId);
@@ -42,10 +50,10 @@ public class PublicKeyHandler {
         }
         return pk;
     }
-    //TODO: finish this method
+
     private static String uploadMyPublicKey(int friendId) {
         String pk = "no";
-        String myPk = ActivityBase.publicKey;
+        String myPk = ActivityBase.encryptor.getPublicKey();
         JSONObject json;
         try {
             String response = client.doPostRequest(String.valueOf(friendId), myPk);
@@ -69,16 +77,13 @@ public class PublicKeyHandler {
         if (status == 2) {
             key = uploadMyPublicKey(friendId);
             Log.d("resp", "status=2");
-            //show message: friend hasn't started dialog yet
         } else if (status == 1) {
             Log.d("resp", "status=1");
-            //show message: friend hasn't started dialog yet
         } else if (status == 0) {
             key = json.getString("key");
             if (!json.getBoolean("my_key"))
                 uploadMyPublicKey(friendId);
             Log.d("resp_st0", key);
-            //uploadMyPK()
         }
         return key;
     }

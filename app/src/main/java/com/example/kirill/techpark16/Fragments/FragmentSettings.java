@@ -1,11 +1,14 @@
 package com.example.kirill.techpark16.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -15,7 +18,7 @@ import com.vk.sdk.api.VKResponse;
  */
 public class FragmentSettings extends android.support.v4.app.Fragment {
 
-    Button set_off;
+    Button setOff, clearDB;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -25,8 +28,8 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
 
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        set_off = (Button) view.findViewById(R.id.off_button);
-        set_off.setOnClickListener(new View.OnClickListener() {
+        setOff = (Button) view.findViewById(R.id.off_button);
+        setOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final VKRequest request_offline = new VKRequest("account.setOffline");
@@ -36,6 +39,18 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
                         super.onComplete(response);
                     }
                 });
+            }
+        });
+
+        clearDB = (Button) view.findViewById(R.id.clear_db);
+
+        clearDB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                PublicKeysTable.deleteAll(PublicKeysTable.class);
+                Toast.makeText(getContext(),"SQLite cleared.", Toast.LENGTH_SHORT).show();
+
             }
         });
 

@@ -26,4 +26,11 @@
         android:id="@+id/off_button"
         android:layout_gravity="center_horizontal" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear data"
+        android:id="@+id/clear_db"
+        android:layout_gravity="center_horizontal" />
+
 </LinearLayout>

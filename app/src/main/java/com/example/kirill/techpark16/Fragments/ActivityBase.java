@@ -73,7 +73,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL,
             VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
     public static FullEncryption encryptor = new FullEncryption();
-    public static String publicKey;
+    //public static String publicKey;
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
 
 
@@ -81,13 +81,15 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         @Override
         protected Void doInBackground(Object[] params) {
-            List<PublicKeysTable> myPk = PublicKeysTable.find(PublicKeysTable.class,"user_id = ?", String.valueOf(0));
+            List<PublicKeysTable> myPk = PublicKeysTable.find(PublicKeysTable.class,"user_id = ?",
+                    String.valueOf(0));
+            List<PublicKeysTable> priv = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?",
+                    String.valueOf(-1));
             if (myPk.size() == 0) {
                 try {
                     encryptor.rsaInstance.generateKeys();
-                    publicKey = encryptor.getPublicKey();
                     PublicKeyHandler.deleteMyPublicKey();
-                    PublicKeysTable pk = new PublicKeysTable(0, publicKey);
+                    PublicKeysTable pk = new PublicKeysTable(0, encryptor.getPublicKey());
                     pk.save();
                     pk = new PublicKeysTable(-1, encryptor.getPrivateKey());
                     pk.save();
@@ -95,13 +97,17 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                     e.printStackTrace();
                 }
             } else {
-                publicKey = myPk.get(0).getPk();
+                try {
+                    encryptor.setPublicKey(myPk.get(0).getPk());
+                    encryptor.setPrivateKey(priv.get(0).getPk());
+
+                    Log.d("pk_publ", encryptor.getPublicKey());
+
+                    Log.d("pk_from_DB", "publ: " + encryptor.getPublicKey() + " priv: " + encryptor.getPrivateKey());
+                } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
             }
-            Log.d("pk_publ", publicKey);
-            List<PublicKeysTable> priv = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?", String.valueOf(-1));
-            encryptor.rsaInstance.setPrivateKey(priv.get(0).getPk());
-            Log.d("pk_from_DB", "publ: " + publicKey
-                    + " priv: " + priv.get(0).getPk());
 
             return null;
         }
@@ -118,6 +124,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
             VKSdk.login(this, scope);
 
         new PublicKeyChecking().execute();
+
+
 
         setBroadcastReceiver();
 

@@ -14,8 +14,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pull Key!"
-        android:id="@+id/pull_key"
+        android:text="Turn on/off encryption"
+        android:id="@+id/encryption_switcher"
         android:layout_gravity="center_horizontal" />
 
     <TextView

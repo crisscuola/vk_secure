@@ -11,6 +11,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.BadPaddingException;
@@ -46,9 +47,6 @@ public class RSAEncryption {
         Log.d("pk", "keys generated");
     }
 
-    public void saveKeys(){
-
-    }
 
     public byte[] encrypt(String plain) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException, InvalidKeySpecException {
 
@@ -75,8 +73,8 @@ public class RSAEncryption {
         publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(bytes));
     }
 
-    public void setPrivateKey(String plain) {
-
+    public void setPrivateKey(byte[] bytes) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        privateKey = KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(bytes));
     }
 
     public PrivateKey getPrivateKey() {

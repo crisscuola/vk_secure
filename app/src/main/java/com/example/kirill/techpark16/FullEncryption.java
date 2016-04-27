@@ -1,6 +1,8 @@
 package com.example.kirill.techpark16;
 
 import android.util.Base64;
+import android.util.Log;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 
@@ -19,7 +21,7 @@ public class FullEncryption {
         return Base64.encodeToString(msgBytes, Base64.DEFAULT);
     }
 
-    public String decode(String inputMessage)  throws Exception{
+    public String decode(String inputMessage)  throws Exception {
         byte[] msgBytes = Base64.decode(inputMessage, Base64.DEFAULT);
         return rsaInstance.decrypt(msgBytes);
     }
@@ -37,5 +39,9 @@ public class FullEncryption {
     public void setPublicKey(String pk) throws InvalidKeySpecException, NoSuchAlgorithmException {
         byte[] pkBytes = Base64.decode(pk, Base64.DEFAULT);
         rsaInstance.setPublicKey(pkBytes);
+    }
+    public void setPrivateKey(String pk) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        byte[] pkBytes = Base64.decode(pk, Base64.DEFAULT);
+        rsaInstance.setPrivateKey(pkBytes);
     }
 }
