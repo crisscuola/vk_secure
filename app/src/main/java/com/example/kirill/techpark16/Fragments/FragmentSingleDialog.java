@@ -162,9 +162,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
-
+                text.setText("");
                 request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
                         VKApiConst.MESSAGE, messageToSend));
 

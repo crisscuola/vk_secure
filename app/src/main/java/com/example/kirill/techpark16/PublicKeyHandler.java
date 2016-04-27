@@ -75,6 +75,8 @@ public class PublicKeyHandler {
             //show message: friend hasn't started dialog yet
         } else if (status == 0) {
             key = json.getString("key");
+            if (!json.getBoolean("my_id"))
+                uploadMyPublicKey(friendId);
             Log.d("resp_st0", key);
             //uploadMyPK()
         }
