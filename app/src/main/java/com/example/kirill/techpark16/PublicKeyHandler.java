@@ -1,6 +1,5 @@
 package com.example.kirill.techpark16;
 
-import android.util.Base64;
 import android.util.Log;
 
 import com.example.kirill.techpark16.Fragments.ActivityBase;
@@ -78,6 +77,7 @@ public class PublicKeyHandler {
             key = uploadMyPublicKey(friendId);
             Log.d("resp", "status=2");
         } else if (status == 1) {
+            key = uploadMyPublicKey(friendId);
             Log.d("resp", "status=1");
         } else if (status == 0) {
             key = json.getString("key");
