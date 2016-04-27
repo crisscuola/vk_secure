@@ -34,6 +34,7 @@ import org.json.JSONObject;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kirill on 02.04.16
@@ -90,6 +91,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
 
             try {
                 friendKey = PublicKeyHandler.downloadFriendPublicKey(id);
+                Log.d("resp_id", String.valueOf(id));
                 Log.d("resp_db_len", String.valueOf(PublicKeysTable.listAll(PublicKeysTable.class).size()));
             } catch ( NoSuchAlgorithmException | InvalidKeySpecException e) {
                 e.printStackTrace();
