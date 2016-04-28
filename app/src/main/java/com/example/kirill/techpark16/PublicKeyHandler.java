@@ -25,7 +25,7 @@ public class PublicKeyHandler {
         friendsKey = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?", String.valueOf(friendId));
         if (friendsKey.size() != 0){
             pk = friendsKey.get(0).getPk();
-            Log.d("resp",pk);
+            Log.d("resp_fron_db",pk);
             String response = client.doGetRequest(String.valueOf(friendId));
             JSONObject json = new JSONObject(response);
             int status = json.getInt("status");
@@ -37,7 +37,7 @@ public class PublicKeyHandler {
         } else {
             try {
                 pk = requestPublicKeyFromServer(friendId);
-                Log.d("resp_friend_pk", pk);
+                Log.d("resp_friend_pk_server", pk);
                 if (!pk.equals("none")){
                     PublicKeysTable key = new PublicKeysTable(friendId, pk);
                     key.save();
@@ -70,14 +70,14 @@ public class PublicKeyHandler {
     private static String requestPublicKeyFromServer(int friendId) throws IOException, JSONException {
         String key = "none";
         String response = client.doGetRequest(String.valueOf(friendId));
-        Log.d("resp", response);
+        Log.d("resp_get_req", response);
         JSONObject json = new JSONObject(response);
         int status = json.getInt("status");
         if (status == 2) {
-            key = uploadMyPublicKey(friendId);
+            uploadMyPublicKey(friendId);
             Log.d("resp", "status=2");
         } else if (status == 1) {
-            key = uploadMyPublicKey(friendId);
+            uploadMyPublicKey(friendId);
             Log.d("resp", "status=1");
         } else if (status == 0) {
             key = json.getString("key");

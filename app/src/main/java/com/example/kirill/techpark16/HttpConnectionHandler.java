@@ -56,18 +56,19 @@ public class HttpConnectionHandler {
                 .addPathSegment("")
                 .build();
 
-
         RequestBody formBody = new FormBody.Builder()
                 .add("my_id", String.valueOf(ActivityBase.MY_ID))
                 .add("to_id", friendId)
                 .add("key", pk)
                 .build();
 
+        Log.d("resp my_id & to_id", ActivityBase.MY_ID + " " + friendId);
+        Log.d("resp_myPk_to_server", pk);
+
         Request request = new Request.Builder()
                 .url(url)
                 .post(formBody)
                 .build();
-
 
         Response response = client.newCall(request).execute();
 
