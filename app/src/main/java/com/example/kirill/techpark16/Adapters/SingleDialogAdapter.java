@@ -18,6 +18,7 @@ public class SingleDialogAdapter extends BaseAdapter {
     private ArrayList<String> inList, outList;
     private Context context;
 
+    String EMPTY = "empty";
 
 
 
@@ -57,7 +58,11 @@ public class SingleDialogAdapter extends BaseAdapter {
         setData.outList = (TextView) view.findViewById(R.id.textView5);
 
         setData.inList.setText(inList.get(position));
+        try {
         setData.outList.setText(outList.get(position));
+        } catch (IndexOutOfBoundsException e){
+            setData.outList.setText(EMPTY);
+        }
 
 
         return view;

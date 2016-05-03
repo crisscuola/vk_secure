@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.kirill.techpark16.MyMessagesHistory;
 import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.api.VKRequest;
@@ -49,6 +50,7 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
             public void onClick(View v) {
 
                 PublicKeysTable.deleteAll(PublicKeysTable.class);
+                MyMessagesHistory.deleteAll(MyMessagesHistory.class);
                 Toast.makeText(getContext(),"SQLite cleared.", Toast.LENGTH_SHORT).show();
 
             }

@@ -23,5 +23,4 @@ public class PublicKeysTable extends SugarRecord {
         return pk;
     }
 
-
 }

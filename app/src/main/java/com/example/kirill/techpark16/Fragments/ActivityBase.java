@@ -22,6 +22,7 @@ import android.widget.Button;
 
 import com.example.kirill.techpark16.FullEncryption;
 import com.example.kirill.techpark16.HttpConnectionHandler;
+import com.example.kirill.techpark16.MyMessagesHistory;
 import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
@@ -81,6 +82,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         @Override
         protected Void doInBackground(Object[] params) {
+
             List<PublicKeysTable> myPk = PublicKeysTable.find(PublicKeysTable.class,"user_id = ?",
                     String.valueOf(0));
             List<PublicKeysTable> priv = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?",
@@ -103,7 +105,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
                     Log.d("pk_publ", encryptor.getPublicKey());
 
-                    Log.d("pk_from_DB", "publ: " + encryptor.getPublicKey() + " priv: " + encryptor.getPrivateKey());
+                    Log.d("pk_from_DB", "publ: " + encryptor.getPublicKey() + " priv: "
+                            + encryptor.getPrivateKey());
                 } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }

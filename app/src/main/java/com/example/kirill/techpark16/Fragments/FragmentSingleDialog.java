@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.kirill.techpark16.Adapters.MyselfSingleDialogAdapter;
 import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
+import com.example.kirill.techpark16.MyMessagesHistory;
 import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
@@ -32,6 +33,7 @@ import com.vk.sdk.api.model.VKList;
 
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -96,7 +98,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                 for (String inMsg : inList) {
                     tmp = ActivityBase.encryptor.decode(inMsg);
                     if (tmp.startsWith(PREFIX)) {
-                        inList_decrypted.add(tmp.substring(7));
+                        inList_decrypted.add(tmp.substring(PREFIX.length()));
                     } else
                         inList_decrypted.add(inMsg);
 
@@ -132,13 +134,16 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
         inList = getArguments().getStringArrayList(IN_LIST);
         outList = getArguments().getStringArrayList(OUT_LIST);
 
+        List<MyMessagesHistory> history = MyMessagesHistory.listAll(MyMessagesHistory.class);
+        for (MyMessagesHistory msg : history){
+            outList_decrypted.add(msg.getMsg());
+        }
+
         id = getArguments().getInt(USER_ID);
 
         try {
             new LongOperation().execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
 
@@ -162,8 +167,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
         if (id == Integer.parseInt(VKSdk.getAccessToken().userId)) {
             listView.setAdapter(new MyselfSingleDialogAdapter(view.getContext(), inList));
         } else {
-
-            listView.setAdapter(new SingleDialogAdapter(view.getContext(), inList_decrypted, outList));
+            listView.setAdapter(new SingleDialogAdapter(view.getContext(), inList_decrypted, outList_decrypted));
         }
         send = (Button) view.findViewById(R.id.sendmsg);
         send.setOnClickListener(new View.OnClickListener() {
@@ -171,6 +175,10 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
             public void onClick(View v){
 
                 VKRequest request;
+                String msg = text.getText().toString();
+                MyMessagesHistory myMessage = new MyMessagesHistory(msg);
+                myMessage.save();
+
                 String messageToSend = PREFIX + text.getText().toString();
 
                 try {
@@ -226,5 +234,19 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
         });
 
         getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        List<MyMessagesHistory> list = MyMessagesHistory.findWithQuery(MyMessagesHistory.class,
+                "select * from MY_MESSAGES_HISTORY order by id desc limit 10");
+        MyMessagesHistory.deleteAll(MyMessagesHistory.class);
+        for (MyMessagesHistory item : list){
+            Log.d("item", item.getMsg());
+            item.save();
+        }
+
     }
 }
