@@ -19,20 +19,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.kirill.techpark16.FullEncryption;
-import com.example.kirill.techpark16.HttpConnectionHandler;
-import com.example.kirill.techpark16.MyMessagesHistory;
 import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
-import com.example.kirill.techpark16.RSAEncryption;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -45,9 +42,7 @@ import com.vk.sdk.api.model.VKList;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
@@ -129,7 +124,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         new PublicKeyChecking().execute();
 
 
-
         setBroadcastReceiver();
 
         IntentFilter intentFilter = new IntentFilter(BROADCAST_EVENT);
@@ -144,31 +138,31 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
             @Override
             public void onClick(View v) {
 
-            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentPlace);
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentPlace);
 
-            if (currentFragment instanceof FragmentDialogsList) {
+                if (currentFragment instanceof FragmentDialogsList) {
 
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.FRIENDSEND]);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                toolbar.setTitle(R.string.friends_title);
-                toolbar.setTitle(R.string.send);
-                toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
-            }
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.FRIENDSEND]);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    toolbar.setTitle(R.string.friends_title);
+                    toolbar.setTitle(R.string.send);
+                    toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+                }
 
-            if (currentFragment instanceof FragmentSingleDialog) {
+                if (currentFragment instanceof FragmentSingleDialog) {
 
-                int id = FragmentSingleDialog.title_id;
+                    int id = FragmentSingleDialog.title_id;
 
-                FragmentSettingsDialog newFragment = FragmentSettingsDialog.getInstance(id);
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                toolbar.setTitle(R.string.friends_title);
-                toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
-            }
+                    FragmentSettingsDialog newFragment = FragmentSettingsDialog.getInstance(id);
+                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                    toolbar.setTitle(R.string.friends_title);
+                    toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+                }
             }
         });
 
@@ -200,6 +194,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
         fragmentTransaction.commit();
+
 
     }
 
@@ -266,6 +261,33 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         //getMenuInflater().inflate(R.menu.main, menu);
+        VKRequest request = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,MY_ID,VKApiConst.FIELDS, "first_name, last_name","photo_50"));
+
+        request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+
+                String first_name = " ";
+                String last_name = " ";
+
+                try {
+                     JSONArray array = response.json.getJSONArray("response");
+                     first_name = array.getJSONObject(0).getString("first_name");
+                     last_name = array.getJSONObject(0).getString("last_name");
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                TextView name = (TextView) findViewById(R.id.nav_username);
+                name.setText(first_name + " " + last_name);
+
+                super.onComplete(response);
+            }
+        });
+
+
         return true;
     }
 
@@ -306,6 +328,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
