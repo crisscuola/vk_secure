@@ -97,7 +97,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                     tmp = ActivityBase.encryptor.decode(inMsg);
                     if (tmp.startsWith(PREFIX)) {
                         Log.d("starts", "was encrypted");
-                        inList_decrypted.add(tmp);
+                        inList_decrypted.add(inMsg);
                     } else
                         inList_decrypted.add(inMsg);
 
@@ -172,7 +172,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
             public void onClick(View v){
 
                 VKRequest request;
-                String messageToSend = text.getText().toString();
+                String messageToSend = PREFIX + text.getText().toString();
 
                 try {
                     if (!friendKey.equals("none")) {
