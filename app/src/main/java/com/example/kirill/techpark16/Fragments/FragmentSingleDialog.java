@@ -96,8 +96,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                 for (String inMsg : inList) {
                     tmp = ActivityBase.encryptor.decode(inMsg);
                     if (tmp.startsWith(PREFIX)) {
-                        Log.d("starts", "was encrypted");
-                        inList_decrypted.add(inMsg);
+                        inList_decrypted.add(tmp.substring(7));
                     } else
                         inList_decrypted.add(inMsg);
 
