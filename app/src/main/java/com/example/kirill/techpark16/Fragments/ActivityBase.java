@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -22,7 +24,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.kirill.techpark16.ImageDownloader;
 import com.example.kirill.techpark16.FullEncryption;
 import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.PublicKeysTable;
@@ -44,6 +45,7 @@ import com.vk.sdk.api.model.VKList;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
@@ -259,11 +261,37 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         }
     }
 
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         //getMenuInflater().inflate(R.menu.main, menu);
-        VKRequest request = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,MY_ID,VKApiConst.FIELDS, "photo_50","first_name, last_name"));
+        VKRequest request = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,MY_ID,VKApiConst.FIELDS, "photo_200","first_name, last_name"));
 
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
@@ -277,9 +305,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                     JSONArray array = response.json.getJSONArray("response");
                     first_name = array.getJSONObject(0).getString("first_name");
                     last_name = array.getJSONObject(0).getString("last_name");
-                    photo_url = array.getJSONObject(0).getString("photo_50");
-
-
+                    photo_url = array.getJSONObject(0).getString("photo_200");
 
                     Log.i("PHOTO", photo_url);
 
@@ -290,8 +316,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 TextView name = (TextView) findViewById(R.id.nav_username);
                 name.setText(first_name + " " + last_name);
 
-                ImageView ava = (ImageView) findViewById(R.id.imageView);
-                ava.setImageDrawable(new ImageDownloader(ava).execute(photo_url));
+                //ImageView ava = (ImageView) findViewById(R.id.imageView);
+                new DownloadImageTask((ImageView) findViewById(R.id.imageView)).execute(photo_url);
 
                 super.onComplete(response);
             }
