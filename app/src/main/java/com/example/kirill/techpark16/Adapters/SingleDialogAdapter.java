@@ -14,6 +14,7 @@ import com.example.kirill.techpark16.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 
 public class SingleDialogAdapter extends BaseAdapter {
     private ArrayList<String> inList, outList;
@@ -71,6 +72,8 @@ public class SingleDialogAdapter extends BaseAdapter {
 //        } catch (IndexOutOfBoundsException e){
 //            setData.outList.setText(EMPTY);
 //        }
+
+
         ChatMessage chatMessageObj = getItem(position);
         View row;
         if (chatMessageObj.getOut()) {

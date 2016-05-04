@@ -109,14 +109,14 @@ public class FragmentSingleFriend extends Fragment {
 
                         final ArrayList<String> inList = new ArrayList<>();
                         final ArrayList<String> outList = new ArrayList<>();
+                        final ArrayList<VKApiMessage> msg = new ArrayList<>();
+
                         try {
                             JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
 
-                            VKApiMessage[] msg = new VKApiMessage[array.length()];
-
                             for (int i = 0; i < array.length(); i++) {
                                 VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
-                                msg[i] = mes;
+                                msg.add(mes);
                             }
 
 
@@ -133,7 +133,7 @@ public class FragmentSingleFriend extends Fragment {
                         }
 
 
-                        FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList);
+                        FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList, msg);
                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                         transaction.replace(R.id.fragmentPlace, newFragment);
                         transaction.addToBackStack(null);

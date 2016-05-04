@@ -25,4 +25,8 @@ public class ChatMessage {
     public Long getTime(){
         return time;
     }
+
+    public void setMsg(String msg){
+        this.msg = msg;
+    }
 }

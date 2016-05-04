@@ -20,10 +20,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
 import com.example.kirill.techpark16.FullEncryption;
 import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.PublicKeysTable;
@@ -69,11 +71,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     BroadcastReceiver br;
     Button toolbarButton;
 
-
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL,
             VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
     public static FullEncryption encryptor = new FullEncryption();
-    //public static String publicKey;
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
 
 
@@ -291,7 +291,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         //getMenuInflater().inflate(R.menu.main, menu);
-        VKRequest request = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,MY_ID,VKApiConst.FIELDS, "photo_200","first_name, last_name"));
+        VKRequest request = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,MY_ID,
+                VKApiConst.FIELDS, "photo_200","first_name, last_name"));
 
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
@@ -393,17 +394,18 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
                         final ArrayList<String> inList = new ArrayList<>();
                         final ArrayList<String> outList = new ArrayList<>();
+                        final ArrayList<VKApiMessage> msg = new ArrayList<>();
+
                         try {
                             JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
 
-                            VKApiMessage[] msg = new VKApiMessage[array.length()];
-
                             for (int i = 0; i < array.length(); i++) {
                                 VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
-                                msg[i] = mes;
+                                msg.add(mes);
                             }
 
                             for (VKApiMessage mess : msg) {
+
                                 if (mess.out) {
                                     outList.add(mess.body);
                                 } else {
@@ -416,7 +418,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                         }
 
 
-                        FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList);
+                        FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList, msg);
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
                         fragmentTransaction.addToBackStack(null);
@@ -481,7 +483,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
     @Override
     public void onFriendSendSelected(final int position) {
-        final VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name", "order", "hints"));
+        final VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS,
+                "first_name, last_name", "order", "hints"));
 
 
         request.executeWithListener(new VKRequest.VKRequestListener() {
@@ -489,7 +492,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
 
-                VKList list = new VKList();
+                VKList list;
 
                 list = (VKList) response.parsedModel;
 
@@ -512,14 +515,14 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
                         final ArrayList<String> inList = new ArrayList<>();
                         final ArrayList<String> outList = new ArrayList<>();
+                        final ArrayList<VKApiMessage> msg = new ArrayList<>();
+
                         try {
                             JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
 
-                            VKApiMessage[] msg = new VKApiMessage[array.length()];
-
                             for (int i = 0; i < array.length(); i++) {
                                 VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
-                                msg[i] = mes;
+                                msg.add(mes);
                             }
 
                             for (VKApiMessage mess : msg) {
@@ -541,7 +544,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                         int id = Integer.parseInt(temp);
 
 
-                        FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList);
+                        FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList, msg);
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
                         fragmentTransaction.addToBackStack(null);

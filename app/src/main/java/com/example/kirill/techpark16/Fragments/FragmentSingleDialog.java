@@ -18,20 +18,19 @@ import android.widget.Toast;
 
 import com.example.kirill.techpark16.Adapters.MyselfSingleDialogAdapter;
 import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
+import com.example.kirill.techpark16.ChatMessage;
 import com.example.kirill.techpark16.MyMessagesHistory;
 import com.example.kirill.techpark16.PublicKeyHandler;
-import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
-import com.handmark.pulltorefresh.library.PullToRefreshAdapterViewBase;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
 
-import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -45,12 +44,14 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     public static String USER_ID = "user_id";
     public static String IN_LIST = "inList";
     public static String OUT_LIST = "outList";
+    public static String MESSAGES = "messages";
     String PREFIX = "cpslbs_";
 
     ArrayList<String> inList = new ArrayList<>();
     ArrayList<String> outList = new ArrayList<>();
     ArrayList<String> inList_decrypted = new ArrayList<>();
     ArrayList<String> outList_decrypted = new ArrayList<>();
+    ArrayList<VKApiMessage> vkMessages = new ArrayList<>();
     SingleDialogAdapter singleDialogAdapter;
     int id;
     boolean sendFlag = false;
@@ -66,12 +67,14 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
 
     private static SwipeRefreshLayout mswipeRefreshLayout;
 
-    public static FragmentSingleDialog getInstance(int user_id, ArrayList<String> inList, ArrayList<String> outList) {
+    public static FragmentSingleDialog getInstance(int user_id, ArrayList<String> inList,
+                                                   ArrayList<String> outList, ArrayList<VKApiMessage> vkMsgs) {
         FragmentSingleDialog fragmentSingleDialog = new FragmentSingleDialog();
         Bundle bundle = new Bundle();
         bundle.putInt(USER_ID, user_id);
         bundle.putStringArrayList(IN_LIST, inList);
         bundle.putStringArrayList(OUT_LIST, outList);
+        bundle.putParcelableArrayList(MESSAGES, vkMsgs);
 
         title_id = user_id;
 
@@ -95,12 +98,16 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
             try {
                 friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id);
                 String tmp;
-                for (String inMsg : inList) {
-                    tmp = ActivityBase.encryptor.decode(inMsg);
+                for (VKApiMessage msg : vkMessages) {
+                    ChatMessage chatMessage = new ChatMessage(msg.body, msg.out, msg.date);
+                    tmp = ActivityBase.encryptor.decode(msg.body);
                     if (tmp.startsWith(PREFIX)) {
+                        chatMessage.setMsg(tmp.substring(PREFIX.length()));
                         inList_decrypted.add(tmp.substring(PREFIX.length()));
                     } else
-                        inList_decrypted.add(inMsg);
+                        inList_decrypted.add(msg.body);
+
+                    singleDialogAdapter.add(chatMessage);
 
                 }
             } catch (Exception e) {
@@ -133,6 +140,18 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
 
         inList = getArguments().getStringArrayList(IN_LIST);
         outList = getArguments().getStringArrayList(OUT_LIST);
+        vkMessages = getArguments().getParcelableArrayList(MESSAGES);
+        singleDialogAdapter = new SingleDialogAdapter(view.getContext(), inList, outList);
+
+        for (VKApiMessage msg : vkMessages){
+
+
+            ChatMessage chatMessage = new ChatMessage(msg.body, msg.out, msg.date);
+            singleDialogAdapter.add(chatMessage);
+        }
+
+
+
 
         id = getArguments().getInt(USER_ID);
 
@@ -162,7 +181,8 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
         if (id == Integer.parseInt(VKSdk.getAccessToken().userId)) {
             listView.setAdapter(new MyselfSingleDialogAdapter(view.getContext(), inList));
         } else {
-            listView.setAdapter(new SingleDialogAdapter(view.getContext(), inList_decrypted, outList_decrypted));
+            listView.setAdapter(singleDialogAdapter);
+            //listView.setAdapter(new SingleDialogAdapter(view.getContext(), inList_decrypted, outList_decrypted));
         }
         send = (Button) view.findViewById(R.id.sendmsg);
         send.setOnClickListener(new View.OnClickListener() {
