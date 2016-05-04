@@ -19,8 +19,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.kirill.techpark16.ImageDownloader;
 import com.example.kirill.techpark16.FullEncryption;
 import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.PublicKeysTable;
@@ -261,7 +263,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         //getMenuInflater().inflate(R.menu.main, menu);
-        VKRequest request = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,MY_ID,VKApiConst.FIELDS, "first_name, last_name","photo_50"));
+        VKRequest request = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,MY_ID,VKApiConst.FIELDS, "photo_50","first_name, last_name"));
 
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
@@ -269,12 +271,17 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
                 String first_name = " ";
                 String last_name = " ";
+                String photo_url = " ";
 
                 try {
-                     JSONArray array = response.json.getJSONArray("response");
-                     first_name = array.getJSONObject(0).getString("first_name");
-                     last_name = array.getJSONObject(0).getString("last_name");
+                    JSONArray array = response.json.getJSONArray("response");
+                    first_name = array.getJSONObject(0).getString("first_name");
+                    last_name = array.getJSONObject(0).getString("last_name");
+                    photo_url = array.getJSONObject(0).getString("photo_50");
 
+
+
+                    Log.i("PHOTO", photo_url);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -282,6 +289,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
                 TextView name = (TextView) findViewById(R.id.nav_username);
                 name.setText(first_name + " " + last_name);
+
+                ImageView ava = (ImageView) findViewById(R.id.imageView);
+                ava.setImageDrawable(new ImageDownloader(ava).execute(photo_url));
 
                 super.onComplete(response);
             }
