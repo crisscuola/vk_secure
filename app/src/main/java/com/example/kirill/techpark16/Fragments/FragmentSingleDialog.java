@@ -52,7 +52,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     ArrayList<String> inList_decrypted = new ArrayList<>();
     ArrayList<String> outList_decrypted = new ArrayList<>();
     int id;
-
+    boolean sendFlag = false;
 
     EditText text;
     ListView listView;
@@ -87,8 +87,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     }
 
     private class LongOperation extends AsyncTask<String, Void, String> {
-        String response;
-        JSONObject json;
+
         @Override
         protected String doInBackground(String... params) {
 
@@ -134,12 +133,14 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
         inList = getArguments().getStringArrayList(IN_LIST);
         outList = getArguments().getStringArrayList(OUT_LIST);
 
-        List<MyMessagesHistory> history = MyMessagesHistory.listAll(MyMessagesHistory.class);
+        id = getArguments().getInt(USER_ID);
+
+        //List<MyMessagesHistory> history = MyMessagesHistory.listAll(MyMessagesHistory.class);
+        List<MyMessagesHistory> history = MyMessagesHistory.find(MyMessagesHistory.class,
+                "user_id = ?", String.valueOf(id));
         for (MyMessagesHistory msg : history){
             outList_decrypted.add(msg.getMsg());
         }
-
-        id = getArguments().getInt(USER_ID);
 
         try {
             new LongOperation().execute().get();
@@ -147,11 +148,6 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
             e.printStackTrace();
         }
 
-//        try {
-//            Log.d("inList_enc", ActivityBase.encryptor.decode(str));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         for (String msg : inList_decrypted) {
             try {
                 Log.d("inList_decr", msg);
@@ -159,7 +155,6 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                 e.printStackTrace();
             }
         }
-
 
         text = (EditText) view.findViewById(R.id.textmsg);
         listView = (ListView) view.findViewById(R.id.listmsg);
@@ -174,15 +169,19 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
             @Override
             public void onClick(View v){
 
-                VKRequest request;
-                String msg = text.getText().toString();
-                MyMessagesHistory myMessage = new MyMessagesHistory(msg);
-                myMessage.save();
+                if (!sendFlag)
+                    sendFlag = true;
 
-                String messageToSend = PREFIX + text.getText().toString();
+                VKRequest request;
+
+                String msg = text.getText().toString();
+                String messageToSend = PREFIX + msg;
 
                 try {
                     if (!friendKey.equals("none")) {
+                        MyMessagesHistory myMessage = new MyMessagesHistory(id, msg);
+                        myMessage.save();
+
                         ActivityBase.encryptor.setPublicKey(friendKey);
                         messageToSend = ActivityBase.encryptor.encode(messageToSend);
 
@@ -240,13 +239,15 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     public void onStop() {
         super.onStop();
 
-        List<MyMessagesHistory> list = MyMessagesHistory.findWithQuery(MyMessagesHistory.class,
-                "select * from MY_MESSAGES_HISTORY order by id desc limit 10");
-        MyMessagesHistory.deleteAll(MyMessagesHistory.class);
-        for (MyMessagesHistory item : list){
-            Log.d("item", item.getMsg());
-            item.save();
-        }
+        if (sendFlag) {
+            String[] queryId = {String.valueOf(id)};
+            List<MyMessagesHistory> list = MyMessagesHistory.find(MyMessagesHistory.class,
+                    "user_id = ?", queryId, "", "id", "10");
+            MyMessagesHistory.deleteAll(MyMessagesHistory.class, "user_id = ?", String.valueOf(id));
 
+            for (MyMessagesHistory item : list) {
+                item.save();
+            }
+        }
     }
 }

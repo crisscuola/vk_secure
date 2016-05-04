@@ -21,8 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <meta-data android:name="DATABASE" android:value="key_store.db" />
-        <meta-data android:name="VERSION" android:value="3" />
+        <meta-data android:name="DATABASE" android:value="storage.db" />
+        <meta-data android:name="VERSION" android:value="5" />
         <meta-data android:name="QUERY_LOG" android:value="false" />
         <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.example.kirill.techpark16" />
     </application>

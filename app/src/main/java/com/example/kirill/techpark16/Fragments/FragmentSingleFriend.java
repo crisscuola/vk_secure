@@ -78,7 +78,7 @@ public class FragmentSingleFriend extends Fragment {
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
 
-                String status = "";
+                String status;
                 Log.i("len", String.valueOf(response.json.length()));
                 try {
 
