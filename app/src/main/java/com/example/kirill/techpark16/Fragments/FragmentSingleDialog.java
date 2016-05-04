@@ -223,7 +223,6 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                                 int msgId;
                                 try {
                                     msgId = (int)response.json.get("response");
-                                    Log.d("id", String.valueOf(msgId));
                                     MyMessagesHistory myMessage = new MyMessagesHistory(id, msg, msgId);
                                     myMessage.save();
                                 } catch (JSONException e) {
@@ -280,7 +279,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
         if (sendFlag) {
             String[] queryId = {String.valueOf(id)};
             List<MyMessagesHistory> list = MyMessagesHistory.find(MyMessagesHistory.class,
-                    "user_id = ?", queryId, "", "id", "10");
+                    "user_id = ?", queryId, "", "id DESC", "10");
             MyMessagesHistory.deleteAll(MyMessagesHistory.class, "user_id = ?", String.valueOf(id));
 
             for (MyMessagesHistory item : list) {
