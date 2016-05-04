@@ -8,21 +8,28 @@ import com.orm.SugarRecord;
 public class MyMessagesHistory extends SugarRecord {
     Integer userId;
     String msg;
+    Integer msgId;
 
 
     public MyMessagesHistory() {
     }
 
-    public MyMessagesHistory(Integer userId, String msg){
+    public MyMessagesHistory(Integer userId, String msg, Integer msgId){
         this.userId = userId;
         this.msg = msg;
+        this.msgId = msgId;
     }
 
     public String getMsg(){
         return msg;
     }
+
     public Integer getUserId() {
         return userId;
+    }
+
+    public Integer getMsgId() {
+        return msgId;
     }
 
 }

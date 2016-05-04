@@ -2,6 +2,7 @@ package com.example.kirill.techpark16.Adapters;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,7 @@ import java.util.Date;
 
 public class SingleDialogAdapter extends BaseAdapter {
     private ArrayList<String> inList, outList;
-    private ArrayList<ChatMessage> chatMessagesList = new ArrayList<>();
+    public ArrayList<ChatMessage> chatMessagesList = new ArrayList<>();
     private TextView textView;
     private Context context;
 

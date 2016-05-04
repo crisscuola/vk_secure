@@ -31,6 +31,12 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -97,21 +103,34 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
 
             try {
                 friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id);
-                String tmp;
-                for (VKApiMessage msg : vkMessages) {
-                    ChatMessage chatMessage = new ChatMessage(msg.body, msg.out, msg.date);
-                    tmp = ActivityBase.encryptor.decode(msg.body);
-                    if (tmp.startsWith(PREFIX)) {
-                        chatMessage.setMsg(tmp.substring(PREFIX.length()));
-                        inList_decrypted.add(tmp.substring(PREFIX.length()));
-                    } else
-                        inList_decrypted.add(msg.body);
-
-                    singleDialogAdapter.add(chatMessage);
-
-                }
-            } catch (Exception e) {
+            } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
                 e.printStackTrace();
+            }
+            String tmp;
+            for (VKApiMessage msg : vkMessages) {
+                ChatMessage chatMessage = new ChatMessage(msg.body, msg.out, msg.date);
+                if(msg.out && msg.body.length() == 174 && msg.body.charAt(msg.body.length() - 1) == '=') {
+                    Log.d("isEnc", String.valueOf(msg.body.length()));
+                    List<MyMessagesHistory> outMsg = MyMessagesHistory.find(MyMessagesHistory.class,
+                            "msg_id = ?", String.valueOf(msg.id));
+                    if (outMsg.size() != 0){
+                        chatMessage.setMsg(outMsg.get(0).getMsg());
+                    }
+                }
+                try {
+                    tmp = ActivityBase.encryptor.decode(msg.body);
+                } catch (Exception e) {
+                    tmp = msg.body;
+                    e.printStackTrace();
+                }
+                if (tmp.startsWith(PREFIX)) {
+                    chatMessage.setMsg(tmp.substring(PREFIX.length()));
+                    inList_decrypted.add(tmp.substring(PREFIX.length()));
+                } else
+                    inList_decrypted.add(msg.body);
+
+                singleDialogAdapter.add(chatMessage);
+
             }
 
             return friendKey;
@@ -143,16 +162,6 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
         vkMessages = getArguments().getParcelableArrayList(MESSAGES);
         singleDialogAdapter = new SingleDialogAdapter(view.getContext(), inList, outList);
 
-        for (VKApiMessage msg : vkMessages){
-
-
-            ChatMessage chatMessage = new ChatMessage(msg.body, msg.out, msg.date);
-            singleDialogAdapter.add(chatMessage);
-        }
-
-
-
-
         id = getArguments().getInt(USER_ID);
 
         List<MyMessagesHistory> history = MyMessagesHistory.find(MyMessagesHistory.class,
@@ -182,7 +191,6 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
             listView.setAdapter(new MyselfSingleDialogAdapter(view.getContext(), inList));
         } else {
             listView.setAdapter(singleDialogAdapter);
-            //listView.setAdapter(new SingleDialogAdapter(view.getContext(), inList_decrypted, outList_decrypted));
         }
         send = (Button) view.findViewById(R.id.sendmsg);
         send.setOnClickListener(new View.OnClickListener() {
@@ -194,13 +202,11 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
 
                 VKRequest request;
 
-                String msg = text.getText().toString();
+                final String msg = text.getText().toString();
                 String messageToSend = PREFIX + msg;
 
                 try {
                     if (!friendKey.equals("none")) {
-                        MyMessagesHistory myMessage = new MyMessagesHistory(id, msg);
-                        myMessage.save();
 
                         ActivityBase.encryptor.setPublicKey(friendKey);
                         messageToSend = ActivityBase.encryptor.encode(messageToSend);
@@ -214,11 +220,22 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                             @Override
                             public void onComplete(VKResponse response) {
                                 super.onComplete(response);
+                                int msgId;
+                                try {
+                                    msgId = (int)response.json.get("response");
+                                    Log.d("id", String.valueOf(msgId));
+                                    MyMessagesHistory myMessage = new MyMessagesHistory(id, msg, msgId);
+                                    myMessage.save();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
                             }
                         });
 
                     } else {
-                        Toast.makeText(getContext(),"The friend hasn't started the dialog.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(),"The friend hasn't started the dialog.",
+                                Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
