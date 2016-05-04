@@ -51,6 +51,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     ArrayList<String> outList = new ArrayList<>();
     ArrayList<String> inList_decrypted = new ArrayList<>();
     ArrayList<String> outList_decrypted = new ArrayList<>();
+    SingleDialogAdapter singleDialogAdapter;
     int id;
     boolean sendFlag = false;
 
@@ -135,7 +136,6 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
 
         id = getArguments().getInt(USER_ID);
 
-        //List<MyMessagesHistory> history = MyMessagesHistory.listAll(MyMessagesHistory.class);
         List<MyMessagesHistory> history = MyMessagesHistory.find(MyMessagesHistory.class,
                 "user_id = ?", String.valueOf(id));
         for (MyMessagesHistory msg : history){
@@ -220,7 +220,8 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
         super.onResume();
         final String[] name_id = {""};
 
-        VKRequest my_request = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, title_id, VKApiConst.FIELDS, "first_name, last_name"));
+        VKRequest my_request = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, title_id,
+                VKApiConst.FIELDS, "first_name, last_name"));
         my_request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {

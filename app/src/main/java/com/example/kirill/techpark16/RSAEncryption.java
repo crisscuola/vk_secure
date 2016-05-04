@@ -48,23 +48,24 @@ public class RSAEncryption {
     }
 
 
-    public byte[] encrypt(String plain) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException, InvalidKeySpecException {
+    public byte[] encrypt(String plain) throws NoSuchAlgorithmException, NoSuchPaddingException,
+            InvalidKeyException, BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException,
+            InvalidKeySpecException {
 
         cipherToEncrypt = Cipher.getInstance("RSA");
         cipherToEncrypt.init(Cipher.ENCRYPT_MODE, publicKey);
         encryptedData= cipherToEncrypt.doFinal(plain.getBytes());
         encryptedString = new String(encryptedData, "UTF-8");
-        Log.d("encryptedStr", encryptedString);
 
         return encryptedData;
     }
 
-    public String decrypt(byte[] encryptedData) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+    public String decrypt(byte[] encryptedData) throws NoSuchPaddingException, NoSuchAlgorithmException,
+            InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
         cipherToDecrypt = Cipher.getInstance("RSA");
         cipherToDecrypt.init(Cipher.DECRYPT_MODE, privateKey);
         decryptedData= cipherToDecrypt.doFinal(encryptedData);
         decryptedString = new String(decryptedData);
-        Log.d("decryptedStr", decryptedString);
 
         return decryptedString;
     }

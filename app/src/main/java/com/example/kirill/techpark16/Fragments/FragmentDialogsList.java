@@ -75,25 +75,25 @@ public class FragmentDialogsList extends ListFragment {
                         request_dialogs_two.executeWithListener(new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(VKResponse response) {
-                            super.onComplete(response);
+                                super.onComplete(response);
 
-                            VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse)
-                                    response.parsedModel;
+                                VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse)
+                                        response.parsedModel;
 
-                            final VKList<VKApiDialog> list = getMessagesResponse.items;
+                                final VKList<VKApiDialog> list = getMessagesResponse.items;
 
 
-                             final ArrayList<String> messages = new ArrayList<>();
-                             final ArrayList<String> users = new ArrayList<>();
+                                 final ArrayList<String> messages = new ArrayList<>();
+                                 final ArrayList<String> users = new ArrayList<>();
 
-                            for ( final VKApiDialog msg : list) {
+                                for ( final VKApiDialog msg : list) {
 
-                                users.add(String.valueOf(FragmentDialogsList.this.list_s.getById(
-                                        msg.message.user_id)));
-                                messages.add(msg.message.body);
+                                    users.add(String.valueOf(FragmentDialogsList.this.list_s.getById(
+                                            msg.message.user_id)));
+                                    messages.add(msg.message.body);
 
-                            }
-                            setListAdapter(new DialogsListAdapter(inflater.getContext(), users, messages));
+                                }
+                                setListAdapter(new DialogsListAdapter(inflater.getContext(), users, messages));
                             }
                         });
                     }
@@ -130,6 +130,6 @@ public class FragmentDialogsList extends ListFragment {
     }
 
     public interface onItemSelectedListener {
-        public void onDialogSelected(int position);
+        void onDialogSelected(int position);
     }
 }
