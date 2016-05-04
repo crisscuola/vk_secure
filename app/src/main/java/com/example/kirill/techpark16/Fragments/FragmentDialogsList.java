@@ -59,7 +59,8 @@ public class FragmentDialogsList extends ListFragment {
 
                 }
 
-                VKRequest my_request = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, id_array, VKApiConst.FIELDS, "first_name, last_name"));
+                VKRequest my_request = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS,
+                        id_array, VKApiConst.FIELDS, "first_name, last_name"));
 
                 my_request.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
@@ -69,34 +70,34 @@ public class FragmentDialogsList extends ListFragment {
                         list_s = (VKList) response.parsedModel;
 
 
-                final VKRequest request_dialogs_two = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
-                request_dialogs_two.executeWithListener(new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
+                        final VKRequest request_dialogs_two = VKApi.messages().getDialogs(
+                                VKParameters.from(VKApiConst.COUNT, 10));
+                        request_dialogs_two.executeWithListener(new VKRequest.VKRequestListener() {
+                            @Override
+                            public void onComplete(VKResponse response) {
+                            super.onComplete(response);
 
-                        VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
+                            VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse)
+                                    response.parsedModel;
 
-                        final VKList<VKApiDialog> list = getMessagesResponse.items;
-
-
-                         final ArrayList<String> messages = new ArrayList<>();
-                         final ArrayList<String> users = new ArrayList<>();
-
-                        for ( final VKApiDialog msg : list) {
-
-                            users.add(String.valueOf(FragmentDialogsList.this.list_s.getById(msg.message.user_id)));
-                            messages.add(msg.message.body);
+                            final VKList<VKApiDialog> list = getMessagesResponse.items;
 
 
-                        }
-                        setListAdapter(new DialogsListAdapter(inflater.getContext(), users, messages));
+                             final ArrayList<String> messages = new ArrayList<>();
+                             final ArrayList<String> users = new ArrayList<>();
+
+                            for ( final VKApiDialog msg : list) {
+
+                                users.add(String.valueOf(FragmentDialogsList.this.list_s.getById(
+                                        msg.message.user_id)));
+                                messages.add(msg.message.body);
+
+                            }
+                            setListAdapter(new DialogsListAdapter(inflater.getContext(), users, messages));
+                            }
+                        });
                     }
                 });
-
-                    }
-                });
-
             }
         });
 
