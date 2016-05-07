@@ -122,6 +122,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         if (VKAccessToken.currentToken() == null)
             VKSdk.login(this, scope);
+        else  MY_ID = Integer.parseInt(VKSdk.getAccessToken().userId);
 
         new PublicKeyChecking().execute();
 
