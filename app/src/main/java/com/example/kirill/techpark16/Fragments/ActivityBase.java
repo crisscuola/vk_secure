@@ -20,12 +20,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
 import com.example.kirill.techpark16.FullEncryption;
 import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.PublicKeysTable;
@@ -205,7 +203,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     @Override
     protected void onStop() {
         super.onStop();
+//        this.finish();
     }
+
 
     private void setBroadcastReceiver() {
         br = new BroadcastReceiver() {
