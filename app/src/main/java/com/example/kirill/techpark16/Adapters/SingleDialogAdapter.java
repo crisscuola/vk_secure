@@ -19,7 +19,7 @@ import java.util.Date;
 
 public class SingleDialogAdapter extends BaseAdapter {
     private ArrayList<String> inList, outList;
-    public ArrayList<ChatMessage> chatMessagesList = new ArrayList<>();
+    private ArrayList<ChatMessage> chatMessagesList = new ArrayList<>();
     private TextView textView;
     private Context context;
 
