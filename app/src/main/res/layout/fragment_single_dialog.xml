@@ -4,26 +4,31 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:background="@color/colorPrimaryDark">
+    
+    <!--<android.support.v4.widget.SwipeRefreshLayout-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--xmlns:tools="http://schemas.android.com/tools"-->
+        <!--android:id="@+id/refresh"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--tools:context=".Fragments.ActivityBase"-->
+        <!--android:layout_above="@+id/textmsg">-->
+        <!--<ListView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/listmsg"-->
+            <!--android:layout_above="@+id/textmsg"-->
+            <!--android:transcriptMode="alwaysScroll"-->
+            <!--android:stackFromBottom="true" />-->
+    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
-
-    <!--<ListView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/listmsg" />-->
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/refresh"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".Fragments.ActivityBase">
-        <ListView
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listmsg" />
-    </android.support.v4.widget.SwipeRefreshLayout>
-
+        android:id="@+id/listmsg"
+        android:layout_above="@+id/textmsg"
+        android:transcriptMode="alwaysScroll"
+        android:stackFromBottom="true" />
 
     <EditText
         android:layout_width="wrap_content"
