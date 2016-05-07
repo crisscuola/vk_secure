@@ -55,9 +55,8 @@ import java.util.List;
 /**
  * Created by konstantin on 09.04.16
  */
-public  class ActivityBase extends AppCompatActivity implements FragmentDialogsList.onItemSelectedListener,
-        FragmentFriendsList.onItemSelectedListener ,NavigationView.OnNavigationItemSelectedListener,
-        FragmentFriendsSend.onItemSelectedListener {
+public  class ActivityBase extends AppCompatActivity implements FragmentDialogsList.onItemSelectedListener
+        ,NavigationView.OnNavigationItemSelectedListener, FragmentFriendsSend.onItemSelectedListener {
 
     static public int MY_ID = 0;
     Fragment fragmentSet[] = new Fragment[10];
@@ -450,50 +449,50 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
 
 
-    @Override
-    public void onFriendSelected(final int position) {
-
-        VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name", "order", "hints"));
-
-        request_list_friend.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-
-                super.onComplete(response);
-
-                VKList list = new VKList();
-
-                list = (VKList) response.parsedModel;
-
-                int id = 0;
-
-                VKApiModel model = list.get(position);
-                try {
-                    id = model.fields.getInt("id");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                String firstname = "";
-                String lastname = "";
-
-
-                try {
-                    firstname = model.fields.getString("first_name");
-                    lastname = model.fields.getString("last_name");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(id, firstname, lastname);
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
-    }
+//    @Override
+//    public void onFriendSelected(final int position) {
+//
+//        VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name", "order", "hints"));
+//
+//        request_list_friend.executeWithListener(new VKRequest.VKRequestListener() {
+//            @Override
+//            public void onComplete(VKResponse response) {
+//
+//                super.onComplete(response);
+//
+//                VKList list = new VKList();
+//
+//                list = (VKList) response.parsedModel;
+//
+//                int id = 0;
+//
+//                VKApiModel model = list.get(position);
+//                try {
+//                    id = model.fields.getInt("id");
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                String firstname = "";
+//                String lastname = "";
+//
+//
+//                try {
+//                    firstname = model.fields.getString("first_name");
+//                    lastname = model.fields.getString("last_name");
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(id, firstname, lastname);
+//                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//            }
+//        });
+//    }
 
 
 
