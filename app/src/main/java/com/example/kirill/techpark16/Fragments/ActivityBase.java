@@ -75,6 +75,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
 
 
+
+
     private class PublicKeyChecking extends AsyncTask<Object, Void, Void> {
 
         @Override
@@ -120,9 +122,12 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         setContentView(R.layout.base_activity);
 
-        if (VKAccessToken.currentToken() == null)
+        if (VKAccessToken.currentToken() == null) {
             VKSdk.login(this, scope);
+
+        }
         else  MY_ID = Integer.parseInt(VKSdk.getAccessToken().userId);
+
 
         new PublicKeyChecking().execute();
 
@@ -192,11 +197,11 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         fragmentSet[FragmentsConst.FRIENDSEND] = new FragmentFriendsSend();
 
 
-        toolbar.setTitle(R.string.dialog_list_title);
-        toolbar.findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
-        fragmentTransaction.commit();
+//        toolbar.setTitle(R.string.dialog_list_title);
+//        toolbar.findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
+//        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.add(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
+//        fragmentTransaction.commit();
 
 
     }
@@ -250,6 +255,15 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
     @Override
     protected void onResume() {
+
+        fragmentSet[FragmentsConst.DIALOGSLIST] = new FragmentDialogsList();
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+        toolbar.setTitle(R.string.dialog_list_title);
+        toolbar.findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
+
         super.onResume();
     }
 

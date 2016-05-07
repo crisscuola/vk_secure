@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.example.kirill.techpark16.Adapters.DialogsListAdapter;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -98,6 +100,12 @@ public class FragmentDialogsList extends ListFragment {
                         });
                     }
                 });
+            }
+
+            @Override
+            public void onError(VKError error) {
+                Log.i("ERROR_DIA", String.valueOf(error));
+                super.onError(error);
             }
         });
 
