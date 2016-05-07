@@ -30,6 +30,7 @@ import org.json.JSONException;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by konstantin on 10.04.16.
@@ -146,6 +147,33 @@ public class FragmentSingleFriend extends Fragment {
                     city = array.getJSONObject(0).getJSONObject("city").getString("title");
                     bdate = array.getJSONObject(0).getString("bdate");
 
+                    String[] arraybdate = bdate.split("\\.");
+
+                    bdate = arraybdate[0];
+
+                    HashMap<String, String> months = new HashMap<String, String>();
+
+                    months.put("1", " января");
+                    months.put("2", " февраля");
+                    months.put("3", " марта");
+                    months.put("4", " апреля");
+                    months.put("5", " мая");
+                    months.put("6", " июня");
+                    months.put("7", " июля");
+                    months.put("8", " августа");
+                    months.put("9", " сентября");
+                    months.put("10", " октября");
+                    months.put("11", " ноября");
+                    months.put("12"," декабря");
+
+                    bdate += months.get(arraybdate[1]);
+
+                    if (arraybdate.length == 3) {
+                        bdate += " ";
+                        bdate += arraybdate[2];
+                    }
+
+                    Log.i("BDATE", bdate);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
