@@ -4,7 +4,6 @@ package com.example.kirill.techpark16.Fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -31,13 +30,13 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -92,8 +91,8 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     public void onRefresh() {
        Log.i("REFRESH", "REFRESH");
 
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(this).attach(this).commit();
+//        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//        ft.detach(this).attach(this).commit();
     }
 
     private class LongOperation extends AsyncTask<String, Void, String> {
@@ -154,12 +153,13 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_single_dialog, null);
 
-        mswipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
-        mswipeRefreshLayout.setOnRefreshListener(this);
+//        mswipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
+//        mswipeRefreshLayout.setOnRefreshListener(this);
 
         inList = getArguments().getStringArrayList(IN_LIST);
         outList = getArguments().getStringArrayList(OUT_LIST);
         vkMessages = getArguments().getParcelableArrayList(MESSAGES);
+        Collections.reverse(vkMessages);
         singleDialogAdapter = new SingleDialogAdapter(view.getContext(), inList, outList);
 
         id = getArguments().getInt(USER_ID);

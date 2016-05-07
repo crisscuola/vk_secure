@@ -1,5 +1,8 @@
 package com.example.kirill.techpark16.Fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kirill.techpark16.R;
@@ -24,7 +28,9 @@ import com.vk.sdk.api.model.VKList;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by konstantin on 10.04.16.
@@ -57,10 +63,37 @@ public class FragmentSingleFriend extends Fragment {
         detailDialogFragment.setArguments(bundle);
         return detailDialogFragment;
     }
+
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_single_friend, null);
+        final View view = inflater.inflate(R.layout.fragment_single_friend, null);
 
         TextView friend_name = (TextView) view.findViewById(R.id.friends_name);
         final TextView friend_status = (TextView) view.findViewById(R.id.friends_status);
@@ -93,6 +126,68 @@ public class FragmentSingleFriend extends Fragment {
             @Override
             public void onError(VKError error) {
                 Log.i("len", String.valueOf(error.errorCode));
+            }
+        });
+
+        VKRequest request_info = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,id,
+                VKApiConst.FIELDS, "photo_200,bdate,city"));
+
+        request_info.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+
+                String photo_url = " ";
+                String city = " ";
+                String bdate = "";
+
+                try {
+                    JSONArray array = response.json.getJSONArray("response");
+
+                    photo_url = array.getJSONObject(0).getString("photo_200");
+                    city = array.getJSONObject(0).getJSONObject("city").getString("title");
+                    bdate = array.getJSONObject(0).getString("bdate");
+
+                    String[] arraybdate = bdate.split("\\.");
+
+                    bdate = arraybdate[0];
+
+                    HashMap<String, String> months = new HashMap<String, String>();
+
+                    months.put("1", " января");
+                    months.put("2", " февраля");
+                    months.put("3", " марта");
+                    months.put("4", " апреля");
+                    months.put("5", " мая");
+                    months.put("6", " июня");
+                    months.put("7", " июля");
+                    months.put("8", " августа");
+                    months.put("9", " сентября");
+                    months.put("10", " октября");
+                    months.put("11", " ноября");
+                    months.put("12"," декабря");
+
+                    bdate += months.get(arraybdate[1]);
+
+                    if (arraybdate.length == 3) {
+                        bdate += " ";
+                        bdate += arraybdate[2];
+                    }
+
+                    Log.i("BDATE", bdate);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                TextView name = (TextView) view.findViewById(R.id.city);
+                name.setText(city);
+
+                TextView b_date = (TextView)  view.findViewById(R.id.b_date);
+                b_date.setText(bdate);
+
+
+                new DownloadImageTask((ImageView) view.findViewById(R.id.avatar)).execute(photo_url);
+
+                super.onComplete(response);
             }
         });
 

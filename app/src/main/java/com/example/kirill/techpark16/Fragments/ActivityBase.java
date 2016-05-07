@@ -257,6 +257,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     protected void onResume() {
 
         fragmentSet[FragmentsConst.DIALOGSLIST] = new FragmentDialogsList();
+
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
         fragmentTransaction.addToBackStack(null);
