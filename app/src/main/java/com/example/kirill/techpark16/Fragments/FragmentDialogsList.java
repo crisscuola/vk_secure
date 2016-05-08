@@ -92,8 +92,15 @@ public class FragmentDialogsList extends ListFragment {
 
                                     users.add(String.valueOf(FragmentDialogsList.this.list_s.getById(
                                             msg.message.user_id)));
-                                    messages.add(msg.message.body);
 
+                                    String test = msg.message.body;
+
+                                    if (test.length() == 174 && test.charAt(test.length() - 1) == '=')
+                                    {
+                                        messages.add("[ENCRYPTED MESSAGE]");
+                                    } else {
+                                        messages.add(msg.message.body);
+                                    }
                                 }
                                 setListAdapter(new DialogsListAdapter(inflater.getContext(), users, messages));
                             }
