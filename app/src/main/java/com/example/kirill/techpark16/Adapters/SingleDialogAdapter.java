@@ -32,7 +32,7 @@ public class SingleDialogAdapter extends BaseAdapter {
     }
 
     public void add(ChatMessage obj){
-        chatMessagesList.add(obj);
+        chatMessagesList.add(0,obj);
     }
 
     @Override

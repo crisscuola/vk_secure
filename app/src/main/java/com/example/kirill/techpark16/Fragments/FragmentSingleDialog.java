@@ -34,6 +34,8 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -161,6 +163,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
         inList = getArguments().getStringArrayList(IN_LIST);
         outList = getArguments().getStringArrayList(OUT_LIST);
         vkMessages = getArguments().getParcelableArrayList(MESSAGES);
+        Collections.reverse(vkMessages);
         singleDialogAdapter = new SingleDialogAdapter(view.getContext(), inList, outList);
 
         id = getArguments().getInt(USER_ID);
@@ -170,7 +173,8 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
         listView = (ListView) view.findViewById(R.id.listmsg);
         send = (Button) view.findViewById(R.id.sendmsg);
 
-            new LongOperation().execute();
+        new LongOperation().execute();
+        singleDialogAdapter.notifyDataSetChanged();
 
 //        if (id == Integer.parseInt(VKSdk.getAccessToken().userId)) {
 //            listView.setAdapter(new MyselfSingleDialogAdapter(view.getContext(), inList));
@@ -213,7 +217,9 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
+                                ChatMessage chatMessage = new ChatMessage(msg, true, new Date().getTime());
+                                singleDialogAdapter.add(chatMessage);
+                                singleDialogAdapter.notifyDataSetChanged();
                             }
                         });
 
