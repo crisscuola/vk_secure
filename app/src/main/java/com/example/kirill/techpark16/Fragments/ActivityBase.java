@@ -419,14 +419,14 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                                 msg.add(mes);
                             }
 
-                            for (VKApiMessage mess : msg) {
-
-                                if (mess.out) {
-                                    outList.add(mess.body);
-                                } else {
-                                    inList.add(mess.body);
-                                }
-                            }
+//                            for (VKApiMessage mess : msg) {
+//
+//                                if (mess.out) {
+//                                    outList.add(mess.body);
+//                                } else {
+//                                    inList.add(mess.body);
+//                                }
+//                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
