@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by konstantin on 10.04.16.
+ * Created by konstantin on 10.04.16
  */
 public class FragmentSingleFriend extends Fragment {
 
@@ -79,7 +79,6 @@ public class FragmentSingleFriend extends Fragment {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
-                Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
             return mIcon11;
@@ -101,8 +100,9 @@ public class FragmentSingleFriend extends Fragment {
         id = getArguments().getInt(USER_ID);
         first_name = getArguments().getString(FIRST_NAME);
         last_name = getArguments().getString(LAST_NAME);
+        String name = first_name + " " + last_name;
 
-        friend_name.setText(first_name + " " + last_name);
+        friend_name.setText(name);
 
         final VKRequest request = new VKRequest("status.get", VKParameters.from(VKApiConst.USER_ID, id));
 
@@ -112,7 +112,6 @@ public class FragmentSingleFriend extends Fragment {
                 super.onComplete(response);
 
                 String status;
-                Log.i("len", String.valueOf(response.json.length()));
                 try {
 
                     status = (String) response.json.getJSONObject("response").get("text");
@@ -151,7 +150,7 @@ public class FragmentSingleFriend extends Fragment {
 
                     bdate = arraybdate[0];
 
-                    HashMap<String, String> months = new HashMap<String, String>();
+                    HashMap<String, String> months = new HashMap<>();
 
                     months.put("1", " января");
                     months.put("2", " февраля");
@@ -173,7 +172,6 @@ public class FragmentSingleFriend extends Fragment {
                         bdate += arraybdate[2];
                     }
 
-                    Log.i("BDATE", bdate);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
