@@ -23,9 +23,6 @@ public class SingleDialogAdapter extends BaseAdapter {
     private TextView textView;
     private Context context;
 
-    String EMPTY = "empty";
-
-
 
     public SingleDialogAdapter(Context context, ArrayList<String> inList, ArrayList<String> outList) {
         this.inList = inList;
@@ -40,12 +37,12 @@ public class SingleDialogAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return inList.size();
+        return chatMessagesList.size();
     }
 
     @Override
     public ChatMessage getItem(int position) {
-        return this.chatMessagesList.get(position);
+        return this.chatMessagesList.get( getCount() - position - 1);
     }
 
     @Override
@@ -56,24 +53,7 @@ public class SingleDialogAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
-        Arrays.sort(inList.toArray(), Collections.reverseOrder());
-        Arrays.sort(outList.toArray(), Collections.reverseOrder());
-
-        SetData setData = new SetData();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-//        View view = inflater.inflate(R.layout.list_dialog_adapter, null);
-//
-//        setData.inList = (TextView) view.findViewById(R.id.textView4);
-//        setData.outList = (TextView) view.findViewById(R.id.textView5);
-//
-//        setData.inList.setText(inList.get(position));
-//        try {
-//        setData.outList.setText(outList.get(position));
-//        } catch (IndexOutOfBoundsException e){
-//            setData.outList.setText(EMPTY);
-//        }
-
 
         ChatMessage chatMessageObj = getItem(position);
         View row;
@@ -88,7 +68,4 @@ public class SingleDialogAdapter extends BaseAdapter {
         return row;
     }
 
-    public class SetData {
-        TextView inList,outList;
-    }
 }
