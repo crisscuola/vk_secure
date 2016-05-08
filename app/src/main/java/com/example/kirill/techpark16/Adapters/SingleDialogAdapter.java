@@ -12,7 +12,6 @@ import com.example.kirill.techpark16.ChatMessage;
 import com.example.kirill.techpark16.R;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class SingleDialogAdapter extends BaseAdapter {
     private ArrayList<String> inList, outList;
@@ -63,11 +62,11 @@ public class SingleDialogAdapter extends BaseAdapter {
         String media = "[MEDIA MESSAGE]";
 
         textView = (TextView) row.findViewById(R.id.msg);
-        if (Objects.equals(chatMessageObj.getMsg(), "")) {
-            textView.setText(media);
-        } else {
+//        if (Objects.equals(chatMessageObj.getMsg(), "")) {
+//            textView.setText(media);
+//        } else {
             textView.setText(chatMessageObj.getMsg());
-        }
+//        }
         return row;
     }
 
