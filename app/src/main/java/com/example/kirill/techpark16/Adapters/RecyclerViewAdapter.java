@@ -27,56 +27,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private VKList friendList = new VKList();
     private FragmentManager fragmentManager;
 
+    int id;
+    String firstname,lastname;
+
     public  RecyclerViewAdapter(FragmentManager fragmentManager, VKList friendList){
         this.fragmentManager = fragmentManager;
         this.friendList = friendList;
     }
-
-    private class FriendNameLoader extends AsyncTask {
-        int position;
-        int id;
-        String firstname,lastname;
-        VKList list;
-
-        @Override
-        protected VKList  doInBackground(Object[] params) {
-            final VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS,
-                    "first_name, last_name", "order", "hints"));
-            position = (int)params[0];
-            request_list_friend.executeWithListener(new VKRequest.VKRequestListener() {
-                @Override
-                public void onComplete(VKResponse response) {
-
-                    super.onComplete(response);
-
-                    list = (VKList) response.parsedModel;
-
-                    VKApiModel model = list.get(position);
-                    try {
-                        id = model.fields.getInt("id");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                    try {
-                        firstname = model.fields.getString("first_name");
-                        lastname = model.fields.getString("last_name");
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(id, firstname, lastname);
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragmentPlace, newFragment)
-                            .addToBackStack(null)
-                            .commit();
-                }
-            });
-            return list;
-        }
-    }
-
 
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -92,7 +49,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new FriendNameLoader().execute(position);
+                VKApiModel model = friendList.get(position);
+                try {
+                    id = model.fields.getInt("id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+                try {
+                    firstname = model.fields.getString("first_name");
+                    lastname = model.fields.getString("last_name");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(id, firstname, lastname);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragmentPlace, newFragment)
+                        .addToBackStack(null)
+                        .commit();
             }
         });
     }

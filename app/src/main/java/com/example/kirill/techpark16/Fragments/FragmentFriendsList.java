@@ -32,14 +32,13 @@ import java.util.ArrayList;
 import java.util.zip.Inflater;
 
 /**
- * Created by konstantin on 09.04.16.
+ * Created by konstantin on 09.04.16
  */
 public class FragmentFriendsList extends Fragment {
 
     RecyclerView recyclerView;
     RecyclerViewAdapter recyclerViewAdapter;
     VKList list = new VKList();
-    FragmentTransaction fragmentTransaction;
 
 
 
