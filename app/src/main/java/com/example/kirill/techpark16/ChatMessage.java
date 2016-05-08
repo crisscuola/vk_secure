@@ -8,6 +8,7 @@ public class ChatMessage {
     private Boolean out;
     private Long time;
 
+
     public ChatMessage(String msg, Boolean out, Long time){
         this.msg = msg;
         this.out = out;
@@ -16,6 +17,10 @@ public class ChatMessage {
 
     public String getMsg(){
         return msg;
+    }
+
+    public String getBody(){
+        return "l";
     }
 
     public Boolean getOut(){

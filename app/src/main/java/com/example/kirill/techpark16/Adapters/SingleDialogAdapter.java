@@ -2,7 +2,6 @@ package com.example.kirill.techpark16.Adapters;
 
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,7 @@ import com.example.kirill.techpark16.ChatMessage;
 import com.example.kirill.techpark16.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
+import java.util.Objects;
 
 public class SingleDialogAdapter extends BaseAdapter {
     private ArrayList<String> inList, outList;
@@ -62,9 +59,15 @@ public class SingleDialogAdapter extends BaseAdapter {
         } else {
             row = inflater.inflate(R.layout.dialog_fragment_in, null);
         }
-        textView = (TextView) row.findViewById(R.id.msg);
-        textView.setText(chatMessageObj.getMsg());
 
+        String media = "[MEDIA MESSAGE]";
+
+        textView = (TextView) row.findViewById(R.id.msg);
+        if (Objects.equals(chatMessageObj.getMsg(), "")) {
+            textView.setText(media);
+        } else {
+            textView.setText(chatMessageObj.getMsg());
+        }
         return row;
     }
 

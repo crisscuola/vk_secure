@@ -101,6 +101,12 @@ public class FragmentDialogsList extends ListFragment {
                                     } else {
                                         messages.add(msg.message.body);
                                     }
+
+//                                    if (Objects.equals(test, "")) {
+//                                        messages.add("[MEDIA MESSAGE]");
+//                                    } else {
+//                                        messages.add(msg.message.body);
+//                                    }
                                 }
                                 setListAdapter(new DialogsListAdapter(inflater.getContext(), users, messages));
                             }

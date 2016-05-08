@@ -415,7 +415,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                             JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
 
                             for (int i = 0; i < array.length(); i++) {
+
                                 VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
+
                                 msg.add(mes);
                             }
 
