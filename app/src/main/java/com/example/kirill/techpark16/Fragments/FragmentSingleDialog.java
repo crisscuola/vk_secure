@@ -15,13 +15,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.kirill.techpark16.Adapters.MyselfSingleDialogAdapter;
 import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
 import com.example.kirill.techpark16.ChatMessage;
 import com.example.kirill.techpark16.MyMessagesHistory;
 import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.R;
-import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
@@ -36,9 +34,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by kirill on 02.04.16
@@ -245,18 +241,18 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
         super.onResume();
         final String[] name_id = {""};
 
-//        VKRequest my_request = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, title_id,
-//                VKApiConst.FIELDS, "first_name, last_name"));
-//        my_request.executeWithListener(new VKRequest.VKRequestListener() {
-//            @Override
-//            public void onComplete(VKResponse response) {
-//                super.onComplete(response);
-//                list_s = (VKList) response.parsedModel;
-//
-//                name_id[0] = String.valueOf(FragmentSingleDialog.this.list_s.getById(title_id));
-//                getActivity().setTitle(name_id[0]);
-//            }
-//        });
+        VKRequest my_request = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, title_id,
+                VKApiConst.FIELDS, "first_name, last_name"));
+        my_request.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                list_s = (VKList) response.parsedModel;
+
+                name_id[0] = String.valueOf(FragmentSingleDialog.this.list_s.getById(title_id));
+                getActivity().setTitle(name_id[0]);
+            }
+        });
 
         getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
     }
