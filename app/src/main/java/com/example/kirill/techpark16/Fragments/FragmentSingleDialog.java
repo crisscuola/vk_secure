@@ -48,6 +48,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     public static final String IN_LIST = "inList";
     public static final String OUT_LIST = "outList";
     public static final String MESSAGES = "messages";
+    private final String MEDIA_MSG = "[MEDIA MESSAGE]";
     private final String PREFIX = "cpslbs_";
 
     ArrayList<String> inList = new ArrayList<>();
@@ -114,6 +115,13 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                         chatMessage.setMsg(outMsg.get(0).getMsg());
                     }
                 }
+
+                if(msg.attachments.size() != 0 || msg.body.isEmpty() || !msg.fwd_messages.isEmpty()){
+                    chatMessage.setMsg(MEDIA_MSG);
+                    singleDialogAdapter.add(chatMessage);
+                    continue;
+                }
+
                 try {
                     tmp = ActivityBase.encryptor.decode(msg.body);
                 } catch (Exception e) {
@@ -123,9 +131,9 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                 if (tmp.startsWith(PREFIX)) {
                     chatMessage.setMsg(tmp.substring(PREFIX.length()));
                 }
+                Log.d("att", String.valueOf(msg.attachments.size()) + " " + msg.body);
 
                 singleDialogAdapter.add(chatMessage);
-
             }
 
             return friendKey;

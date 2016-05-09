@@ -19,10 +19,6 @@ public class ChatMessage {
         return msg;
     }
 
-    public String getBody(){
-        return "l";
-    }
-
     public Boolean getOut(){
         return out;
     }

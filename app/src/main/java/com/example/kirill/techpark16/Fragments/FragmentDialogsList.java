@@ -20,6 +20,7 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKApiGetDialogResponse;
+import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
 
 import java.util.ArrayList;
@@ -32,6 +33,9 @@ public class FragmentDialogsList extends ListFragment {
     private onItemSelectedListener mCallback;
     private VKList list_s;
     private  ArrayList id_array = new ArrayList();
+
+    final private String ENCRYPTED_MSG = "[ENCRYPTED MESSAGE]";
+    final private String MEDIA_MSG = "[MEDIA MESSAGE]";
 
 
 
@@ -93,20 +97,17 @@ public class FragmentDialogsList extends ListFragment {
                                     users.add(String.valueOf(FragmentDialogsList.this.list_s.getById(
                                             msg.message.user_id)));
 
-                                    String test = msg.message.body;
 
-                                    if (test.length() == 174 && test.charAt(test.length() - 1) == '=')
-                                    {
-                                        messages.add("[ENCRYPTED MESSAGE]");
+                                    VKApiMessage test = msg.message;
+
+                                    if (test.body.length() == 174 && test.body.charAt(test.body.length() - 1) == '=') {
+                                        messages.add(ENCRYPTED_MSG);
+                                    } else if (msg.message.attachments.size() != 0 || msg.message.body.isEmpty()
+                                            || !msg.message.fwd_messages.isEmpty()){
+                                        messages.add(MEDIA_MSG);
                                     } else {
                                         messages.add(msg.message.body);
                                     }
-
-//                                    if (Objects.equals(test, "")) {
-//                                        messages.add("[MEDIA MESSAGE]");
-//                                    } else {
-//                                        messages.add(msg.message.body);
-//                                    }
                                 }
                                 setListAdapter(new DialogsListAdapter(inflater.getContext(), users, messages));
                             }

@@ -59,14 +59,9 @@ public class SingleDialogAdapter extends BaseAdapter {
             row = inflater.inflate(R.layout.dialog_fragment_in, null);
         }
 
-        String media = "[MEDIA MESSAGE]";
-
         textView = (TextView) row.findViewById(R.id.msg);
-//        if (Objects.equals(chatMessageObj.getMsg(), "")) {
-//            textView.setText(media);
-//        } else {
-            textView.setText(chatMessageObj.getMsg());
-//        }
+        textView.setText(chatMessageObj.getMsg());
+
         return row;
     }
 
