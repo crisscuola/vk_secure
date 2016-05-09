@@ -53,8 +53,6 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
 
     ArrayList<String> inList = new ArrayList<>();
     ArrayList<String> outList = new ArrayList<>();
-    ArrayList<String> inList_decrypted = new ArrayList<>();
-    ArrayList<String> outList_decrypted = new ArrayList<>();
     ArrayList<VKApiMessage> vkMessages = new ArrayList<>();
     SingleDialogAdapter singleDialogAdapter;
     int id;
@@ -70,6 +68,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     String friendKey;
 
     private static SwipeRefreshLayout mswipeRefreshLayout;
+
 
     public static FragmentSingleDialog getInstance(int user_id, ArrayList<String> inList,
                                                    ArrayList<String> outList, ArrayList<VKApiMessage> vkMsgs) {
@@ -98,7 +97,6 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
 
         @Override
         protected String doInBackground(String... params) {
-
             try {
                 friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id);
             } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
@@ -131,11 +129,9 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                 if (tmp.startsWith(PREFIX)) {
                     chatMessage.setMsg(tmp.substring(PREFIX.length()));
                 }
-                Log.d("att", String.valueOf(msg.attachments.size()) + " " + msg.body);
 
                 singleDialogAdapter.add(chatMessage);
             }
-
             return friendKey;
         }
 
@@ -163,6 +159,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+
         View view = inflater.inflate(R.layout.fragment_single_dialog, null);
 
 //        mswipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
@@ -192,7 +189,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
 
                 if (!sendFlag)
                     sendFlag = true;
@@ -219,7 +216,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                                 super.onComplete(response);
                                 int msgId;
                                 try {
-                                    msgId = (int)response.json.get("response");
+                                    msgId = (int) response.json.get("response");
                                     MyMessagesHistory myMessage = new MyMessagesHistory(id, msg, msgId);
                                     myMessage.save();
                                 } catch (JSONException e) {
@@ -232,7 +229,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                         });
 
                     } else {
-                        Toast.makeText(getContext(),"The friend hasn't started the dialog.",
+                        Toast.makeText(getContext(), "The friend hasn't started the dialog.",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {

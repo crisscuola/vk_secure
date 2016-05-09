@@ -80,7 +80,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         @Override
         protected Void doInBackground(Object[] params) {
-
             List<PublicKeysTable> myPk = PublicKeysTable.find(PublicKeysTable.class,"user_id = ?",
                     String.valueOf(0));
             List<PublicKeysTable> priv = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?",
@@ -109,7 +108,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                     e.printStackTrace();
                 }
             }
-
             return null;
         }
     }
@@ -124,8 +122,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         if (VKAccessToken.currentToken() == null) {
             VKSdk.login(this, scope);
 
-        }
-        else  MY_ID = Integer.parseInt(VKSdk.getAccessToken().userId);
+        } else
+            MY_ID = Integer.parseInt(VKSdk.getAccessToken().userId);
 
 
         new PublicKeyChecking().execute();
@@ -194,14 +192,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         fragmentSet[FragmentsConst.SINGLEDIALOG] = new FragmentSingleDialog();
         fragmentSet[FragmentsConst.SETTINGSDIALOG] = new FragmentSettingsDialog();
         fragmentSet[FragmentsConst.FRIENDSEND] = new FragmentFriendsSend();
-
-
-//        toolbar.setTitle(R.string.dialog_list_title);
-//        toolbar.findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
-//        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.add(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
-//        fragmentTransaction.commit();
-
 
     }
 
@@ -421,14 +411,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                                 msg.add(mes);
                             }
 
-//                            for (VKApiMessage mess : msg) {
-//
-//                                if (mess.out) {
-//                                    outList.add(mess.body);
-//                                } else {
-//                                    inList.add(mess.body);
-//                                }
-//                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -445,57 +427,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 });
             }
         });
-
-
     }
-
-
-
-//    @Override
-//    public void onFriendSelected(final int position) {
-//
-//        VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS, "first_name, last_name", "order", "hints"));
-//
-//        request_list_friend.executeWithListener(new VKRequest.VKRequestListener() {
-//            @Override
-//            public void onComplete(VKResponse response) {
-//
-//                super.onComplete(response);
-//
-//                VKList list = new VKList();
-//
-//                list = (VKList) response.parsedModel;
-//
-//                int id = 0;
-//
-//                VKApiModel model = list.get(position);
-//                try {
-//                    id = model.fields.getInt("id");
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                String firstname = "";
-//                String lastname = "";
-//
-//
-//                try {
-//                    firstname = model.fields.getString("first_name");
-//                    lastname = model.fields.getString("last_name");
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(id, firstname, lastname);
-//                fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
-//            }
-//        });
-//    }
-
 
 
     @Override
@@ -572,11 +504,5 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
             }
         });
     }
-
-    public void sendMessageButton(View view) {
-
-    }
-
-
 
 }
