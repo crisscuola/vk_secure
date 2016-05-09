@@ -25,7 +25,7 @@ public class PublicKeyHandler {
         friendsKey = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?", String.valueOf(friendId));
         if (friendsKey.size() != 0){
             pk = friendsKey.get(0).getPk();
-            Log.d("resp_fron_db",pk);
+            Log.d("resp_from_db",pk);
             String response = client.doGetRequest(String.valueOf(friendId));
             JSONObject json = new JSONObject(response);
             int status = json.getInt("status");
@@ -34,6 +34,21 @@ public class PublicKeyHandler {
                 String key = uploadMyPublicKey(friendId);
                 Log.d("resp_st0", key);
             }
+
+            String friendPk = requestPublicKeyFromServer(friendId);
+            if (!friendPk.equals(pk)){
+                try {
+                    pk = requestPublicKeyFromServer(friendId);
+                    Log.d("resp_not_equals", pk);
+                    if (!pk.equals("none")){
+                        PublicKeysTable key = new PublicKeysTable(friendId, pk);
+                        key.save();
+                    }
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
         } else {
             try {
                 pk = requestPublicKeyFromServer(friendId);
