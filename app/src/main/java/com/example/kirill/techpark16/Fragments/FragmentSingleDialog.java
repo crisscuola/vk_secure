@@ -61,6 +61,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     EditText text;
     ListView listView;
     Button send;
+    static Integer count = 0;
 
     static int title_id;
     VKList list_s;
@@ -164,6 +165,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
 
 //        mswipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
 //        mswipeRefreshLayout.setOnRefreshListener(this);
+        count = 0;
 
         inList = getArguments().getStringArrayList(IN_LIST);
         outList = getArguments().getStringArrayList(OUT_LIST);
@@ -250,6 +252,25 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     @Override
     public void onResume() {
         super.onResume();
+
+        count = 0;
+
+        VKRequest update = new VKRequest("messages.getLongPollHistory",  VKParameters.from("pts", ActivityBase.pts));
+
+        update.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                try {
+                    count = response.json.getJSONObject("response").getJSONObject("messages").getInt("count");
+                    Log.i("POOL", String.valueOf(count));
+                    Log.i("POOL", String.valueOf(ActivityBase.pts));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                super.onComplete(response);
+            }
+        });
+
         final String[] name_id = {""};
 
         VKRequest my_request = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, title_id,
@@ -261,7 +282,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                 list_s = (VKList) response.parsedModel;
 
                 name_id[0] = String.valueOf(FragmentSingleDialog.this.list_s.getById(title_id));
-                getActivity().setTitle(name_id[0]);
+                getActivity().setTitle(name_id[0]+ " +" + String.valueOf(count));
             }
         });
 

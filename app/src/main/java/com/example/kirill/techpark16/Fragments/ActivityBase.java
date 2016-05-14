@@ -67,6 +67,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     NavigationView navigationView;
     BroadcastReceiver br;
     Button toolbarButton;
+    static Integer pts;
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL,
             VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
@@ -125,6 +126,22 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         } else
             MY_ID = Integer.parseInt(VKSdk.getAccessToken().userId);
 
+
+        VKRequest request_long_poll =  new VKRequest("messages.getLongPollServer", VKParameters.from("need_pts", 1));
+
+        request_long_poll.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                try {
+                    pts = response.json.getJSONObject("response").getInt("pts");
+
+                    Log.i("PTS", String.valueOf(pts));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         new PublicKeyChecking().execute();
 
