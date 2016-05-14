@@ -4,6 +4,7 @@ package com.example.kirill.techpark16.Fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -62,6 +63,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     ListView listView;
     Button send;
     static Integer count = 0;
+    String title;
 
     static int title_id;
     VKList list_s;
@@ -89,9 +91,28 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     @Override
     public void onRefresh() {
        Log.i("REFRESH", "REFRESH");
+        title = title.substring(0, title.length() -1);
 
-//        FragmentTransaction ft = getFragmentManager().beginTransaction();
-//        ft.detach(this).attach(this).commit();
+//        VKRequest update = new VKRequest("messages.getLongPollHistory",  VKParameters.from("pts", ActivityBase.pts));
+//
+//        update.executeWithListener(new VKRequest.VKRequestListener() {
+//            @Override
+//            public void onComplete(VKResponse response) {
+//                try {
+//                    count = response.json.getJSONObject("response").getJSONObject("messages").getInt("count");
+//                    Log.i("POOL", String.valueOf(count));
+//                    Log.i("POOL", String.valueOf(ActivityBase.pts));
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                super.onComplete(response);
+//            }
+//        });
+
+        getActivity().setTitle(title);
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
     }
 
     private class LongOperation extends AsyncTask<String, Void, String> {
@@ -163,9 +184,26 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
 
         View view = inflater.inflate(R.layout.fragment_single_dialog, null);
 
-//        mswipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
-//        mswipeRefreshLayout.setOnRefreshListener(this);
+        mswipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
+        mswipeRefreshLayout.setOnRefreshListener(this);
+
         count = 0;
+
+        VKRequest update = new VKRequest("messages.getLongPollHistory",  VKParameters.from("pts", ActivityBase.pts));
+
+        update.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                try {
+                    count = response.json.getJSONObject("response").getJSONObject("messages").getInt("count");
+                    Log.i("POOL", String.valueOf(count));
+                    Log.i("POOL", String.valueOf(ActivityBase.pts));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                super.onComplete(response);
+            }
+        });
 
         inList = getArguments().getStringArrayList(IN_LIST);
         outList = getArguments().getStringArrayList(OUT_LIST);
@@ -282,7 +320,8 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                 list_s = (VKList) response.parsedModel;
 
                 name_id[0] = String.valueOf(FragmentSingleDialog.this.list_s.getById(title_id));
-                getActivity().setTitle(name_id[0]+ " +" + String.valueOf(count));
+                title = name_id[0]+ " +" + String.valueOf(count);
+                getActivity().setTitle(title);
             }
         });
 
