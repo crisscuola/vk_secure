@@ -109,6 +109,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                 super.onComplete(response);
             }
         });
+        title += "0";
         getActivity().setTitle(title);
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -183,6 +184,23 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
         View view = inflater.inflate(R.layout.fragment_single_dialog, null);
+
+
+        VKRequest request_long_poll =  new VKRequest("messages.getLongPollServer", VKParameters.from("need_pts", 1));
+
+        request_long_poll.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                try {
+                    ActivityBase.pts = response.json.getJSONObject("response").getInt("pts");
+
+                    Log.i("PTS", String.valueOf(ActivityBase.pts));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         mswipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
         mswipeRefreshLayout.setOnRefreshListener(this);
@@ -320,7 +338,9 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                 list_s = (VKList) response.parsedModel;
 
                 name_id[0] = String.valueOf(FragmentSingleDialog.this.list_s.getById(title_id));
-                title = name_id[0]+ " +" + String.valueOf(count);
+                String[] parts = name_id[0].split(" ");
+                String name = parts[0];
+                title = name+ " +" + String.valueOf(count);
                 getActivity().setTitle(title);
             }
         });
