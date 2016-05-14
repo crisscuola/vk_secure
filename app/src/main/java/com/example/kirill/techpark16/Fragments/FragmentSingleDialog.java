@@ -91,6 +91,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     @Override
     public void onRefresh() {
        Log.i("REFRESH", "REFRESH");
+        Collections.reverse(vkMessages);
         title = title.substring(0, title.length() -1);
         count = 0;
 
@@ -101,6 +102,8 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
             public void onComplete(VKResponse response) {
                 try {
                     count = response.json.getJSONObject("response").getJSONObject("messages").getInt("count");
+                    Log.i("POOL", String.valueOf(response.json.getJSONObject("response")));
+                    // HERE NEED CHECK NEW IN MESS 
                     Log.i("POOL", String.valueOf(count));
                     Log.i("POOL", String.valueOf(ActivityBase.pts));
                 } catch (JSONException e) {
@@ -308,9 +311,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     @Override
     public void onResume() {
         super.onResume();
-
         count = 0;
-
         VKRequest update = new VKRequest("messages.getLongPollHistory",  VKParameters.from("pts", ActivityBase.pts));
 
         update.executeWithListener(new VKRequest.VKRequestListener() {
