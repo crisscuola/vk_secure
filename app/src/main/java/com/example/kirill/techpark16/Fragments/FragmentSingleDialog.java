@@ -29,6 +29,7 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
@@ -94,6 +95,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
         Collections.reverse(vkMessages);
         title = title.substring(0, title.length() -1);
         count = 0;
+        final ArrayList<VKApiMessage> msg = new ArrayList<>();
 
         VKRequest update = new VKRequest("messages.getLongPollHistory",  VKParameters.from("pts", ActivityBase.pts));
 
@@ -103,9 +105,30 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                 try {
                     count = response.json.getJSONObject("response").getJSONObject("messages").getInt("count");
                     Log.i("POOL", String.valueOf(response.json.getJSONObject("response")));
-                    // HERE NEED CHECK NEW IN MESS 
+                    // HERE NEED CHECK NEW IN MESS
+                    JSONArray new_messages = response.json.getJSONObject("response").getJSONObject("messages").getJSONArray("items");
+
+                    for (int i = 0; i < new_messages.length(); i++) {
+                        VKApiMessage mes = new VKApiMessage(new_messages.getJSONObject(i));
+                        msg.add(mes);
+                    }
+
+                    for (VKApiMessage mess : msg) {
+                        if (mess.out) {
+                            count --;
+                            ChatMessage chatMessage = new ChatMessage(mess.body, true, new Date().getTime());
+                            singleDialogAdapter.add(chatMessage);
+                            singleDialogAdapter.notifyDataSetChanged();
+                        } else {
+                            // add to List new message
+                            ChatMessage chatMessage = new ChatMessage(mess.body, false, new Date().getTime());
+                            singleDialogAdapter.add(chatMessage);
+                            singleDialogAdapter.notifyDataSetChanged();
+                        }
+                    }
+
                     Log.i("POOL", String.valueOf(count));
-                    Log.i("POOL", String.valueOf(ActivityBase.pts));
+                    Log.i("POOL", String.valueOf(new_messages));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
