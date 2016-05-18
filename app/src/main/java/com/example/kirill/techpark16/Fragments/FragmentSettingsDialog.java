@@ -2,7 +2,6 @@ package com.example.kirill.techpark16.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +9,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kirill.techpark16.PublicKeysTable;
+import com.example.kirill.techpark16.MyMessagesHistory;
 import com.example.kirill.techpark16.R;
+import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.List;
+import org.json.JSONException;
 
 /**
  * Created by konstantin on 10.04.16.
@@ -30,6 +27,7 @@ public class FragmentSettingsDialog extends Fragment {
         private Button encryptionSwitcher;
         VKList list_s;
         static int title_id;
+        Button use;
 
     public static FragmentSettingsDialog getInstance(int user_id){
         FragmentSettingsDialog fragmentSettingsDialog = new FragmentSettingsDialog();
@@ -58,6 +56,37 @@ public class FragmentSettingsDialog extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(getContext(), "TODO: switcher", Toast.LENGTH_SHORT).show();
+                }
+
+
+            });
+
+            use = (Button) view.findViewById(R.id.new_device);
+
+            use.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, title_id,
+                            VKApiConst.MESSAGE, "I wtite on new Device"));
+
+                    request.executeWithListener(new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+                            int msgId;
+                            try {
+                                msgId = (int) response.json.get("response");
+                                MyMessagesHistory myMessage = new MyMessagesHistory(title_id, "I wtite on new Device", msgId);
+                                myMessage.save();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+//                            ChatMessage chatMessage = new ChatMessage("I wtite on new Device", true, new Date().getTime());
+//                            singleDialogAdapter.add(chatMessage);
+//                            singleDialogAdapter.notifyDataSetChanged();
+                        }
+                    });
+
                 }
             });
 

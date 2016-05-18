@@ -22,9 +22,7 @@ import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKApiGetDialogResponse;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKApiUser;
-import com.vk.sdk.api.model.VKApiUserFull;
 import com.vk.sdk.api.model.VKList;
-import com.vk.sdk.api.model.VKUsersArray;
 
 import java.util.ArrayList;
 
@@ -102,7 +100,12 @@ public class FragmentDialogsList extends ListFragment {
                                             || !msg.message.fwd_messages.isEmpty()){
                                         messages.add(MEDIA_MSG);
                                     } else {
-                                        messages.add(msg.message.body);
+                                        String mess =  msg.message.body;
+                                        if ( mess.length() > 30) {
+                                           mess = mess.substring(0,30);
+                                           mess += " ...";
+                                        }
+                                        messages.add(mess);
                                     }
                                 }
                                 setListAdapter(new DialogsListAdapter(inflater.getContext(), usersArray, messages));

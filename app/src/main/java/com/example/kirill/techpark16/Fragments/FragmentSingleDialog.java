@@ -4,7 +4,6 @@ package com.example.kirill.techpark16.Fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -64,7 +63,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     ListView listView;
     Button send;
     static Integer count = 0;
-    String title;
+    static String title;
 
     static int title_id;
     VKList list_s;
@@ -93,7 +92,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     public void onRefresh() {
        Log.i("REFRESH", "REFRESH");
         //Collections.reverse(vkMessages);
-        title = title.substring(0, title.length() -1);
+//        title = title.substring(0, title.length() -1);
         count = 0;
         final ArrayList<VKApiMessage> msgList = new ArrayList<>();
         final ArrayList<Integer> idList = new ArrayList<>();
@@ -174,7 +173,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
             }
         });
 
-        title += "0";
+//        title += "0";
         getActivity().setTitle(title);
     }
 
@@ -399,7 +398,8 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                 name_id[0] = String.valueOf(FragmentSingleDialog.this.list_s.getById(title_id));
                 String[] parts = name_id[0].split(" ");
                 String name = parts[0];
-                title = name+ " +" + String.valueOf(count);
+                title = name;
+//                        + " +" + String.valueOf(count);
                 getActivity().setTitle(title);
             }
         });
