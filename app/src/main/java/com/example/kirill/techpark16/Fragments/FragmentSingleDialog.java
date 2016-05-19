@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
-import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +19,7 @@ import com.example.kirill.techpark16.ChatMessage;
 import com.example.kirill.techpark16.MyMessagesHistory;
 import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.R;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
@@ -367,21 +367,21 @@ public class FragmentSingleDialog extends ListFragment {
     public void onResume() {
         super.onResume();
         count = 0;
-        VKRequest update = new VKRequest("messages.getLongPollHistory",  VKParameters.from("pts", ActivityBase.pts));
-
-        update.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                try {
-                    count = response.json.getJSONObject("response").getJSONObject("messages").getInt("count");
-                    Log.i("POOL", String.valueOf(count));
-                    Log.i("POOL", String.valueOf(ActivityBase.pts));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                super.onComplete(response);
-            }
-        });
+//        VKRequest update = new VKRequest("messages.getLongPollHistory",  VKParameters.from("pts", ActivityBase.pts));
+//
+//        update.executeWithListener(new VKRequest.VKRequestListener() {
+//            @Override
+//            public void onComplete(VKResponse response) {
+//                try {
+//                    count = response.json.getJSONObject("response").getJSONObject("messages").getInt("count");
+//                    Log.i("POOL", String.valueOf(count));
+//                    Log.i("POOL", String.valueOf(ActivityBase.pts));
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//                super.onComplete(response);
+//            }
+//        });
 
         final String[] name_id = {""};
 
