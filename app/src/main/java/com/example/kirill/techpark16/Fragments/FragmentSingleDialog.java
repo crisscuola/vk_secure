@@ -228,7 +228,11 @@ public class FragmentSingleDialog extends ListFragment {
                                     ChatMessage chatMessage = new ChatMessage(body, true, mess.date);
                                     singleDialogAdapter.add(chatMessage);
                                 } else {
-                                    ChatMessage chatMessage = new ChatMessage(mess.body, false, mess.date);
+                                    if (mess.body.startsWith(PREFIX)) {
+                                        body = mess.body.substring(PREFIX.length());
+                                    } else
+                                        body = mess.body;
+                                    ChatMessage chatMessage = new ChatMessage(body, false, mess.date);
                                     singleDialogAdapter.add(chatMessage);
                                 }
                             }
