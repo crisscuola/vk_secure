@@ -37,6 +37,7 @@ public class FragmentDialogsList extends ListFragment {
 
     final private String ENCRYPTED_MSG = "[ENCRYPTED MESSAGE]";
     final private String MEDIA_MSG = "[MEDIA MESSAGE]";
+    private final String PREFIX = "cpslbs_";
 
 
 
@@ -101,6 +102,15 @@ public class FragmentDialogsList extends ListFragment {
                                         messages.add(MEDIA_MSG);
                                     } else {
                                         String mess =  msg.message.body;
+
+                                        mess = mess.replaceAll("\\r|\\n", PREFIX);
+
+                                        if (mess.contains(PREFIX)) {
+                                            Integer pos = mess.indexOf(PREFIX);
+                                            mess = mess.substring(0, pos);
+                                            mess += " ...";
+                                        }
+
                                         if ( mess.length() > 30) {
                                            mess = mess.substring(0,30);
                                            mess += " ...";
