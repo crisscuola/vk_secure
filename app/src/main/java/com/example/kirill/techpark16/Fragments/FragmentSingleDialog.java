@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
-import android.support.v4.widget.SwipeRefreshLayout;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +20,7 @@ import com.example.kirill.techpark16.ChatMessage;
 import com.example.kirill.techpark16.MyMessagesHistory;
 import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.R;
+import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
@@ -42,7 +43,7 @@ import java.util.List;
 /**
  * Created by kirill on 02.04.16
  */
-public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class FragmentSingleDialog extends ListFragment {
 
 
     public static final String USER_ID = "user_id";
@@ -69,9 +70,7 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
     VKList list_s;
 
     String friendKey;
-
-    private static SwipeRefreshLayout mswipeRefreshLayout;
-
+    private static SwipyRefreshLayout mswipeRefreshLayout;
 
     public static FragmentSingleDialog getInstance(int user_id, ArrayList<String> inList,
                                                    ArrayList<String> outList, ArrayList<VKApiMessage> vkMsgs) {
@@ -86,95 +85,6 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
 
         fragmentSingleDialog.setArguments(bundle);
         return fragmentSingleDialog;
-    }
-
-    @Override
-    public void onRefresh() {
-       Log.i("REFRESH", "REFRESH");
-        //Collections.reverse(vkMessages);
-//        title = title.substring(0, title.length() -1);
-        count = 0;
-        final ArrayList<VKApiMessage> msgList = new ArrayList<>();
-        final ArrayList<Integer> idList = new ArrayList<>();
-
-        VKRequest update = new VKRequest("messages.getLongPollHistory",  VKParameters.from("pts", ActivityBase.pts));
-
-        mswipeRefreshLayout.setRefreshing(true);
-
-        update.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                try {
-                    count = response.json.getJSONObject("response").getJSONObject("messages").getInt("count");
-                    Log.i("POOL", String.valueOf(response.json.getJSONObject("response")));
-                    // HERE NEED CHECK NEW IN MESS
-                    JSONArray new_messages = response.json.getJSONObject("response").getJSONObject("messages").getJSONArray("items");
-
-                    for (int i = 0; i < new_messages.length(); i++) {
-                        VKApiMessage mes = new VKApiMessage(new_messages.getJSONObject(i));
-                        if (mes.user_id == title_id) {
-
-                            if(mes.body.length() == 174 && mes.body.charAt(mes.body.length() - 1) == '='){
-                                mes.body = ActivityBase.encryptor.decode(mes.body);
-                            }
-
-                            msgList.add(mes);
-                            idList.add(mes.id);
-                        }
-                    }
-                    if (msgList.size() == 0) {
-                        mswipeRefreshLayout.setRefreshing(false);
-                        return;
-                    }
-                    for (VKApiMessage mess : msgList) {
-                        if (mess.out) {
-                            count--;
-                            ChatMessage chatMessage = new ChatMessage(mess.body, true, mess.date);
-                            singleDialogAdapter.add(chatMessage);
-                            //singleDialogAdapter.notifyDataSetChanged();
-                        } else {
-                            // add to List new message
-                            ChatMessage chatMessage = new ChatMessage(mess.body, false, mess.date);
-                            singleDialogAdapter.add(chatMessage);
-                            //singleDialogAdapter.notifyDataSetChanged();
-                        }
-                    }
-
-                    singleDialogAdapter.notifyDataSetChanged();
-                    mswipeRefreshLayout.setRefreshing(false);
-
-                    VKRequest markAsRead = new VKRequest("messages.markAsRead", VKParameters
-                            .from("message_ids", idList));
-                    markAsRead.executeWithListener(new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(VKResponse response) {
-                            super.onComplete(response);
-                            idList.clear();
-                        }
-                    });
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                super.onComplete(response);
-            }
-        });
-
-        VKRequest request_long_poll = new VKRequest("messages.getLongPollServer", VKParameters.from("need_pts", 1));
-        request_long_poll.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                try {
-                    ActivityBase.pts = response.json.getJSONObject("response").getInt("pts");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-//        title += "0";
-        getActivity().setTitle(title);
     }
 
     private class LongOperation extends AsyncTask<String, Void, String> {
@@ -246,7 +156,6 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
 
         View view = inflater.inflate(R.layout.fragment_single_dialog, null);
 
-
         VKRequest request_long_poll =  new VKRequest("messages.getLongPollServer", VKParameters.from("need_pts", 1));
 
         request_long_poll.executeWithListener(new VKRequest.VKRequestListener() {
@@ -263,8 +172,96 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
             }
         });
 
-        mswipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
-        mswipeRefreshLayout.setOnRefreshListener(this);
+        mswipeRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.refresh);
+        mswipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener(){
+            @Override
+            public void onRefresh(SwipyRefreshLayoutDirection direction) {
+                Log.i("REFRESH", "REFRESH");
+                //Collections.reverse(vkMessages);
+//        title = title.substring(0, title.length() -1);
+                count = 0;
+                final ArrayList<VKApiMessage> msgList = new ArrayList<>();
+                final ArrayList<Integer> idList = new ArrayList<>();
+
+                VKRequest update = new VKRequest("messages.getLongPollHistory",  VKParameters.from("pts", ActivityBase.pts));
+
+                mswipeRefreshLayout.setRefreshing(true);
+
+                update.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        try {
+                            count = response.json.getJSONObject("response").getJSONObject("messages").getInt("count");
+                            Log.i("POOL", String.valueOf(response.json.getJSONObject("response")));
+                            // HERE NEED CHECK NEW IN MESS
+                            JSONArray new_messages = response.json.getJSONObject("response").getJSONObject("messages").getJSONArray("items");
+
+                            for (int i = 0; i < new_messages.length(); i++) {
+                                VKApiMessage mes = new VKApiMessage(new_messages.getJSONObject(i));
+                                if (mes.user_id == title_id) {
+
+                                    if(mes.body.length() == 174 && mes.body.charAt(mes.body.length() - 1) == '='){
+                                        mes.body = ActivityBase.encryptor.decode(mes.body);
+                                    }
+
+                                    msgList.add(mes);
+                                    idList.add(mes.id);
+                                }
+                            }
+                            if (msgList.size() == 0) {
+                                mswipeRefreshLayout.setRefreshing(false);
+                                return;
+                            }
+                            for (VKApiMessage mess : msgList) {
+                                if (mess.out) {
+                                    count--;
+                                    ChatMessage chatMessage = new ChatMessage(mess.body, true, mess.date);
+                                    singleDialogAdapter.add(chatMessage);
+                                    //singleDialogAdapter.notifyDataSetChanged();
+                                } else {
+                                    // add to List new message
+                                    ChatMessage chatMessage = new ChatMessage(mess.body, false, mess.date);
+                                    singleDialogAdapter.add(chatMessage);
+                                    //singleDialogAdapter.notifyDataSetChanged();
+                                }
+                            }
+
+                            singleDialogAdapter.notifyDataSetChanged();
+                            mswipeRefreshLayout.setRefreshing(false);
+
+                            VKRequest markAsRead = new VKRequest("messages.markAsRead", VKParameters
+                                    .from("message_ids", idList));
+                            markAsRead.executeWithListener(new VKRequest.VKRequestListener() {
+                                @Override
+                                public void onComplete(VKResponse response) {
+                                    super.onComplete(response);
+                                    idList.clear();
+                                }
+                            });
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        super.onComplete(response);
+                    }
+                });
+
+                VKRequest request_long_poll = new VKRequest("messages.getLongPollServer", VKParameters.from("need_pts", 1));
+                request_long_poll.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        super.onComplete(response);
+                        try {
+                            ActivityBase.pts = response.json.getJSONObject("response").getInt("pts");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                getActivity().setTitle(title);
+            }
+        });
 
         count = 0;
 
@@ -399,8 +396,8 @@ public class FragmentSingleDialog extends ListFragment implements SwipeRefreshLa
                 String[] parts = name_id[0].split(" ");
                 String name = parts[0];
                 title = name;
-//                        + " +" + String.valueOf(count);
-                getActivity().setTitle(title);
+                if (getActivity() != null)
+                    getActivity().setTitle(title);
             }
         });
 
