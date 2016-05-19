@@ -212,17 +212,24 @@ public class FragmentSingleDialog extends ListFragment {
                                 mswipeRefreshLayout.setRefreshing(false);
                                 return;
                             }
-                            for (VKApiMessage mess : msgList) {
+                            int toReplace = singleDialogAdapter.msgToReplace();
+                            String body;
+                            for(int i = 0; i < msgList.size(); i++){
+                                VKApiMessage mess = msgList.get(i);
                                 if (mess.out) {
-                                    count--;
-                                    ChatMessage chatMessage = new ChatMessage(mess.body, true, mess.date);
+                                    if (toReplace != 0){
+                                        body = singleDialogAdapter.getMessage(toReplace + i);
+                                        toReplace--;
+                                        singleDialogAdapter.deleteMessage(toReplace + i);
+                                        Log.d("toReplace_body", body);
+                                    } else {
+                                        body = mess.body;
+                                    }
+                                    ChatMessage chatMessage = new ChatMessage(body, true, mess.date);
                                     singleDialogAdapter.add(chatMessage);
-                                    //singleDialogAdapter.notifyDataSetChanged();
                                 } else {
-                                    // add to List new message
                                     ChatMessage chatMessage = new ChatMessage(mess.body, false, mess.date);
                                     singleDialogAdapter.add(chatMessage);
-                                    //singleDialogAdapter.notifyDataSetChanged();
                                 }
                             }
 
@@ -338,7 +345,7 @@ public class FragmentSingleDialog extends ListFragment {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                ChatMessage chatMessage = new ChatMessage(msg, true, new Date().getTime());
+                                ChatMessage chatMessage = new ChatMessage(msg, true, null);
                                 singleDialogAdapter.add(chatMessage);
                                 singleDialogAdapter.notifyDataSetChanged();
                             }

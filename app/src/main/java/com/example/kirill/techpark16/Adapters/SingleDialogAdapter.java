@@ -2,6 +2,7 @@ package com.example.kirill.techpark16.Adapters;
 
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.kirill.techpark16.ChatMessage;
 import com.example.kirill.techpark16.R;
+import com.vk.sdk.api.model.VKApiMessage;
 
 import java.util.ArrayList;
 
@@ -28,7 +30,28 @@ public class SingleDialogAdapter extends BaseAdapter {
     }
 
     public void add(ChatMessage obj){
-        chatMessagesList.add(0,obj);
+        chatMessagesList.add(0, obj);
+    }
+
+    public int msgToReplace() {
+        ChatMessage msg;
+        int count = 0;
+        for(int i = 0; i < getCount(); i++){
+            msg = chatMessagesList.get(i);
+            if(msg.getOut() && msg.getTime() == null) {
+                count++;
+            } else
+                return count;
+        }
+        return count;
+    }
+
+    public String getMessage(int position){
+        return chatMessagesList.get(position - 1).getMsg();
+    }
+
+    public void deleteMessage(int position){
+        chatMessagesList.remove(position);
     }
 
     @Override
