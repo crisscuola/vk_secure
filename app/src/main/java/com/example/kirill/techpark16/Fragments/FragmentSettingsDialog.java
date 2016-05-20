@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kirill.techpark16.MyMessagesHistory;
@@ -15,7 +14,6 @@ import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKList;
 
 import org.json.JSONException;
 
@@ -25,9 +23,9 @@ import org.json.JSONException;
 public class FragmentSettingsDialog extends Fragment {
 
         private Button encryptionSwitcher;
-        VKList list_s;
         static int title_id;
         Button use;
+        static boolean flag = false;
 
     public static FragmentSettingsDialog getInstance(int user_id){
         FragmentSettingsDialog fragmentSettingsDialog = new FragmentSettingsDialog();
@@ -48,7 +46,7 @@ public class FragmentSettingsDialog extends Fragment {
 
             View view = inflater.inflate(R.layout.fragment_dialog_settings, container, false);
 
-            final TextView user_status = (TextView) view.findViewById(R.id.user_status);
+            flag = true;
 
             encryptionSwitcher = (Button) view.findViewById(R.id.encryption_switcher);
 
@@ -67,7 +65,7 @@ public class FragmentSettingsDialog extends Fragment {
                 @Override
                 public void onClick(View v) {
                     VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, title_id,
-                            VKApiConst.MESSAGE, "I wtite on new Device"));
+                            VKApiConst.MESSAGE, "I wtite on new Device !"));
 
                     request.executeWithListener(new VKRequest.VKRequestListener() {
                         @Override
@@ -81,9 +79,6 @@ public class FragmentSettingsDialog extends Fragment {
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-//                            ChatMessage chatMessage = new ChatMessage("I wtite on new Device", true, new Date().getTime());
-//                            singleDialogAdapter.add(chatMessage);
-//                            singleDialogAdapter.notifyDataSetChanged();
                         }
                     });
 

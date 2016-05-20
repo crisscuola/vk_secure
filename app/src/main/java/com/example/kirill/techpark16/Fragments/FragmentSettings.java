@@ -65,7 +65,6 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
                 VKSdk.logout();
 
                 Intent intent = new Intent(FragmentSettings.this.getActivity(), ActivityBase.class);
-               // FragmentSettings.this.getActivity().finish();
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

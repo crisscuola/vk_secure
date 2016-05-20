@@ -37,7 +37,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -55,15 +54,16 @@ public class FragmentSingleDialog extends ListFragment {
 
     ArrayList<String> inList = new ArrayList<>();
     ArrayList<String> outList = new ArrayList<>();
-    ArrayList<VKApiMessage> vkMessages = new ArrayList<>();
+    static ArrayList<VKApiMessage> vkMessages = new ArrayList<>();
     SingleDialogAdapter singleDialogAdapter;
     int id;
     boolean sendFlag = false;
 
+
     EditText text;
     ListView listView;
     Button send;
-    static Integer count = 0;
+//    static Integer count = 0;
     static String title;
 
     static int title_id;
@@ -177,9 +177,7 @@ public class FragmentSingleDialog extends ListFragment {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 Log.i("REFRESH", "REFRESH");
-                //Collections.reverse(vkMessages);
-//        title = title.substring(0, title.length() -1);
-                count = 0;
+
                 final ArrayList<VKApiMessage> msgList = new ArrayList<>();
                 final ArrayList<Integer> idList = new ArrayList<>();
 
@@ -191,9 +189,7 @@ public class FragmentSingleDialog extends ListFragment {
                     @Override
                     public void onComplete(VKResponse response) {
                         try {
-                            count = response.json.getJSONObject("response").getJSONObject("messages").getInt("count");
-                            Log.i("POOL", String.valueOf(response.json.getJSONObject("response")));
-                            // HERE NEED CHECK NEW IN MESS
+
                             JSONArray new_messages = response.json.getJSONObject("response").getJSONObject("messages").getJSONArray("items");
 
                             for (int i = 0; i < new_messages.length(); i++) {
@@ -274,28 +270,15 @@ public class FragmentSingleDialog extends ListFragment {
             }
         });
 
-        count = 0;
-
-        VKRequest update = new VKRequest("messages.getLongPollHistory",  VKParameters.from("pts", ActivityBase.pts));
-
-        update.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                try {
-                    count = response.json.getJSONObject("response").getJSONObject("messages").getInt("count");
-                    Log.i("POOL", String.valueOf(count));
-                    Log.i("POOL", String.valueOf(ActivityBase.pts));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                super.onComplete(response);
-            }
-        });
 
         inList = getArguments().getStringArrayList(IN_LIST);
         outList = getArguments().getStringArrayList(OUT_LIST);
         vkMessages = getArguments().getParcelableArrayList(MESSAGES);
-        Collections.reverse(vkMessages);
+
+        if (FragmentSettingsDialog.flag == false ) {
+            Collections.reverse(vkMessages);
+        }
+        FragmentSettingsDialog.flag = false;
         singleDialogAdapter = new SingleDialogAdapter(view.getContext(), inList, outList);
 
         id = getArguments().getInt(USER_ID);
@@ -307,12 +290,6 @@ public class FragmentSingleDialog extends ListFragment {
 
         new LongOperation().execute();
         singleDialogAdapter.notifyDataSetChanged();
-
-//        if (id == Integer.parseInt(VKSdk.getAccessToken().userId)) {
-//            listView.setAdapter(new MyselfSingleDialogAdapter(view.getContext(), inList));
-//        } else {
-//            listView.setAdapter(singleDialogAdapter);
-//        }
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -377,22 +354,6 @@ public class FragmentSingleDialog extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        count = 0;
-//        VKRequest update = new VKRequest("messages.getLongPollHistory",  VKParameters.from("pts", ActivityBase.pts));
-//
-//        update.executeWithListener(new VKRequest.VKRequestListener() {
-//            @Override
-//            public void onComplete(VKResponse response) {
-//                try {
-//                    count = response.json.getJSONObject("response").getJSONObject("messages").getInt("count");
-//                    Log.i("POOL", String.valueOf(count));
-//                    Log.i("POOL", String.valueOf(ActivityBase.pts));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                super.onComplete(response);
-//            }
-//        });
 
         final String[] name_id = {""};
 

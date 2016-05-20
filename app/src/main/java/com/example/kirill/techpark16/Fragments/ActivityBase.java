@@ -49,6 +49,7 @@ import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -185,6 +186,11 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                     toolbar.setTitle(R.string.friends_title);
                     toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
                 }
+
+                if (currentFragment instanceof FragmentSettingsDialog) {
+
+                    Collections.reverse(FragmentSingleDialog.vkMessages);
+                }
             }
         });
 
@@ -234,26 +240,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     }
 
 
-    public void changeFragment(int oldFragment, int newFragment, String option){
-
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[newFragment]);
-        fragmentTransaction.commit();
-
-    }
-
-    public void changeToggle(int fragment){
-
-            toggle.setDrawerIndicatorEnabled(true);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    drawer.openDrawer(GravityCompat.START);
-                }
-            });
-
-            navigationView.setNavigationItemSelectedListener(this);
-    }
 
     protected Application getApp() {
         return getApplication();
@@ -311,8 +297,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.main, menu);
+
         VKRequest request = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,MY_ID,
                 VKApiConst.FIELDS, "photo_200","first_name, last_name"));
 
@@ -339,7 +324,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 TextView name = (TextView) findViewById(R.id.nav_username);
                 name.setText(first_name + " " + last_name);
 
-                //ImageView ava = (ImageView) findViewById(R.id.imageView);
                 new DownloadImageTask((ImageView) findViewById(R.id.imageView)).execute(photo_url);
 
                 super.onComplete(response);
