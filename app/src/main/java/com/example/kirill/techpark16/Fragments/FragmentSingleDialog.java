@@ -96,7 +96,7 @@ public class FragmentSingleDialog extends ListFragment {
         @Override
         protected String doInBackground(String... params) {
             try {
-                friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id);
+                friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id, true);
             } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
                 e.printStackTrace();
             }
@@ -111,15 +111,22 @@ public class FragmentSingleDialog extends ListFragment {
             String tmp;
             boolean keyIsDownloaded = false;
             String mediaMessage = "[MEDIA MESSAGE]";
+
+            try {
+                friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id, false);
+            } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
+                e.printStackTrace();
+            }
             for (VKApiMessage msg : vkMessages) {
                 if (msg.body.equals("I write from new Device!") && !msg.out && !keyIsDownloaded) {
+                    keyIsDownloaded = true;
                     try {
-                        friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id);
-                        keyIsDownloaded = true;
+                        friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id, true);
                     } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
                         e.printStackTrace();
                     }
                 }
+
                 ChatMessage chatMessage = new ChatMessage(msg.body, msg.out, msg.date);
                 if(msg.out && msg.body.length() == 174 && msg.body.charAt(msg.body.length() - 1) == '=') {
                     Log.d("isEnc", String.valueOf(msg.body.length()));

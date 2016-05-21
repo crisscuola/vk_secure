@@ -19,32 +19,30 @@ import java.util.List;
 public class PublicKeyHandler {
     public static HttpConnectionHandler client = new HttpConnectionHandler();
 
-    public static String downloadFriendPublicKey(int friendId) throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, JSONException {
+    public static String downloadFriendPublicKey(int friendId, boolean isNewKey) throws InvalidKeySpecException, NoSuchAlgorithmException, IOException, JSONException {
         List<PublicKeysTable> friendsKey = new ArrayList<>();
         String pk = "";
         friendsKey = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?", String.valueOf(friendId));
         if (friendsKey.size() != 0){
             pk = friendsKey.get(0).getPk();
             Log.d("resp_from_db",pk);
-            String response = client.doGetRequest(String.valueOf(friendId));
-            JSONObject json = new JSONObject(response);
-            int status = json.getInt("status");
-            boolean myKey = json.getBoolean("my_key");
-            if (status == 0 && !myKey){
-                String key = uploadMyPublicKey(friendId);
-                Log.d("resp_st0", key);
-            }
+            if(isNewKey) {
+                String response = client.doGetRequest(String.valueOf(friendId));
+                JSONObject json = new JSONObject(response);
+                int status = json.getInt("status");
+                boolean myKey = json.getBoolean("my_key");
+                if (status == 0 && !myKey) {
+                    String key = uploadMyPublicKey(friendId);
+                    Log.d("resp_st0", key);
+                }
 
-            String friendPk = requestPublicKeyFromServer(friendId);
-            if (!friendPk.equals(pk)){
-                pk = friendPk;
-                friendsKey.get(0).pk = pk;
-                friendsKey.get(0).save();
-                Log.d("resp_not_equals", pk);
-//                if (!friendPk.equals("none")){
-//                    PublicKeysTable key = new PublicKeysTable(friendId, pk);
-//                    key.save();
-//                }
+                String friendPk = requestPublicKeyFromServer(friendId);
+                if (!friendPk.equals(pk)) {
+                    pk = friendPk;
+                    friendsKey.get(0).pk = pk;
+                    friendsKey.get(0).save();
+                    Log.d("resp_not_equals", pk);
+                }
             }
 
         } else {
