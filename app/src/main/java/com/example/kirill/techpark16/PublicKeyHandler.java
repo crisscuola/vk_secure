@@ -38,11 +38,13 @@ public class PublicKeyHandler {
             String friendPk = requestPublicKeyFromServer(friendId);
             if (!friendPk.equals(pk)){
                 pk = friendPk;
+                friendsKey.get(0).pk = pk;
+                friendsKey.get(0).save();
                 Log.d("resp_not_equals", pk);
-                if (!pk.equals("none")){
-                    PublicKeysTable key = new PublicKeysTable(friendId, pk);
-                    key.save();
-                }
+//                if (!friendPk.equals("none")){
+//                    PublicKeysTable key = new PublicKeysTable(friendId, pk);
+//                    key.save();
+//                }
             }
 
         } else {
