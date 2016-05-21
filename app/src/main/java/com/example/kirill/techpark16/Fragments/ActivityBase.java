@@ -343,7 +343,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         switch (id) {
             case R.id.nav_dialogs:
-                FragmentSettingsDialog.flag = true;
+                FragmentSettingsDialog.flag = false;
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
                 fragmentTransaction.addToBackStack(null);
@@ -353,6 +353,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 break;
 
             case R.id.nav_friends:
+                FragmentSettingsDialog.flag = false;
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.FRIENDSLIST]);
                 fragmentTransaction.addToBackStack(null);
@@ -362,6 +363,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 break;
 
             case R.id.nav_settings:
+                FragmentSettingsDialog.flag = false;
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.SETTINGS]);
                 fragmentTransaction.addToBackStack(null);
