@@ -24,7 +24,7 @@
             android:transcriptMode="alwaysScroll"
             android:stackFromBottom="true" />
     </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
-    
+
 
     <EditText
         android:layout_width="wrap_content"
