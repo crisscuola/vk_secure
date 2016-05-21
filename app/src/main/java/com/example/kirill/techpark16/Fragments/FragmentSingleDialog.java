@@ -91,6 +91,19 @@ public class FragmentSingleDialog extends ListFragment {
         return fragmentSingleDialog;
     }
 
+    private class DownloadingKey extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id);
+            } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
+                e.printStackTrace();
+            }
+            return friendKey;
+        }
+    }
+
     private class DownloadingMessages extends AsyncTask<String, Void, String> {
 
         @Override
@@ -99,7 +112,7 @@ public class FragmentSingleDialog extends ListFragment {
             boolean keyIsDownloaded = false;
             String mediaMessage = "[MEDIA MESSAGE]";
             for (VKApiMessage msg : vkMessages) {
-                if (msg.body.equals("I write from new Device!") && !keyIsDownloaded) {
+                if (msg.body.equals("I write from new Device!") && !msg.out && !keyIsDownloaded) {
                     try {
                         friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id);
                         keyIsDownloaded = true;
@@ -153,10 +166,6 @@ public class FragmentSingleDialog extends ListFragment {
             send.setClickable(false);
             send.setText("loading");
             listView.setAdapter(singleDialogAdapter);
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
         }
     }
 
@@ -255,8 +264,9 @@ public class FragmentSingleDialog extends ListFragment {
                             for (int i = 0; i < new_messages.length(); i++) {
                                 VKApiMessage mes = new VKApiMessage(new_messages.getJSONObject(i));
                                 if (mes.user_id == title_id) {
-
-                                    if(mes.body.length() == 174 && mes.body.charAt(mes.body.length() - 1) == '='){
+                                    if (mes.body.equals("I write from new Device!") && !mes.out)
+                                        new DownloadingKey().execute();
+                                    if (mes.body.length() == 174 && mes.body.charAt(mes.body.length() - 1) == '=') {
                                         mes.body = ActivityBase.encryptor.decode(mes.body);
                                     }
 
@@ -270,14 +280,13 @@ public class FragmentSingleDialog extends ListFragment {
                             }
                             int toReplace = singleDialogAdapter.msgToReplace();
                             String body;
-                            for(int i = 0; i < msgList.size(); i++){
+                            for (int i = 0; i < msgList.size(); i++) {
                                 VKApiMessage mess = msgList.get(i);
                                 if (mess.out) {
-                                    if (toReplace != 0){
+                                    if (toReplace != 0) {
                                         body = singleDialogAdapter.getMessage(toReplace + i);
                                         toReplace--;
                                         singleDialogAdapter.deleteMessage(toReplace + i);
-                                        Log.d("toReplace_body", body);
                                     } else {
                                         body = mess.body;
                                     }
@@ -326,7 +335,7 @@ public class FragmentSingleDialog extends ListFragment {
                     }
                 });
 
-                getActivity().setTitle(title);
+                //getActivity().setTitle(title);
             }
         });
 
