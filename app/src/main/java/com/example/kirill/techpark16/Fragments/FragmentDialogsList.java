@@ -32,7 +32,8 @@ import java.util.ArrayList;
 public class FragmentDialogsList extends ListFragment {
 
     private onItemSelectedListener mCallback;
-    private VKList<VKApiUser> usersArray;
+    private VKList<VKApiUser> usersPhoto;
+    private VKList usersArray;
     private  ArrayList id_array = new ArrayList();
 
     final private String ENCRYPTED_MSG = "[ENCRYPTED MESSAGE]";
@@ -72,7 +73,9 @@ public class FragmentDialogsList extends ListFragment {
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
 
-                        usersArray = (VKList<VKApiUser>) response.parsedModel;
+                        usersArray = (VKList) response.parsedModel;
+
+                        usersPhoto = (VKList<VKApiUser>) response.parsedModel;
 
                         final VKRequest request_dialogs_two = VKApi.messages().getDialogs(
                                 VKParameters.from(VKApiConst.COUNT, 10));
@@ -88,6 +91,9 @@ public class FragmentDialogsList extends ListFragment {
 
 
                                  final ArrayList<String> messages = new ArrayList<>();
+                                 final ArrayList<String> users = new ArrayList<>();
+                                 final  ArrayList<Integer> ids = new ArrayList<>();
+                                 final  VKList<VKApiUser> photo = new VKList<>();
 
                                 for ( final VKApiDialog msg : list) {
 
@@ -115,8 +121,14 @@ public class FragmentDialogsList extends ListFragment {
                                         }
                                         messages.add(mess);
                                     }
+
+                                    users.add(String.valueOf(FragmentDialogsList.this.usersArray.getById(msg.message.user_id)));
+                                    photo.add(FragmentDialogsList.this.usersPhoto.getById(msg.message.user_id));
+                                    ids.add(msg.message.user_id);
+
+
                                 }
-                                setListAdapter(new DialogsListAdapter(inflater.getContext(), usersArray, messages));
+                                setListAdapter(new DialogsListAdapter(inflater.getContext(), users, messages,photo));
                             }
                         });
                     }
