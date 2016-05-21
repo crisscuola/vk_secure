@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -156,11 +157,18 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         toolbarButton = (Button) toolbar.findViewById(R.id.toolbar_button);
 
         toolbarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                View view = getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
 
                 Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentPlace);
 
@@ -298,6 +306,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        Log.i("MENU","MENU CLICK!!!");
 
         VKRequest request = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,MY_ID,
                 VKApiConst.FIELDS, "photo_100","first_name, last_name"));
