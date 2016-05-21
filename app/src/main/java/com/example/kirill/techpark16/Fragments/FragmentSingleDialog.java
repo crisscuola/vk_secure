@@ -189,8 +189,6 @@ public class FragmentSingleDialog extends ListFragment {
     }
 
     public void setupUI(final View view) {
-
-        //Set up touch listener for non-text box views to hide keyboard.
         if(!(view instanceof EditText) && !(view instanceof Button)) {
 
             view.setOnTouchListener(new View.OnTouchListener() {
