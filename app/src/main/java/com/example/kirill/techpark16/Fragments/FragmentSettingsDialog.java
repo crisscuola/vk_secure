@@ -1,29 +1,41 @@
 package com.example.kirill.techpark16.Fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.example.kirill.techpark16.ChatMessage;
 import com.example.kirill.techpark16.MyMessagesHistory;
+import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiMessage;
 
 import org.json.JSONException;
 
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.List;
+
 /**
- * Created by konstantin on 10.04.16.
+ * Created by konstantin on 10.04.16
  */
 public class FragmentSettingsDialog extends Fragment {
 
         private Button encryptionSwitcher;
+        private final String NEW_DEVICE_NOTIFICATION = "I write from new Device!";
         static int title_id;
-        Button use;
+        Button newDivice;
         static boolean flag = false;
 
     public static FragmentSettingsDialog getInstance(int user_id){
@@ -36,55 +48,91 @@ public class FragmentSettingsDialog extends Fragment {
         return fragmentSettingsDialog;
     }
 
+    private class UploadKey extends AsyncTask<String, Void, String> {
+        String pk;
+        @Override
+        protected String doInBackground(String... params) {
+            pk = PublicKeyHandler.uploadMyPublicKey(title_id);
+            if(!pk.equals("no")) {
+                VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, title_id,
+                        VKApiConst.MESSAGE, NEW_DEVICE_NOTIFICATION));
 
-        public void onCreate(Bundle savedInstanceState){
-            super.onCreate(savedInstanceState);
-        }
-
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-            View view = inflater.inflate(R.layout.fragment_dialog_settings, container, false);
-
-            flag = true;
-
-
-            use = (Button) view.findViewById(R.id.new_device);
-
-            use.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, title_id,
-                            VKApiConst.MESSAGE, "I wtite on new Device !"));
-
-                    request.executeWithListener(new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(VKResponse response) {
-                            super.onComplete(response);
-                            int msgId;
-                            try {
-                                msgId = (int) response.json.get("response");
-                                MyMessagesHistory myMessage = new MyMessagesHistory(title_id, "I wtite on new Device", msgId);
-                                myMessage.save();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-
-                }
-            });
-
-            return view;
+                request.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    int msgId;
+                    try {
+                        msgId = (int) response.json.get("response");
+                        MyMessagesHistory myMessage = new MyMessagesHistory(title_id,
+                                NEW_DEVICE_NOTIFICATION, msgId);
+                        myMessage.save();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    }
+                });
+            }
+            return pk;
         }
 
         @Override
-        public void onResume() {
-            super.onResume();
-            getActivity().setTitle(R.string.settings_dialog_title);
-            getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+        protected void onPostExecute(String result) {
+            // might want to change "executed" for the returned string passed
+            // into onPostExecute() but that is upto you
+            newDivice.setText("New Device");
+            newDivice.setClickable(true);
+            if (!pk.equals("no"))
+                Toast.makeText(getContext(), "Key sent", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(getContext(), "Your key was not sent.", Toast.LENGTH_SHORT).show();
         }
 
+        @Override
+        protected void onPreExecute() {
+            newDivice.setClickable(false);
+            newDivice.setText("Uploading");
+        }
 
-
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
     }
+
+
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+    }
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_dialog_settings, container, false);
+
+        flag = true;
+
+        newDivice = (Button) view.findViewById(R.id.new_device);
+        final UploadKey uploadKey = new UploadKey();
+        newDivice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    uploadKey.execute();
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(),"You've already sent key.",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle(R.string.settings_dialog_title);
+        getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+    }
+
+}
 

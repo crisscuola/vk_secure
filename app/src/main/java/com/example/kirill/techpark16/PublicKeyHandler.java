@@ -65,7 +65,7 @@ public class PublicKeyHandler {
         return pk;
     }
 
-    private static String uploadMyPublicKey(int friendId) {
+    public static String uploadMyPublicKey(int friendId) {
         String pk = "no";
         String myPk = ActivityBase.encryptor.getPublicKey();
         JSONObject json;

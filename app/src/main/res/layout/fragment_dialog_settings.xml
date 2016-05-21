@@ -14,7 +14,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="new_device"
+        android:text="new device"
         android:id="@+id/new_device"
         android:layout_gravity="center_horizontal"/>
 
