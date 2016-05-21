@@ -49,7 +49,7 @@ public class FragmentSettingsDialog extends Fragment {
     }
 
     private class UploadKey extends AsyncTask<String, Void, String> {
-        String pk;
+        String pk = "no";
         @Override
         protected String doInBackground(String... params) {
             pk = PublicKeyHandler.uploadMyPublicKey(title_id);
@@ -115,12 +115,12 @@ public class FragmentSettingsDialog extends Fragment {
         newDivice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    uploadKey.execute();
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(),"You've already sent key.",Toast.LENGTH_SHORT).show();
-                }
+            try {
+                uploadKey.execute();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(),"You've already sent key.",Toast.LENGTH_SHORT).show();
+            }
             }
         });
 

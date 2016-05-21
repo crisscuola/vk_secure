@@ -26,23 +26,21 @@ public class PublicKeyHandler {
         if (friendsKey.size() != 0){
             pk = friendsKey.get(0).getPk();
             Log.d("resp_from_db",pk);
-            if(isNewKey) {
-                String response = client.doGetRequest(String.valueOf(friendId));
-                JSONObject json = new JSONObject(response);
-                int status = json.getInt("status");
-                boolean myKey = json.getBoolean("my_key");
-                if (status == 0 && !myKey) {
-                    String key = uploadMyPublicKey(friendId);
-                    Log.d("resp_st0", key);
-                }
+            String response = client.doGetRequest(String.valueOf(friendId));
+            JSONObject json = new JSONObject(response);
+            int status = json.getInt("status");
+            boolean myKey = json.getBoolean("my_key");
+            if (status == 0 && !myKey) {
+                String key = uploadMyPublicKey(friendId);
+                Log.d("resp_st0", key);
+            }
 
-                String friendPk = requestPublicKeyFromServer(friendId);
-                if (!friendPk.equals(pk)) {
-                    pk = friendPk;
-                    friendsKey.get(0).pk = pk;
-                    friendsKey.get(0).save();
-                    Log.d("resp_not_equals", pk);
-                }
+            String friendPk = requestPublicKeyFromServer(friendId);
+            if (!friendPk.equals(pk)) {
+                pk = friendPk;
+                friendsKey.get(0).pk = pk;
+                friendsKey.get(0).save();
+                Log.d("resp_not_equals", pk);
             }
 
         } else {
