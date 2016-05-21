@@ -24,14 +24,7 @@
             android:transcriptMode="alwaysScroll"
             android:stackFromBottom="true" />
     </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
-
-    <!--<ListView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/listmsg"-->
-        <!--android:layout_above="@+id/textmsg"-->
-        <!--android:transcriptMode="alwaysScroll"-->
-        <!--android:stackFromBottom="true" />-->
+    
 
     <EditText
         android:layout_width="wrap_content"

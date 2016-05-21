@@ -94,6 +94,8 @@ public class FragmentSingleFriend extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_single_friend, null);
 
+        FragmentSettingsDialog.flag = true;
+
         TextView friend_name = (TextView) view.findViewById(R.id.friends_name);
         final TextView friend_status = (TextView) view.findViewById(R.id.friends_status);
 

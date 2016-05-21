@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.kirill.techpark16.MyMessagesHistory;
 import com.example.kirill.techpark16.R;
@@ -48,16 +47,6 @@ public class FragmentSettingsDialog extends Fragment {
 
             flag = true;
 
-            encryptionSwitcher = (Button) view.findViewById(R.id.encryption_switcher);
-
-            encryptionSwitcher.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getContext(), "TODO: switcher", Toast.LENGTH_SHORT).show();
-                }
-
-
-            });
 
             use = (Button) view.findViewById(R.id.new_device);
 

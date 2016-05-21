@@ -30,6 +30,8 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
 
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
+        FragmentSettingsDialog.flag = true;
+
         setOff = (Button) view.findViewById(R.id.off_button);
         setOff.setOnClickListener(new View.OnClickListener() {
             @Override

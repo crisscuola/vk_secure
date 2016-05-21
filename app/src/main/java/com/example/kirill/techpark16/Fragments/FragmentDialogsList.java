@@ -49,7 +49,7 @@ public class FragmentDialogsList extends ListFragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
+        FragmentSettingsDialog.flag = true;
 
         final VKRequest request_dialogs_one = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
 
