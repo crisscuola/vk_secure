@@ -20,14 +20,16 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class DialogsListAdapter extends BaseAdapter {
-    private ArrayList<String> messages;
-    private VKList<VKApiUser> users;
+    private ArrayList<String> users, messages;
+    private VKList<VKApiUser> photo;
+
     private Context context;
 
-    public DialogsListAdapter(Context context, VKList<VKApiUser> users, ArrayList<String> messages) {
+    public DialogsListAdapter(Context context, ArrayList<String> users, ArrayList<String> messages, VKList<VKApiUser> photo) {
         this.users = users;
         this.messages = messages;
         this.context = context;
+        this.photo = photo;
     }
 
     @Override
@@ -51,14 +53,13 @@ public class DialogsListAdapter extends BaseAdapter {
         SetData setData = new SetData();
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.fragment_dialogs_list, null);
+        final View view = inflater.inflate(R.layout.fragment_dialogs_list, null);
 
         setData.user_name = (TextView) view.findViewById(R.id.user_name);
         setData.msg = (TextView) view.findViewById(R.id.msg);
         setData.avatar = (ImageView) view.findViewById(R.id.avatar);
-
-        String name = users.get(position).first_name + " " + users.get(position).last_name;
-
+        setData.user_name.setText(users.get(position));
+        String name  = users.get(position);
         if ( name.length() > 18) {
             name = name.substring(0,18);
             name += " ...";
@@ -66,19 +67,8 @@ public class DialogsListAdapter extends BaseAdapter {
 
         setData.user_name.setText(name);
         setData.msg.setText(messages.get(position));
-        //setData.avatar.setImageURI(users.get(position).photo_100);
-//        URL newurl;
-//        try {
-//            newurl = new URL(users.get(position).photo_100);
-//            Log.i("bullshit", users.get(position).photo_100);
-//            Bitmap mIcon_val = BitmapFactory.decodeStream(newurl.openStream());
-//            setData.avatar.setImageBitmap(mIcon_val);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-        new DownloadImageTask((ImageView) view.findViewById(R.id.avatar)).execute(users.get(position).photo_100);
 
-
+        new DownloadImageTask((ImageView) view.findViewById(R.id.avatar)).execute(photo.get(position).photo_100);
 
 
         return view;
