@@ -158,6 +158,7 @@ public class FragmentSingleDialog extends ListFragment {
 
     public boolean onTouchEvent(MotionEvent event) {
         y = (int)event.getY();
+        y -=50;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
@@ -179,7 +180,6 @@ public class FragmentSingleDialog extends ListFragment {
                     onTouchEvent(event);
 
                     if (y < 265) {
-
                         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                         text.clearFocus();
