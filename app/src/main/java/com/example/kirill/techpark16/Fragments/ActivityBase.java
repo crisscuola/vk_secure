@@ -121,6 +121,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         setContentView(R.layout.base_activity);
 
+
         if (VKAccessToken.currentToken() == null) {
             VKSdk.login(this, scope);
 
@@ -299,7 +300,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     public boolean onCreateOptionsMenu(Menu menu) {
 
         VKRequest request = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,MY_ID,
-                VKApiConst.FIELDS, "photo_200","first_name, last_name"));
+                VKApiConst.FIELDS, "photo_100","first_name, last_name"));
 
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
@@ -313,7 +314,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                     JSONArray array = response.json.getJSONArray("response");
                     first_name = array.getJSONObject(0).getString("first_name");
                     last_name = array.getJSONObject(0).getString("last_name");
-                    photo_url = array.getJSONObject(0).getString("photo_200");
+                    photo_url = array.getJSONObject(0).getString("photo_100");
 
                     Log.i("PHOTO", photo_url);
 
