@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -66,11 +67,12 @@ public class FragmentSingleDialog extends ListFragment {
     EditText text;
     ListView listView;
     Button send;
-//    static Integer count = 0;
     static String title;
 
     static int title_id;
     VKList list_s;
+
+    int y;
 
     String friendKey;
     private static SwipyRefreshLayout mswipeRefreshLayout;
@@ -153,11 +155,67 @@ public class FragmentSingleDialog extends ListFragment {
         }
     }
 
+
+    public boolean onTouchEvent(MotionEvent event) {
+        y = (int)event.getY();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_UP:
+        }
+        return false;
+    }
+
+    public void setupUI(final View view) {
+
+        //Set up touch listener for non-text box views to hide keyboard.
+        if(!(view instanceof EditText) && !(view instanceof Button)) {
+
+            view.setOnTouchListener(new View.OnTouchListener() {
+
+
+
+                public boolean onTouch(View v, MotionEvent event) {
+                    onTouchEvent(event);
+
+                    if (y < 265) {
+
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        text.clearFocus();
+                    }
+                    return false;
+                }
+
+            });
+        }
+
+        //If a layout container, iterate over children and seed recursion.
+        if (view instanceof ViewGroup) {
+
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+
+                View innerView = ((ViewGroup) view).getChildAt(i);
+
+                setupUI(innerView);
+            }
+        }
+    }
+
+
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
         final View view = inflater.inflate(R.layout.fragment_single_dialog, null);
+
+        setupUI(view);
+
+
+ //       View current = getActivity().getCurrentFocus();
+
 
         VKRequest request_long_poll =  new VKRequest("messages.getLongPollServer", VKParameters.from("need_pts", 1));
 
@@ -297,13 +355,6 @@ public class FragmentSingleDialog extends ListFragment {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                EditText editText = (EditText) view.findViewById(R.id.textmsg);
-
-                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
-                editText.clearFocus();
 
                 if (!sendFlag)
                     sendFlag = true;
