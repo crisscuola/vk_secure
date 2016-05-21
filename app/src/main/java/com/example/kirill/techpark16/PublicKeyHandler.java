@@ -37,15 +37,11 @@ public class PublicKeyHandler {
 
             String friendPk = requestPublicKeyFromServer(friendId);
             if (!friendPk.equals(pk)){
-                try {
-                    pk = requestPublicKeyFromServer(friendId);
-                    Log.d("resp_not_equals", pk);
-                    if (!pk.equals("none")){
-                        PublicKeysTable key = new PublicKeysTable(friendId, pk);
-                        key.save();
-                    }
-                } catch (IOException | JSONException e) {
-                    e.printStackTrace();
+                pk = friendPk;
+                Log.d("resp_not_equals", pk);
+                if (!pk.equals("none")){
+                    PublicKeysTable key = new PublicKeysTable(friendId, pk);
+                    key.save();
                 }
             }
 

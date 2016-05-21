@@ -53,7 +53,6 @@ public class FragmentSingleDialog extends ListFragment {
     public static final String IN_LIST = "inList";
     public static final String OUT_LIST = "outList";
     public static final String MESSAGES = "messages";
-    private final String MEDIA_MSG = "[MEDIA MESSAGE]";
     private final String PREFIX = "cpslbs_";
 
     ArrayList<String> inList = new ArrayList<>();
@@ -92,17 +91,22 @@ public class FragmentSingleDialog extends ListFragment {
         return fragmentSingleDialog;
     }
 
-    private class LongOperation extends AsyncTask<String, Void, String> {
+    private class DownloadingMessages extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {
-            try {
-                friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id);
-            } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
-                e.printStackTrace();
-            }
             String tmp;
+            boolean keyIsDownloaded = false;
+            String mediaMessage = "[MEDIA MESSAGE]";
             for (VKApiMessage msg : vkMessages) {
+                if (msg.body.equals("I write from new Device!") && !keyIsDownloaded) {
+                    try {
+                        friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id);
+                        keyIsDownloaded = true;
+                    } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 ChatMessage chatMessage = new ChatMessage(msg.body, msg.out, msg.date);
                 if(msg.out && msg.body.length() == 174 && msg.body.charAt(msg.body.length() - 1) == '=') {
                     Log.d("isEnc", String.valueOf(msg.body.length()));
@@ -114,7 +118,8 @@ public class FragmentSingleDialog extends ListFragment {
                 }
 
                 if(msg.attachments.size() != 0 || msg.body.isEmpty() || !msg.fwd_messages.isEmpty()){
-                    chatMessage.setMsg(MEDIA_MSG);
+
+                    chatMessage.setMsg(mediaMessage);
                     singleDialogAdapter.add(chatMessage);
                     continue;
                 }
@@ -173,8 +178,6 @@ public class FragmentSingleDialog extends ListFragment {
 
             view.setOnTouchListener(new View.OnTouchListener() {
 
-
-
                 public boolean onTouch(View v, MotionEvent event) {
                     onTouchEvent(event);
 
@@ -212,10 +215,6 @@ public class FragmentSingleDialog extends ListFragment {
         final View view = inflater.inflate(R.layout.fragment_single_dialog, null);
 
         setupUI(view);
-
-
- //       View current = getActivity().getCurrentFocus();
-
 
         VKRequest request_long_poll =  new VKRequest("messages.getLongPollServer", VKParameters.from("need_pts", 1));
 
@@ -336,7 +335,7 @@ public class FragmentSingleDialog extends ListFragment {
         outList = getArguments().getStringArrayList(OUT_LIST);
         vkMessages = getArguments().getParcelableArrayList(MESSAGES);
 
-        if (FragmentSettingsDialog.flag == false ) {
+        if (!FragmentSettingsDialog.flag) {
             Collections.reverse(vkMessages);
         }
         FragmentSettingsDialog.flag = false;
@@ -349,7 +348,7 @@ public class FragmentSingleDialog extends ListFragment {
         listView = (ListView) view.findViewById(R.id.listmsg);
         send = (Button) view.findViewById(R.id.sendmsg);
 
-        new LongOperation().execute();
+        new DownloadingMessages().execute();
         singleDialogAdapter.notifyDataSetChanged();
 
         send.setOnClickListener(new View.OnClickListener() {
@@ -427,8 +426,7 @@ public class FragmentSingleDialog extends ListFragment {
                 list_s = (VKList) response.parsedModel;
                 name_id[0] = String.valueOf(FragmentSingleDialog.this.list_s.getById(title_id));
                 String[] parts = name_id[0].split(" ");
-                String name = parts[0];
-                title = name;
+                title = parts[0];
                 if (getActivity() != null)
                     getActivity().setTitle(title);
             }
