@@ -99,6 +99,7 @@ public class FragmentSingleDialog extends ListFragment {
         protected String doInBackground(String... params) {
             try {
                 friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id, true);
+                Log.d("resp_not_equ", friendKey);
                 ActivityBase.encryptor.setPublicKey(friendKey);
             } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
                 e.printStackTrace();

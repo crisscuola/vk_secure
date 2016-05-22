@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kirill.techpark16.R;
+import com.squareup.picasso.Picasso;
 import com.vk.sdk.api.model.VKApiUser;
 import com.vk.sdk.api.model.VKList;
 
@@ -68,7 +69,11 @@ public class DialogsListAdapter extends BaseAdapter {
         setData.user_name.setText(name);
         setData.msg.setText(messages.get(position));
 
-        new DownloadImageTask((ImageView) view.findViewById(R.id.avatar)).execute(photo.get(position).photo_100);
+        Picasso.with(context).load(photo.get(position).photo_100)
+                .placeholder(R.drawable.placeholder_light)
+                .into(setData.avatar);
+
+        //new DownloadImageTask((ImageView) view.findViewById(R.id.avatar)).execute(photo.get(position).photo_100);
 
 
         return view;

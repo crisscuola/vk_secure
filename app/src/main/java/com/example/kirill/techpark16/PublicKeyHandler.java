@@ -45,6 +45,7 @@ public class PublicKeyHandler {
                     key.pk = pk;
                     key.save();
                     Log.d("resp_not_equals", pk);
+                    Log.d("resp_not_equals", key.getPk());
                 }
             }
 
