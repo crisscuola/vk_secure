@@ -9,6 +9,7 @@ import com.orm.SugarRecord;
 public class PublicKeysTable extends SugarRecord {
     Integer userId;
     String pk;
+    Boolean encryptionMode;
 
 
     public PublicKeysTable() {
@@ -17,10 +18,19 @@ public class PublicKeysTable extends SugarRecord {
     public PublicKeysTable(Integer userId, String pk){
         this.userId = userId;
         this.pk = pk;
+        this.encryptionMode = false;
     }
 
     public String getPk(){
         return pk;
+    }
+
+    public boolean getEncryptionMode(){
+        return encryptionMode;
+    }
+
+    public void setEncryptionMode(boolean encryptionMode){
+        this.encryptionMode = encryptionMode;
     }
 
 }

@@ -25,6 +25,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
         <activity
             android:name=".Fragments.ActivityBase">
 
@@ -33,6 +34,10 @@
 
         <meta-data android:name="DATABASE" android:value="vk_storage.db" />
         <meta-data android:name="VERSION" android:value="6" />
+=======
+        <meta-data android:name="DATABASE" android:value="app_storage.db" />
+        <meta-data android:name="VERSION" android:value="1" />
+>>>>>>> ad44e43a5d332e520768f01a55edd7f03d5c0233
         <meta-data android:name="QUERY_LOG" android:value="false" />
         <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.example.kirill.techpark16" />
     </application>

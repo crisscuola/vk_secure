@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New ToggleButton"
-        android:id="@+id/toggleButton2"
+        android:id="@+id/mode"
         android:layout_gravity="center_horizontal" />
 
     <Button
