@@ -444,7 +444,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                     for (int i = 0; i < array.length(); i++) {
                         VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
                         msg.add(mes);
-                        ids.add(mes.id);
+                        if (!mes.out)
+                            ids.add(mes.id);
                     }
 
                 } catch (JSONException e) {
@@ -503,7 +504,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                     for (int i = 0; i < array.length(); i++) {
                         VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
                         msg.add(mes);
-                        ids.add(mes.id);
+                        if (!mes.out)
+                            ids.add(mes.id);
                     }
 
                 } catch (JSONException e) {
