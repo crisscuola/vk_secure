@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:background="@color/colorPrimaryDark">
+    android:background="#6c83db">
     
     <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -25,19 +25,24 @@
             android:stackFromBottom="true"
             android:background="#ebf4fd"
             android:divider="@android:color/transparent"
-            android:dividerHeight="10.0dp"/>
+            android:dividerHeight="10.0dp"
+            android:paddingBottom="10dp"/>
     </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
 
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minHeight="48dp"
         android:id="@+id/textmsg"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/sendmsg"
-        android:layout_toStartOf="@+id/sendmsg" />
+        android:layout_toStartOf="@+id/sendmsg"
+        android:textCursorDrawable="@null"
+        android:textColor="#ffffff"
+        style="@style/EditTextCustomHolo"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -46,7 +51,8 @@
         android:id="@+id/sendmsg"
         android:layout_alignBottom="@+id/textmsg"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:background="#4961bb"/>
 
 
 </RelativeLayout>

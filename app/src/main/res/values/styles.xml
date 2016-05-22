@@ -16,5 +16,9 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
+    <style name="EditTextCustomHolo" parent="android:Widget.EditText">
+        <item name="android:background">#6c83db</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:padding">8dp</item>
+    </style>
 </resources>
