@@ -25,7 +25,7 @@ public class PublicKeyHandler {
         List<PublicKeysTable> friendsKey = new ArrayList<>();
         String pk = "";
         friendsKey = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?", String.valueOf(friendId));
-        if (friendsKey.size() != 0){
+        if (friendsKey.size() != 0 && friendsKey.get(0).getPk() != null){
             pk = friendsKey.get(0).getPk();
             Log.d("resp_from_db",pk);
             if(isNewKey) {
@@ -49,17 +49,21 @@ public class PublicKeyHandler {
             }
 
         } else {
-            try {
-                pk = requestPublicKeyFromServer(friendId);
-                Log.d("resp_friend_pk_server", pk);
+            pk = requestPublicKeyFromServer(friendId);
+            Log.d("resp_friend_pk_server", pk);
+            if(friendsKey.size() != 0 && friendsKey.get(0).getPk() == null){
+                if (!pk.equals("none")){
+                    PublicKeysTable key = friendsKey.get(0);
+                    key.pk = pk;
+                    key.save();
+                }
+
+            } else if (friendsKey.size() == 0){
                 if (!pk.equals("none")){
                     PublicKeysTable key = new PublicKeysTable(friendId, pk);
                     key.save();
                 }
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
             }
-
         }
         return pk;
     }
@@ -92,6 +96,8 @@ public class PublicKeyHandler {
             Log.d("resp", "status=2");
         } else if (status == 1) {
             uploadMyPublicKey(friendId);
+//            if (!json.getBoolean("my_key"))
+//                uploadMyPublicKey(friendId);
             Log.d("resp", "status=1");
         } else if (status == 0) {
             key = json.getString("key");
@@ -111,5 +117,16 @@ public class PublicKeyHandler {
         }
         Log.d("pk_del", response);
         return response;
+    }
+
+    public static boolean checkEncryprionMode(int friendId) {
+        List<PublicKeysTable> friend = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?",
+                String.valueOf(friendId));
+        boolean mode;
+        if (friend.size() == 0)
+            mode = false;
+        else
+            mode = friend.get(0).getEncryptionMode();
+        return mode;
     }
 }

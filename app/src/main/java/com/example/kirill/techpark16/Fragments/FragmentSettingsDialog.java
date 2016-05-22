@@ -9,22 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
-import com.example.kirill.techpark16.ChatMessage;
 import com.example.kirill.techpark16.MyMessagesHistory;
 import com.example.kirill.techpark16.PublicKeyHandler;
+import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKApiMessage;
 
 import org.json.JSONException;
-
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 /**
@@ -32,11 +28,11 @@ import java.util.List;
  */
 public class FragmentSettingsDialog extends Fragment {
 
-        private Button encryptionSwitcher;
-        private final String NEW_DEVICE_NOTIFICATION = "I write from new Device!";
-        static int title_id;
-        Button newDivice;
-        static boolean flag = false;
+    private final String NEW_DEVICE_NOTIFICATION = "I write from new Device!";
+    static int title_id;
+    Button newDevice;
+    ToggleButton encryptionMode;
+    static boolean flag = false;
 
     public static FragmentSettingsDialog getInstance(int user_id){
         FragmentSettingsDialog fragmentSettingsDialog = new FragmentSettingsDialog();
@@ -80,8 +76,8 @@ public class FragmentSettingsDialog extends Fragment {
         protected void onPostExecute(String result) {
             // might want to change "executed" for the returned string passed
             // into onPostExecute() but that is upto you
-            newDivice.setText("New Device");
-            newDivice.setClickable(true);
+            newDevice.setText("New Device");
+            newDevice.setClickable(true);
             if (!pk.equals("no"))
                 Toast.makeText(getContext(), "Key sent", Toast.LENGTH_SHORT).show();
             else
@@ -90,8 +86,8 @@ public class FragmentSettingsDialog extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            newDivice.setClickable(false);
-            newDivice.setText("Uploading");
+            newDevice.setClickable(false);
+            newDevice.setText("Uploading");
         }
 
         @Override
@@ -110,17 +106,26 @@ public class FragmentSettingsDialog extends Fragment {
 
         flag = true;
 
-        newDivice = (Button) view.findViewById(R.id.new_device);
+        newDevice = (Button) view.findViewById(R.id.new_device);
         final UploadKey uploadKey = new UploadKey();
-        newDivice.setOnClickListener(new View.OnClickListener() {
+        newDevice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            try {
-                uploadKey.execute();
-            } catch (IllegalStateException e) {
-                e.printStackTrace();
-                Toast.makeText(getContext(),"You've already sent key.",Toast.LENGTH_SHORT).show();
+                try {
+                    uploadKey.execute();
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(),"You've already sent key.",Toast.LENGTH_SHORT).show();
+                }
             }
+        });
+
+        encryptionMode = (ToggleButton) view.findViewById(R.id.mode);
+        encryptionMode.setChecked(PublicKeyHandler.checkEncryprionMode(title_id));
+        encryptionMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("resp_encMode", String.valueOf(encryptionMode.isChecked()));
             }
         });
 
@@ -134,5 +139,20 @@ public class FragmentSettingsDialog extends Fragment {
         getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        PublicKeysTable key;
+        List<PublicKeysTable> friend = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?",
+                String.valueOf(title_id));
+        if (friend.size() == 0){
+            key = new PublicKeysTable(title_id, null);
+        } else {
+            key = friend.get(0);
+        }
+        key.setEncryptionMode(encryptionMode.isChecked());
+        key.save();
+    }
 }
 
