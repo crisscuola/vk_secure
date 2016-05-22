@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.kirill.techpark16.Adapters.DialogsListAdapter;
@@ -156,6 +157,8 @@ public class FragmentDialogsList extends ListFragment {
         super.onResume();
         getActivity().setTitle(R.string.dialog_list_title);
         getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
+        Button myButton = (Button) getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button);
+        myButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_add_white_24dp, 0);
     }
 
     @Override
