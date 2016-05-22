@@ -22,6 +22,7 @@ import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
 import com.example.kirill.techpark16.ChatMessage;
 import com.example.kirill.techpark16.MyMessagesHistory;
 import com.example.kirill.techpark16.PublicKeyHandler;
+import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout;
 import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutDirection;
@@ -112,16 +113,13 @@ public class FragmentSingleDialog extends ListFragment {
             boolean keyIsDownloaded = false;
             String mediaMessage = "[MEDIA MESSAGE]";
 
-            try {
-                friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id, false);
-            } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
-                e.printStackTrace();
-            }
+            //friendKey = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?", String.valueOf(title_id)).get(0).getPk();
             for (VKApiMessage msg : vkMessages) {
                 if (msg.body.equals("I write from new Device!") && !msg.out && !keyIsDownloaded) {
                     keyIsDownloaded = true;
                     try {
                         friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id, true);
+                        ActivityBase.encryptor.setPublicKey(friendKey);
                     } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
                         e.printStackTrace();
                     }
@@ -221,7 +219,6 @@ public class FragmentSingleDialog extends ListFragment {
 
 
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -235,19 +232,93 @@ public class FragmentSingleDialog extends ListFragment {
         request_long_poll.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                try {
-                    ActivityBase.pts = response.json.getJSONObject("response").getInt("pts");
+            super.onComplete(response);
+            try {
+                ActivityBase.pts = response.json.getJSONObject("response").getInt("pts");
 
-                    Log.i("PTS", String.valueOf(ActivityBase.pts));
-                } catch (JSONException e) {
+                Log.i("PTS", String.valueOf(ActivityBase.pts));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            }
+        });
+
+
+        inList = getArguments().getStringArrayList(IN_LIST);
+        outList = getArguments().getStringArrayList(OUT_LIST);
+        vkMessages = getArguments().getParcelableArrayList(MESSAGES);
+
+        if (!FragmentSettingsDialog.flag) {
+            Collections.reverse(vkMessages);
+        }
+        FragmentSettingsDialog.flag = false;
+        singleDialogAdapter = new SingleDialogAdapter(view.getContext(), inList, outList);
+
+        id = getArguments().getInt(USER_ID);
+        
+
+        text = (EditText) view.findViewById(R.id.textmsg);
+        listView = (ListView) view.findViewById(R.id.listmsg);
+        send = (Button) view.findViewById(R.id.sendmsg);
+        friendKey = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?", String.valueOf(title_id))
+                .get(0).getPk();
+        new DownloadingMessages().execute();
+        //singleDialogAdapter.notifyDataSetChanged();
+
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (!sendFlag)
+                    sendFlag = true;
+
+                VKRequest request;
+
+                final String msg = text.getText().toString();
+                String messageToSend = PREFIX + msg;
+
+                try {
+                    if (!friendKey.equals("none")) {
+
+                        //ActivityBase.encryptor.setPublicKey(friendKey);
+                        messageToSend = ActivityBase.encryptor.encode(messageToSend);
+
+                        text.setText("");
+
+                        request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
+                                VKApiConst.MESSAGE, messageToSend));
+
+                        request.executeWithListener(new VKRequest.VKRequestListener() {
+                            @Override
+                            public void onComplete(VKResponse response) {
+                                super.onComplete(response);
+                                int msgId;
+                                try {
+                                    msgId = (int) response.json.get("response");
+                                    MyMessagesHistory myMessage = new MyMessagesHistory(id, msg, msgId);
+                                    myMessage.save();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                ChatMessage chatMessage = new ChatMessage(msg, true, null);
+                                singleDialogAdapter.add(chatMessage);
+                                singleDialogAdapter.notifyDataSetChanged();
+                            }
+                        });
+
+                    } else {
+                        Toast.makeText(getContext(), "The friend hasn't started the dialog.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
+
             }
         });
 
         mswipeRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.refresh);
-        mswipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener(){
+        mswipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
                 Log.i("REFRESH", "REFRESH");
@@ -255,7 +326,7 @@ public class FragmentSingleDialog extends ListFragment {
                 final ArrayList<VKApiMessage> msgList = new ArrayList<>();
                 final ArrayList<Integer> idList = new ArrayList<>();
 
-                VKRequest update = new VKRequest("messages.getLongPollHistory",  VKParameters.from("pts", ActivityBase.pts));
+                VKRequest update = new VKRequest("messages.getLongPollHistory", VKParameters.from("pts", ActivityBase.pts));
 
                 mswipeRefreshLayout.setRefreshing(true);
 
@@ -268,16 +339,16 @@ public class FragmentSingleDialog extends ListFragment {
 
                             for (int i = 0; i < new_messages.length(); i++) {
                                 VKApiMessage mes = new VKApiMessage(new_messages.getJSONObject(i));
-                                if (mes.user_id == title_id) {
-                                    if (mes.body.equals("I write from new Device!") && !mes.out)
-                                        new DownloadingKey().execute();
-                                    if (mes.body.length() == 174 && mes.body.charAt(mes.body.length() - 1) == '=') {
-                                        mes.body = ActivityBase.encryptor.decode(mes.body);
-                                    }
-
-                                    msgList.add(mes);
-                                    idList.add(mes.id);
+                                //if (mes.user_id == title_id) {
+                                if (mes.body.equals("I write from new Device!") && !mes.out)
+                                    new DownloadingKey().execute().get();
+                                if (mes.body.length() == 174 && mes.body.charAt(mes.body.length() - 1) == '=') {
+                                    mes.body = ActivityBase.encryptor.decode(mes.body);
                                 }
+
+                                msgList.add(mes);
+                                idList.add(mes.id);
+                                //}
                             }
                             if (msgList.size() == 0) {
                                 mswipeRefreshLayout.setRefreshing(false);
@@ -341,79 +412,6 @@ public class FragmentSingleDialog extends ListFragment {
                 });
 
                 //getActivity().setTitle(title);
-            }
-        });
-
-
-        inList = getArguments().getStringArrayList(IN_LIST);
-        outList = getArguments().getStringArrayList(OUT_LIST);
-        vkMessages = getArguments().getParcelableArrayList(MESSAGES);
-
-        if (!FragmentSettingsDialog.flag) {
-            Collections.reverse(vkMessages);
-        }
-        FragmentSettingsDialog.flag = false;
-        singleDialogAdapter = new SingleDialogAdapter(view.getContext(), inList, outList);
-
-        id = getArguments().getInt(USER_ID);
-        
-
-        text = (EditText) view.findViewById(R.id.textmsg);
-        listView = (ListView) view.findViewById(R.id.listmsg);
-        send = (Button) view.findViewById(R.id.sendmsg);
-
-        new DownloadingMessages().execute();
-        singleDialogAdapter.notifyDataSetChanged();
-
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (!sendFlag)
-                    sendFlag = true;
-
-                VKRequest request;
-
-                final String msg = text.getText().toString();
-                String messageToSend = PREFIX + msg;
-
-                try {
-                    if (!friendKey.equals("none")) {
-
-                        ActivityBase.encryptor.setPublicKey(friendKey);
-                        messageToSend = ActivityBase.encryptor.encode(messageToSend);
-
-                        text.setText("");
-
-                        request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
-                                VKApiConst.MESSAGE, messageToSend));
-
-                        request.executeWithListener(new VKRequest.VKRequestListener() {
-                            @Override
-                            public void onComplete(VKResponse response) {
-                                super.onComplete(response);
-                                int msgId;
-                                try {
-                                    msgId = (int) response.json.get("response");
-                                    MyMessagesHistory myMessage = new MyMessagesHistory(id, msg, msgId);
-                                    myMessage.save();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                ChatMessage chatMessage = new ChatMessage(msg, true, null);
-                                singleDialogAdapter.add(chatMessage);
-                                singleDialogAdapter.notifyDataSetChanged();
-                            }
-                        });
-
-                    } else {
-                        Toast.makeText(getContext(), "The friend hasn't started the dialog.",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
             }
         });
 
