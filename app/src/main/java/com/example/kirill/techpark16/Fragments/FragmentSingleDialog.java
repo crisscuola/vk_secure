@@ -98,6 +98,7 @@ public class FragmentSingleDialog extends ListFragment {
         protected String doInBackground(String... params) {
             try {
                 friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id, true);
+                ActivityBase.encryptor.setPublicKey(friendKey);
             } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
                 e.printStackTrace();
             }
@@ -344,16 +345,16 @@ public class FragmentSingleDialog extends ListFragment {
 
                             for (int i = 0; i < new_messages.length(); i++) {
                                 VKApiMessage mes = new VKApiMessage(new_messages.getJSONObject(i));
-                                //if (mes.user_id == title_id) {
-                                if (mes.body.equals("I write from new Device!") && !mes.out)
-                                    new DownloadingKey().execute().get();
-                                if (mes.body.length() == 174 && mes.body.charAt(mes.body.length() - 1) == '=') {
-                                    mes.body = ActivityBase.encryptor.decode(mes.body);
-                                }
+                                if (mes.user_id == title_id) {
+                                    if (mes.body.equals("I write from new Device!") && !mes.out)
+                                        new DownloadingKey().execute().get();
+                                    if (mes.body.length() == 174 && mes.body.charAt(mes.body.length() - 1) == '=') {
+                                        mes.body = ActivityBase.encryptor.decode(mes.body);
+                                    }
 
-                                msgList.add(mes);
-                                idList.add(mes.id);
-                                //}
+                                    msgList.add(mes);
+                                    idList.add(mes.id);
+                                }
                             }
                             if (msgList.size() == 0) {
                                 mswipeRefreshLayout.setRefreshing(false);

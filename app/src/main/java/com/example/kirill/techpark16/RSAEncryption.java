@@ -27,7 +27,6 @@ public class RSAEncryption {
     KeyPairGenerator kpg;
     KeyPair kp;
     PublicKey publicKey;
-    PublicKey friendPublicKey;
     byte[] publicKeyBytes;
     PrivateKey privateKey;
     byte[] encryptedData, decryptedData;
