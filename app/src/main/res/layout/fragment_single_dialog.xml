@@ -22,7 +22,10 @@
             android:id="@+id/listmsg"
             android:layout_above="@+id/textmsg"
             android:transcriptMode="alwaysScroll"
-            android:stackFromBottom="true" />
+            android:stackFromBottom="true"
+            android:background="#ebf4fd"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="10.0dp"/>
     </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
 
 
