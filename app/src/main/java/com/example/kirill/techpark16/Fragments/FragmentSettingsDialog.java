@@ -3,14 +3,12 @@ package com.example.kirill.techpark16.Fragments;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.kirill.techpark16.ChatMessage;
 import com.example.kirill.techpark16.MyMessagesHistory;
 import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.R;
@@ -18,14 +16,8 @@ import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKApiMessage;
 
 import org.json.JSONException;
-
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.util.List;
 
 /**
  * Created by konstantin on 10.04.16

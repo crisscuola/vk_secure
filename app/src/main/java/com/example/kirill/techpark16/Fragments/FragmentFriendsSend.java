@@ -38,7 +38,7 @@ public class FragmentFriendsSend extends ListFragment {
 
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        FragmentSettingsDialog.flag = true;
+        FragmentSettingsDialog.flag = false;
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
