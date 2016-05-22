@@ -57,7 +57,7 @@ public class FragmentFriendsSend extends ListFragment {
 
                 list = (VKList) response.parsedModel;
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, list);
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.friend_send_list, list);
                 setListAdapter(adapter);
 
             }
