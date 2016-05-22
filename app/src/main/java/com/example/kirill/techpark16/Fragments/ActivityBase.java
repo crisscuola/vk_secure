@@ -410,7 +410,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     @Override
     public void onDialogSelected(final int position) {
 
-        final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
+        final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 30));
 
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
@@ -420,9 +420,17 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
                 final VKList<VKApiDialog> list = getMessagesResponse.items;
 
-                final int id = list.get(position).message.user_id;
+                ArrayList id_array = new ArrayList();
+
+                for ( final VKApiDialog msg : list) {
+                    if (msg.message.title.equals(" ... "))
+                    id_array.add(msg.message.user_id);
+                }
+
+                final  int id = (int) id_array.get(position);
 
                 VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id));
+
                 request.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
@@ -439,7 +447,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
                                 VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
 
-                                msg.add(mes);
+                                    msg.add(mes);
                             }
 
 
