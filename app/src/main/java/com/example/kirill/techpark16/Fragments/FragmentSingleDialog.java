@@ -113,9 +113,15 @@ public class FragmentSingleDialog extends ListFragment {
             boolean keyIsDownloaded = false;
             String mediaMessage = "[MEDIA MESSAGE]";
 
-            //friendKey = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?", String.valueOf(title_id)).get(0).getPk();
+            try {
+                friendKey = PublicKeyHandler.downloadFriendPublicKey(id, false);
+            } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
+                e.printStackTrace();
+            }
+
             for (VKApiMessage msg : vkMessages) {
                 if (msg.body.equals("I write from new Device!") && !msg.out && !keyIsDownloaded) {
+                    Log.d("resp_isDownloaded", "false");
                     keyIsDownloaded = true;
                     try {
                         friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id, true);
@@ -260,8 +266,7 @@ public class FragmentSingleDialog extends ListFragment {
         text = (EditText) view.findViewById(R.id.textmsg);
         listView = (ListView) view.findViewById(R.id.listmsg);
         send = (Button) view.findViewById(R.id.sendmsg);
-        friendKey = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?", String.valueOf(title_id))
-                .get(0).getPk();
+
         new DownloadingMessages().execute();
         //singleDialogAdapter.notifyDataSetChanged();
 
