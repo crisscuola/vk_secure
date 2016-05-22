@@ -62,6 +62,7 @@ public class FragmentSingleDialog extends ListFragment {
     SingleDialogAdapter singleDialogAdapter;
     int id;
     boolean sendFlag = false;
+    boolean encryptionMode = false;
 
 
     EditText text;
@@ -98,6 +99,7 @@ public class FragmentSingleDialog extends ListFragment {
         protected String doInBackground(String... params) {
             try {
                 friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id, true);
+                ActivityBase.encryptor.setPublicKey(friendKey);
             } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
                 e.printStackTrace();
             }
@@ -224,7 +226,6 @@ public class FragmentSingleDialog extends ListFragment {
     }
 
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -261,14 +262,16 @@ public class FragmentSingleDialog extends ListFragment {
         singleDialogAdapter = new SingleDialogAdapter(view.getContext(), inList, outList);
 
         id = getArguments().getInt(USER_ID);
-        
+
+
 
         text = (EditText) view.findViewById(R.id.textmsg);
         listView = (ListView) view.findViewById(R.id.listmsg);
         send = (Button) view.findViewById(R.id.sendmsg);
 
         new DownloadingMessages().execute();
-        //singleDialogAdapter.notifyDataSetChanged();
+
+        encryptionMode = PublicKeyHandler.checkEncryprionMode(id);
 
         send.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -280,41 +283,47 @@ public class FragmentSingleDialog extends ListFragment {
                 VKRequest request;
 
                 final String msg = text.getText().toString();
-                String messageToSend = PREFIX + msg;
+                String messageToSend;
 
                 try {
-                    if (!friendKey.equals("none")) {
 
-                        //ActivityBase.encryptor.setPublicKey(friendKey);
-                        messageToSend = ActivityBase.encryptor.encode(messageToSend);
+                    if (encryptionMode) {
+                        if (!friendKey.equals("none")) {
 
-                        text.setText("");
+                            messageToSend = ActivityBase.encryptor.encode(PREFIX + msg);
 
-                        request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
-                                VKApiConst.MESSAGE, messageToSend));
+                        } else {
+                            Toast.makeText(getContext(), "The friend hasn't started the dialog.",
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    } else
+                        messageToSend = msg;
 
-                        request.executeWithListener(new VKRequest.VKRequestListener() {
-                            @Override
-                            public void onComplete(VKResponse response) {
-                                super.onComplete(response);
-                                int msgId;
-                                try {
-                                    msgId = (int) response.json.get("response");
-                                    MyMessagesHistory myMessage = new MyMessagesHistory(id, msg, msgId);
-                                    myMessage.save();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                ChatMessage chatMessage = new ChatMessage(msg, true, null);
-                                singleDialogAdapter.add(chatMessage);
-                                singleDialogAdapter.notifyDataSetChanged();
-                            }
+                    text.setText("");
+
+                    request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
+                            VKApiConst.MESSAGE, messageToSend));
+
+                    request.executeWithListener(new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                        super.onComplete(response);
+                        int msgId;
+                        try {
+                            msgId = (int) response.json.get("response");
+                            MyMessagesHistory myMessage = new MyMessagesHistory(id, msg, msgId);
+                            myMessage.save();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        ChatMessage chatMessage = new ChatMessage(msg, true, null);
+                        singleDialogAdapter.add(chatMessage);
+                        singleDialogAdapter.notifyDataSetChanged();
+                        }
                         });
 
-                    } else {
-                        Toast.makeText(getContext(), "The friend hasn't started the dialog.",
-                                Toast.LENGTH_SHORT).show();
-                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -344,16 +353,16 @@ public class FragmentSingleDialog extends ListFragment {
 
                             for (int i = 0; i < new_messages.length(); i++) {
                                 VKApiMessage mes = new VKApiMessage(new_messages.getJSONObject(i));
-                                //if (mes.user_id == title_id) {
-                                if (mes.body.equals("I write from new Device!") && !mes.out)
-                                    new DownloadingKey().execute().get();
-                                if (mes.body.length() == 174 && mes.body.charAt(mes.body.length() - 1) == '=') {
-                                    mes.body = ActivityBase.encryptor.decode(mes.body);
-                                }
+                                if (mes.user_id == title_id) {
+                                    if (mes.body.equals("I write from new Device!") && !mes.out)
+                                        new DownloadingKey().execute().get();
+                                    if (mes.body.length() == 174 && mes.body.charAt(mes.body.length() - 1) == '=') {
+                                        mes.body = ActivityBase.encryptor.decode(mes.body);
+                                    }
 
-                                msgList.add(mes);
-                                idList.add(mes.id);
-                                //}
+                                    msgList.add(mes);
+                                    idList.add(mes.id);
+                                }
                             }
                             if (msgList.size() == 0) {
                                 mswipeRefreshLayout.setRefreshing(false);
@@ -450,6 +459,8 @@ public class FragmentSingleDialog extends ListFragment {
         });
 
         getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
+
+        encryptionMode = PublicKeyHandler.checkEncryprionMode(id);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.example.kirill.techpark16;
 
 import android.util.Base64;
-import android.util.Log;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;

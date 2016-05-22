@@ -1,7 +1,5 @@
 package com.example.kirill.techpark16;
 
-import android.util.Log;
-
 import com.example.kirill.techpark16.Fragments.ActivityBase;
 
 import java.io.IOException;
@@ -61,9 +59,6 @@ public class HttpConnectionHandler {
                 .add("to_id", friendId)
                 .add("key", pk)
                 .build();
-
-        Log.d("resp my_id & to_id", ActivityBase.MY_ID + " " + friendId);
-        Log.d("resp_myPk_to_server", pk);
 
         Request request = new Request.Builder()
                 .url(url)

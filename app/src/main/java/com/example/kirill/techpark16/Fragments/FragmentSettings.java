@@ -65,12 +65,9 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
             @Override
             public void onClick(View v) {
                 VKSdk.logout();
-
-                Intent intent = new Intent(FragmentSettings.this.getActivity(), ActivityBase.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent = new Intent(FragmentSettings.this.getActivity(), ActivityLogin.class);
                 startActivity(intent);
-
+                getActivity().finish();
 
             }
         });
