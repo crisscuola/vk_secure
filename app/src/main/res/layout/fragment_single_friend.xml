@@ -21,21 +21,24 @@
         android:layout_height="wrap_content"
         android:id="@+id/friends_status"
         android:layout_gravity="center_horizontal"
-        android:textSize="16dp" />
+        android:textSize="16dp"
+        android:text="Status" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/b_date"
         android:layout_gravity="center_horizontal"
-        android:textSize="16dp" />
+        android:textSize="16dp"
+        android:text="bDate" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/city"
         android:layout_gravity="center_horizontal"
-        android:textSize="16dp" />
+        android:textSize="16dp"
+        android:text="City" />
 
     <Button
         android:layout_width="wrap_content"

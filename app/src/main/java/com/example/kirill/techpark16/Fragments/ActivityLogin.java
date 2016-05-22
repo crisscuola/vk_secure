@@ -15,7 +15,7 @@ public class ActivityLogin extends AppCompatActivity {
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL,
             VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
