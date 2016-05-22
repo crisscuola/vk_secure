@@ -135,14 +135,14 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         request_long_poll.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                try {
-                    pts = response.json.getJSONObject("response").getInt("pts");
+            super.onComplete(response);
+            try {
+                pts = response.json.getJSONObject("response").getInt("pts");
 
-                    Log.i("PTS", String.valueOf(pts));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                Log.i("PTS", String.valueOf(pts));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
             }
         });
 
@@ -171,42 +171,42 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
             @Override
             public void onClick(View v) {
 
-                View view = getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
+            View view = getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
 
-                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentPlace);
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragmentPlace);
 
-                if (currentFragment instanceof FragmentDialogsList) {
+            if (currentFragment instanceof FragmentDialogsList) {
 
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.FRIENDSEND]);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    toolbar.setTitle(R.string.friends_title);
-                    toolbar.setTitle(R.string.send);
-                    toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
-                }
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.FRIENDSEND]);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                toolbar.setTitle(R.string.friends_title);
+                toolbar.setTitle(R.string.send);
+                toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+            }
 
-                if (currentFragment instanceof FragmentSingleDialog) {
+            if (currentFragment instanceof FragmentSingleDialog) {
 
-                    int id = FragmentSingleDialog.title_id;
+                int id = FragmentSingleDialog.title_id;
 
-                    FragmentSettingsDialog newFragment = FragmentSettingsDialog.getInstance(id);
-                    fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                    toolbar.setTitle(R.string.friends_title);
-                    toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
-                }
+                FragmentSettingsDialog newFragment = FragmentSettingsDialog.getInstance(id);
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                toolbar.setTitle(R.string.friends_title);
+                toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+            }
 
-                if (currentFragment instanceof FragmentSettingsDialog) {
+            if (currentFragment instanceof FragmentSettingsDialog) {
 
-                    Collections.reverse(FragmentSingleDialog.vkMessages);
-                }
+                Collections.reverse(FragmentSingleDialog.vkMessages);
+            }
             }
         });
 
@@ -255,11 +255,11 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         br = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                try {
+            try {
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             }
         };
 
@@ -324,7 +324,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-
         VKRequest request = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,MY_ID,
                 VKApiConst.FIELDS, "photo_100","first_name, last_name"));
 
@@ -332,28 +331,28 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
             @Override
             public void onComplete(VKResponse response) {
 
-                String first_name = " ";
-                String last_name = " ";
-                String photo_url = " ";
+            String first_name = " ";
+            String last_name = " ";
+            String photo_url = " ";
 
-                try {
-                    JSONArray array = response.json.getJSONArray("response");
-                    first_name = array.getJSONObject(0).getString("first_name");
-                    last_name = array.getJSONObject(0).getString("last_name");
-                    photo_url = array.getJSONObject(0).getString("photo_100");
+            try {
+                JSONArray array = response.json.getJSONArray("response");
+                first_name = array.getJSONObject(0).getString("first_name");
+                last_name = array.getJSONObject(0).getString("last_name");
+                photo_url = array.getJSONObject(0).getString("photo_100");
 
-                    Log.i("PHOTO", photo_url);
+                Log.i("PHOTO", photo_url);
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-                TextView name = (TextView) findViewById(R.id.nav_username);
-                name.setText(first_name + " " + last_name);
+            TextView name = (TextView) findViewById(R.id.nav_username);
+            name.setText(first_name + " " + last_name);
 
-                new DownloadImageTask((ImageView) findViewById(R.id.imageView)).execute(photo_url);
+            new DownloadImageTask((ImageView) findViewById(R.id.imageView)).execute(photo_url);
 
-                super.onComplete(response);
+            super.onComplete(response);
             }
         });
 
@@ -415,55 +414,50 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
+            super.onComplete(response);
+            VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
+
+            final VKList<VKApiDialog> list = getMessagesResponse.items;
+
+            ArrayList id_array = new ArrayList();
+
+            for ( final VKApiDialog msg : list) {
+                if (msg.message.title.equals(" ... "))
+                id_array.add(msg.message.user_id);
+            }
+
+            final  int id = (int) id_array.get(position);
+
+            VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id));
+
+            request.executeWithListener(new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
                 super.onComplete(response);
-                VKApiGetDialogResponse getMessagesResponse = (VKApiGetDialogResponse) response.parsedModel;
 
-                final VKList<VKApiDialog> list = getMessagesResponse.items;
+                final ArrayList<VKApiMessage> msg = new ArrayList<>();
+                final ArrayList<Integer> ids = new ArrayList<>();
 
-                ArrayList id_array = new ArrayList();
+                try {
+                    JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
 
-                for ( final VKApiDialog msg : list) {
-                    if (msg.message.title.equals(" ... "))
-                    id_array.add(msg.message.user_id);
+                    for (int i = 0; i < array.length(); i++) {
+                        VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
+                        msg.add(mes);
+                        ids.add(mes.id);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
 
-                final  int id = (int) id_array.get(position);
-
-                VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id));
-
-                request.executeWithListener(new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
-
-                        final ArrayList<String> inList = new ArrayList<>();
-                        final ArrayList<String> outList = new ArrayList<>();
-                        final ArrayList<VKApiMessage> msg = new ArrayList<>();
-
-                        try {
-                            JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
-
-                            for (int i = 0; i < array.length(); i++) {
-
-                                VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
-
-                                    msg.add(mes);
-                            }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-
-                        FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList, msg);
-                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
-
-                    }
-                });
+                FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, msg, ids);
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                }
+            });
             }
         });
     }
@@ -474,72 +468,63 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         final VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS,
                 "first_name, last_name", "order", "hints"));
 
-
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
+            super.onComplete(response);
+
+            VKList list;
+
+            list = (VKList) response.parsedModel;
+
+            int id_f = 0;
+
+            VKApiModel model = list.get(position);
+
+            try {
+                id_f = model.fields.getInt("id");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id_f));
+            final int finalId_f = id_f;
+            request.executeWithListener(new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
                 super.onComplete(response);
 
-                VKList list;
-
-                list = (VKList) response.parsedModel;
-
-                int id_f = 0;
-
-                VKApiModel model = list.get(position);
+                final ArrayList<VKApiMessage> msg = new ArrayList<>();
+                final ArrayList<Integer> ids = new ArrayList<>();
 
                 try {
-                    id_f = model.fields.getInt("id");
+                    JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
+
+                    for (int i = 0; i < array.length(); i++) {
+                        VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
+                        msg.add(mes);
+                        ids.add(mes.id);
+                    }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
-                VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id_f));
-                final int finalId_f = id_f;
-                request.executeWithListener(new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
+                String temp ;
 
-                        final ArrayList<String> inList = new ArrayList<>();
-                        final ArrayList<String> outList = new ArrayList<>();
-                        final ArrayList<VKApiMessage> msg = new ArrayList<>();
+                temp = String.valueOf(finalId_f);
 
-                        try {
-                            JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
-
-                            for (int i = 0; i < array.length(); i++) {
-                                VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
-                                msg.add(mes);
-                            }
-
-                            for (VKApiMessage mess : msg) {
-                                if (mess.out) {
-                                    outList.add(mess.body);
-                                } else {
-                                    inList.add(mess.body);
-                                }
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        String temp ;
-
-                        temp = String.valueOf(finalId_f);
-
-                        int id = Integer.parseInt(temp);
+                int id = Integer.parseInt(temp);
 
 
-                        FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList, msg);
-                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
+                FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, msg, ids);
+                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
 
-                    }
-                });
+                }
+            });
             }
         });
     }

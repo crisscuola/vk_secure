@@ -53,11 +53,11 @@ public class FragmentSingleDialog extends ListFragment {
     public static final String IN_LIST = "inList";
     public static final String OUT_LIST = "outList";
     public static final String MESSAGES = "messages";
+    public static final String IDS = "ids";
     private final String PREFIX = "cpslbs_";
 
-    ArrayList<String> inList = new ArrayList<>();
-    ArrayList<String> outList = new ArrayList<>();
     static ArrayList<VKApiMessage> vkMessages = new ArrayList<>();
+    ArrayList<Integer> vkMessagesIds = new ArrayList<>();
     SingleDialogAdapter singleDialogAdapter;
     int id;
     boolean sendFlag = false;
@@ -77,14 +77,12 @@ public class FragmentSingleDialog extends ListFragment {
     String friendKey;
     private static SwipyRefreshLayout mswipeRefreshLayout;
 
-    public static FragmentSingleDialog getInstance(int user_id, ArrayList<String> inList,
-                                                   ArrayList<String> outList, ArrayList<VKApiMessage> vkMsgs) {
+    public static FragmentSingleDialog getInstance(int user_id, ArrayList<VKApiMessage> vkMsgs, ArrayList<Integer> ids) {
         FragmentSingleDialog fragmentSingleDialog = new FragmentSingleDialog();
         Bundle bundle = new Bundle();
         bundle.putInt(USER_ID, user_id);
-        bundle.putStringArrayList(IN_LIST, inList);
-        bundle.putStringArrayList(OUT_LIST, outList);
         bundle.putParcelableArrayList(MESSAGES, vkMsgs);
+        bundle.putIntegerArrayList(IDS, ids);
 
         title_id = user_id;
 
@@ -250,16 +248,24 @@ public class FragmentSingleDialog extends ListFragment {
             }
         });
 
-
-        inList = getArguments().getStringArrayList(IN_LIST);
-        outList = getArguments().getStringArrayList(OUT_LIST);
         vkMessages = getArguments().getParcelableArrayList(MESSAGES);
+        vkMessagesIds = getArguments().getIntegerArrayList(IDS);
+
+        VKRequest markAsRead = new VKRequest("messages.markAsRead", VKParameters
+                .from("message_ids", vkMessagesIds));
+        markAsRead.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+            }
+        });
+
 
         if (!FragmentSettingsDialog.flag) {
             Collections.reverse(vkMessages);
         }
         FragmentSettingsDialog.flag = false;
-        singleDialogAdapter = new SingleDialogAdapter(view.getContext(), inList, outList);
+        singleDialogAdapter = new SingleDialogAdapter(view.getContext());
 
         id = getArguments().getInt(USER_ID);
 

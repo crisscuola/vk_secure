@@ -22,11 +22,8 @@ public class SingleDialogAdapter extends BaseAdapter {
     private Context context;
 
 
-    public SingleDialogAdapter(Context context, ArrayList<String> inList, ArrayList<String> outList) {
-        this.inList = inList;
-        this.outList = outList;
+    public SingleDialogAdapter(Context context) {
         this.context = context;
-        inList.addAll(outList);
     }
 
     public void add(ChatMessage obj){

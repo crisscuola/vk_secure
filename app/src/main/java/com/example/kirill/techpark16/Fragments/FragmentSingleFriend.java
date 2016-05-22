@@ -137,57 +137,57 @@ public class FragmentSingleFriend extends Fragment {
             @Override
             public void onComplete(VKResponse response) {
 
-                String photo_url = " ";
-                String city = " ";
-                String bdate = "";
+            String photo_url = " ";
+            String city = " ";
+            String bdate = "";
 
-                try {
-                    JSONArray array = response.json.getJSONArray("response");
+            try {
+                JSONArray array = response.json.getJSONArray("response");
 
-                    photo_url = array.getJSONObject(0).getString("photo_200");
-                    city = array.getJSONObject(0).getJSONObject("city").getString("title");
-                    bdate = array.getJSONObject(0).getString("bdate");
+                photo_url = array.getJSONObject(0).getString("photo_200");
+                city = array.getJSONObject(0).getJSONObject("city").getString("title");
+                bdate = array.getJSONObject(0).getString("bdate");
 
-                    String[] arraybdate = bdate.split("\\.");
+                String[] arraybdate = bdate.split("\\.");
 
-                    bdate = arraybdate[0];
+                bdate = arraybdate[0];
 
-                    HashMap<String, String> months = new HashMap<>();
+                HashMap<String, String> months = new HashMap<>();
 
-                    months.put("1", " января");
-                    months.put("2", " февраля");
-                    months.put("3", " марта");
-                    months.put("4", " апреля");
-                    months.put("5", " мая");
-                    months.put("6", " июня");
-                    months.put("7", " июля");
-                    months.put("8", " августа");
-                    months.put("9", " сентября");
-                    months.put("10", " октября");
-                    months.put("11", " ноября");
-                    months.put("12"," декабря");
+                months.put("1", " января");
+                months.put("2", " февраля");
+                months.put("3", " марта");
+                months.put("4", " апреля");
+                months.put("5", " мая");
+                months.put("6", " июня");
+                months.put("7", " июля");
+                months.put("8", " августа");
+                months.put("9", " сентября");
+                months.put("10", " октября");
+                months.put("11", " ноября");
+                months.put("12"," декабря");
 
-                    bdate += months.get(arraybdate[1]);
+                bdate += months.get(arraybdate[1]);
 
-                    if (arraybdate.length == 3) {
-                        bdate += " ";
-                        bdate += arraybdate[2];
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (arraybdate.length == 3) {
+                    bdate += " ";
+                    bdate += arraybdate[2];
                 }
 
-                TextView name = (TextView) view.findViewById(R.id.city);
-                name.setText(city);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-                TextView b_date = (TextView)  view.findViewById(R.id.b_date);
-                b_date.setText(bdate);
+            TextView name = (TextView) view.findViewById(R.id.city);
+            name.setText(city);
+
+            TextView b_date = (TextView)  view.findViewById(R.id.b_date);
+            b_date.setText(bdate);
 
 
-                new DownloadImageTask((ImageView) view.findViewById(R.id.avatar)).execute(photo_url);
+            new DownloadImageTask((ImageView) view.findViewById(R.id.avatar)).execute(photo_url);
 
-                super.onComplete(response);
+            super.onComplete(response);
             }
         });
 
@@ -196,46 +196,37 @@ public class FragmentSingleFriend extends Fragment {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id));
-                request.executeWithListener(new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
+            VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id));
+            request.executeWithListener(new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                super.onComplete(response);
 
-                        final ArrayList<String> inList = new ArrayList<>();
-                        final ArrayList<String> outList = new ArrayList<>();
-                        final ArrayList<VKApiMessage> msg = new ArrayList<>();
+                final ArrayList<VKApiMessage> msg = new ArrayList<>();
+                final ArrayList<Integer> ids = new ArrayList<>();
 
-                        try {
-                            JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
+                try {
+                    JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
 
-                            for (int i = 0; i < array.length(); i++) {
-                                VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
-                                msg.add(mes);
-                            }
-
-
-                            for (VKApiMessage mess : msg) {
-                                if (mess.out) {
-                                    outList.add(mess.body);
-                                } else {
-                                    inList.add(mess.body);
-                                }
-
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-
-                        FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, inList, outList, msg);
-                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.fragmentPlace, newFragment);
-                        transaction.addToBackStack(null);
-                        transaction.commit();
+                    for (int i = 0; i < array.length(); i++) {
+                        VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
+                        msg.add(mes);
+                        ids.add(mes.id);
                     }
 
-                });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+                FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, msg, ids);
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragmentPlace, newFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                }
+
+            });
 
 
             }
