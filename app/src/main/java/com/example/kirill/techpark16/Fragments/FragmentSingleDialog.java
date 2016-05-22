@@ -459,8 +459,8 @@ public class FragmentSingleDialog extends ListFragment {
         });
 
         getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
-//        Button myButton = (Button) getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button);
-//        myButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.logo, 0);
+        Button myButton = (Button) getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button);
+        myButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_settings_white_24dp, 0);
 
         encryptionMode = PublicKeyHandler.checkEncryprionMode(id);
     }
