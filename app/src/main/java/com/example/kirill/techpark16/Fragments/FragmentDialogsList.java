@@ -90,7 +90,7 @@ public class FragmentDialogsList extends ListFragment {
 
                                 final VKList<VKApiDialog> list = getMessagesResponse.items;
 
-                                 final ArrayList<String> messages = new ArrayList<>();
+                                 final ArrayList<VKApiMessage> messages = new ArrayList<>();
                                  final ArrayList<String> users = new ArrayList<>();
                                  final  ArrayList<Integer> ids = new ArrayList<>();
                                  final  VKList<VKApiUser> photo = new VKList<>();
@@ -102,12 +102,19 @@ public class FragmentDialogsList extends ListFragment {
                                     if (test.title.equals(" ... ")) {
 
                                     if (test.body.length() == 174 && test.body.charAt(test.body.length() - 1) == '=') {
-                                        messages.add(ENCRYPTED_MSG);
+                                        VKApiMessage vkApiMessage = new VKApiMessage();
+                                        vkApiMessage.body = ENCRYPTED_MSG;
+                                        vkApiMessage.read_state = msg.message.read_state;
+                                        messages.add(vkApiMessage);
                                     } else if (msg.message.attachments.size() != 0 || msg.message.body.isEmpty()
                                             || !msg.message.fwd_messages.isEmpty()){
-                                        messages.add(MEDIA_MSG);
+                                        VKApiMessage vkApiMessage = new VKApiMessage();
+                                        vkApiMessage.body = MEDIA_MSG;
+                                        vkApiMessage.read_state = msg.message.read_state;
+                                        messages.add(vkApiMessage);
                                     } else {
-                                        String mess = msg.message.body;
+                                        VKApiMessage vkApiMessage = msg.message;
+                                        String mess = vkApiMessage.body;
 
                                         mess = mess.replaceAll("\\r|\\n", PREFIX);
 
@@ -121,8 +128,8 @@ public class FragmentDialogsList extends ListFragment {
                                             mess = mess.substring(0, 30);
                                             mess += " ...";
                                         }
-
-                                        messages.add(mess);
+                                        vkApiMessage.body = mess;
+                                        messages.add(vkApiMessage);
                                     }
                                     }
                                     if (msg.message.title.equals(" ... ")) {

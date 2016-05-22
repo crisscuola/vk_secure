@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.kirill.techpark16.R;
 import com.squareup.picasso.Picasso;
+import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKApiUser;
 import com.vk.sdk.api.model.VKList;
 
@@ -21,12 +23,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class DialogsListAdapter extends BaseAdapter {
-    private ArrayList<String> users, messages;
+    private ArrayList<String> users;
+    private ArrayList<VKApiMessage> messages;
     private VKList<VKApiUser> photo;
 
     private Context context;
 
-    public DialogsListAdapter(Context context, ArrayList<String> users, ArrayList<String> messages, VKList<VKApiUser> photo) {
+    public DialogsListAdapter(Context context, ArrayList<String> users, ArrayList<VKApiMessage> messages, VKList<VKApiUser> photo) {
         this.users = users;
         this.messages = messages;
         this.context = context;
@@ -67,7 +70,10 @@ public class DialogsListAdapter extends BaseAdapter {
         }
 
         setData.user_name.setText(name);
-        setData.msg.setText(messages.get(position));
+        if (!messages.get(position).read_state){
+            setData.msg.setBackgroundColor(ContextCompat.getColor(context, R.color.vk_light_color));
+        }
+        setData.msg.setText(messages.get(position).body);
 
         Picasso.with(context).load(photo.get(position).photo_100)
                 .placeholder(R.drawable.placeholder_light)
