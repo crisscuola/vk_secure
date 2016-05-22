@@ -324,7 +324,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        Log.i("MENU","MENU CLICK!!!");
 
         VKRequest request = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,MY_ID,
                 VKApiConst.FIELDS, "photo_100","first_name, last_name"));

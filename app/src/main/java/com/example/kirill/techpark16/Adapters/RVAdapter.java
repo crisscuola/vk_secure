@@ -1,11 +1,13 @@
 package com.example.kirill.techpark16.Adapters;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.kirill.techpark16.Fragments.FragmentSingleFriend;
 import com.example.kirill.techpark16.R;
+import com.squareup.picasso.Picasso;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
@@ -50,8 +53,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
     List<Person> persons;
     Map<Integer, Bitmap> avatars;
     private FragmentManager fragmentManager;
+    Context context;
 
-    public RVAdapter(FragmentManager fragmentManager, List<Person> persons){
+    public RVAdapter(Context context, FragmentManager fragmentManager, List<Person> persons){
+        this.context = context;
         this.persons = persons;
         this.avatars = new HashMap();
         this.fragmentManager = fragmentManager;
@@ -81,10 +86,16 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
                         .commit();
             }
         });
-        if(avatars.get(persons.get(i).getId()) != null)
-            personViewHolder.personPhoto.setImageBitmap(avatars.get(persons.get(i).getId()));
-        else
-            new DownloadImageTask(avatars, persons.get(i).getId(), personViewHolder.personPhoto).execute(persons.get(i).photo);
+
+        Picasso.with(context).load(persons.get(i).photo)
+                .placeholder(R.drawable.placeholder_light)
+                .into(personViewHolder.personPhoto);
+//        if(avatars.get(persons.get(i).getId()) != null) {
+//            personViewHolder.personPhoto.setImageBitmap(avatars.get(persons.get(i).getId()));
+//            Log.d("recycler", "1");
+//        }
+//        else
+//            new DownloadImageTask(avatars, persons.get(i).getId(), personViewHolder.personPhoto).execute(persons.get(i).photo);
     }
 
     @Override

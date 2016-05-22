@@ -50,7 +50,7 @@ public class FragmentDialogsList extends ListFragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        final VKRequest request_dialogs_one = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 10));
+        final VKRequest request_dialogs_one = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 30));
 
         request_dialogs_one.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
@@ -78,7 +78,7 @@ public class FragmentDialogsList extends ListFragment {
                         usersPhoto = (VKList<VKApiUser>) response.parsedModel;
 
                         final VKRequest request_dialogs_two = VKApi.messages().getDialogs(
-                                VKParameters.from(VKApiConst.COUNT, 10));
+                                VKParameters.from(VKApiConst.COUNT, 30));
                         request_dialogs_two.executeWithListener(new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(VKResponse response) {
