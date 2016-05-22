@@ -158,6 +158,13 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("TOOLBAR", "home selected");
+            }
+        });
+
         toolbarButton = (Button) toolbar.findViewById(R.id.toolbar_button);
 
         toolbarButton.setOnClickListener(new View.OnClickListener() {
@@ -208,8 +215,18 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        {
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                super.onDrawerStateChanged(newState);
+                View view = getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            }
+        };
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -247,8 +264,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         };
 
     }
-
-
 
     protected Application getApp() {
         return getApplication();
@@ -303,6 +318,8 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
             bmImage.setImageBitmap(result);
         }
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
