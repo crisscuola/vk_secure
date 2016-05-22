@@ -1,22 +1,44 @@
 package com.example.kirill.techpark16.Fragments;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.example.kirill.techpark16.Adapters.RecyclerViewAdapter;
+import com.example.kirill.techpark16.Adapters.Person;
+import com.example.kirill.techpark16.Adapters.RVAdapter;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiModel;
+import com.vk.sdk.api.model.VKApiUser;
 import com.vk.sdk.api.model.VKList;
+
+import org.json.JSONException;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by konstantin on 09.04.16
@@ -24,8 +46,7 @@ import com.vk.sdk.api.model.VKList;
 public class FragmentFriendsList extends Fragment {
 
     RecyclerView recyclerView;
-    RecyclerViewAdapter recyclerViewAdapter;
-    VKList list = new VKList();
+    VKList<VKApiUser> list = new VKList();
 
 
 
@@ -36,7 +57,7 @@ public class FragmentFriendsList extends Fragment {
         FragmentSettingsDialog.flag = true;
 
         VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS,
-                "first_name, last_name", "order", "hints"));
+                "first_name, last_name, photo_100", "order", "hints"));
 
         request_list_friend.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
@@ -44,14 +65,17 @@ public class FragmentFriendsList extends Fragment {
 
                 super.onComplete(response);
 
-                list = (VKList) response.parsedModel;
+                list = (VKList<VKApiUser>) response.parsedModel;
 
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 recyclerView.setLayoutManager(linearLayoutManager);
-                recyclerView.setItemAnimator(new DefaultItemAnimator());
-                recyclerViewAdapter = new RecyclerViewAdapter(getActivity().getSupportFragmentManager(),list);
-                recyclerView.setAdapter(recyclerViewAdapter);
+                List<Person> persons = new ArrayList<>();
+                for (final VKApiUser user: list) {
+                    persons.add(new Person(user.first_name, user.last_name, user.photo_100, user.id));
+                }
+                RVAdapter adapter = new RVAdapter(getActivity().getSupportFragmentManager(), persons);
+                recyclerView.setAdapter(adapter);
             }
         });
 
@@ -70,7 +94,5 @@ public class FragmentFriendsList extends Fragment {
         getActivity().setTitle(R.string.friends_title);
         getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
     }
-
-
 
 }
