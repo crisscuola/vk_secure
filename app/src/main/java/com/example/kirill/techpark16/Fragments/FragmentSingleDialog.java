@@ -373,6 +373,7 @@ public class FragmentSingleDialog extends ListFragment {
                             idList.add(mes.id);
                         }
                     }
+                    vkMessages.addAll(msgList);
                     if (msgList.size() == 0) {
                         mswipeRefreshLayout.setRefreshing(false);
                         return;
@@ -405,6 +406,7 @@ public class FragmentSingleDialog extends ListFragment {
                             //singleDialogAdapter.add(chatMessage);
                         }
                     }
+                    Collections.reverse(addMessagesList);
                     singleDialogAdapter.addArrayList(addMessagesList);
                     singleDialogAdapter.notifyDataSetChanged();
                     mswipeRefreshLayout.setRefreshing(false);

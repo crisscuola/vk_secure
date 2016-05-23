@@ -48,7 +48,7 @@ public class SingleDialogAdapter extends BaseAdapter {
     }
 
     public void addArrayList(ArrayList<ChatMessage> list){
-        chatMessagesList.addAll(list);
+        chatMessagesList.addAll(0,list);
     }
 
     public ArrayList<ChatMessage> getArrayList(){
