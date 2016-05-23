@@ -129,6 +129,19 @@ public class FragmentSettingsDialog extends Fragment {
             }
         });
 
+        VKRequest request_long_poll = new VKRequest("messages.getLongPollServer", VKParameters.from("need_pts", 1));
+        request_long_poll.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                try {
+                    ActivityBase.pts = response.json.getJSONObject("response").getInt("pts");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         return view;
     }
 

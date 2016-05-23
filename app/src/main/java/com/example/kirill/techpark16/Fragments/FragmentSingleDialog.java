@@ -72,7 +72,7 @@ public class FragmentSingleDialog extends ListFragment {
 
     static int title_id;
     VKList list_s;
-
+    VKRequest update;
     int y;
 
     String friendKey;
@@ -233,6 +233,8 @@ public class FragmentSingleDialog extends ListFragment {
         final View view = inflater.inflate(R.layout.fragment_single_dialog, null);
         setupUI(view);
 
+        update = new VKRequest("messages.getLongPollHistory", VKParameters.from("pts", ActivityBase.pts));
+
         VKRequest request_long_poll =  new VKRequest("messages.getLongPollServer", VKParameters.from("need_pts", 1));
 
         request_long_poll.executeWithListener(new VKRequest.VKRequestListener() {
@@ -363,7 +365,7 @@ public class FragmentSingleDialog extends ListFragment {
             final ArrayList<Integer> idList = new ArrayList<>();
             final ArrayList<ChatMessage> addMessagesList = new ArrayList<>();
 
-            VKRequest update = new VKRequest("messages.getLongPollHistory", VKParameters.from("pts", ActivityBase.pts));
+//            VKRequest update = new VKRequest("messages.getLongPollHistory", VKParameters.from("pts", ActivityBase.pts));
 
             mswipeRefreshLayout.setRefreshing(true);
 
@@ -471,6 +473,8 @@ public class FragmentSingleDialog extends ListFragment {
     public void onResume() {
         super.onResume();
         final String[] name_id = {""};
+
+        update = new VKRequest("messages.getLongPollHistory", VKParameters.from("pts", ActivityBase.pts));
 
         VKRequest my_request = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, title_id,
                 VKApiConst.FIELDS, "first_name, last_name"));
