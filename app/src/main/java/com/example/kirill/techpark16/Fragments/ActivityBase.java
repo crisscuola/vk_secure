@@ -369,8 +369,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         switch (id) {
             case R.id.nav_dialogs:
                 FragmentSettingsDialog.flag = false;
+                FragmentDialogsList newFragment = new FragmentDialogsList();
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
+                fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 toolbar.setTitle(R.string.dialog_list_title);
