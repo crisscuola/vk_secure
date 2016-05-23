@@ -1,8 +1,10 @@
 package com.example.kirill.techpark16.Fragments;
 
+import android.app.AlertDialog;
 import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -24,6 +26,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kirill.techpark16.CircleTransform;
 import com.example.kirill.techpark16.FullEncryption;
@@ -73,6 +76,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     Button toolbarButton;
     static Integer pts;
     Context context = this;
+    AlertDialog.Builder ad;
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL,
             VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
@@ -233,7 +237,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-// lal
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -245,12 +248,41 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         fragmentSet[FragmentsConst.SETTINGSDIALOG] = new FragmentSettingsDialog();
         fragmentSet[FragmentsConst.FRIENDSEND] = new FragmentFriendsSend();
 
+        String title = "Внимание!";
+        String message = "Вы уверены, что хотите выйти?";
+        String button1String = "Выйти";
+        String button2String = "Отмена";
+
+        ad = new AlertDialog.Builder(context);
+        ad.setTitle(title);
+        ad.setMessage(message);
+        ad.setPositiveButton(button1String, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                VKSdk.logout();
+                Intent intent = new Intent(context, ActivityLogin.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        ad.setNegativeButton(button2String, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+
+            }
+        });
+        ad.setCancelable(true);
+        ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            public void onCancel(DialogInterface dialog) {
+                Toast.makeText(context, "Вы ничего не выбрали",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-//        this.finish();
     }
 
 
@@ -323,7 +355,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -354,7 +385,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
             ImageView image = (ImageView) findViewById(R.id.imageView);
             name.setText(first_name + " " + last_name);
 
-            new DownloadImageTask((ImageView) findViewById(R.id.imageView)).execute(photo_url);
             Picasso.with(context).load(photo_url).transform(new CircleTransform())
                         .placeholder(R.drawable.placeholder_dark)
                         .into(image);
@@ -407,10 +437,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 break;
 
             case R.id.nav_logout:
-                VKSdk.logout();
-                Intent intent = new Intent(this, ActivityLogin.class);
-                startActivity(intent);
-                finish();
+                ad.show();
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
