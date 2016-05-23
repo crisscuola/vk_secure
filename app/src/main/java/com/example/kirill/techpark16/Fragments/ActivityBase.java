@@ -230,7 +230,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-
+// lal
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
