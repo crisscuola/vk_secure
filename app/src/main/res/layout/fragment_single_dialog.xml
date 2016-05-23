@@ -47,7 +47,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send"
+        android:text="Отправить"
         android:id="@+id/sendmsg"
         android:layout_alignBottom="@+id/textmsg"
         android:layout_alignParentRight="true"
