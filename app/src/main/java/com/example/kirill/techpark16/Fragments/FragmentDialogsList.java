@@ -115,9 +115,19 @@ public class FragmentDialogsList extends ListFragment {
                                         messages.add(vkApiMessage);
                                     } else {
                                         VKApiMessage vkApiMessage = msg.message;
-                                        String mess = vkApiMessage.body;
+
+                                        String mess = "";
+
+                                        if (msg.message.out == true) {
+                                            mess = mess + "Вы: " + vkApiMessage.body;
+                                        } else {
+                                            mess = mess + vkApiMessage.body;
+                                        }
+
 
                                         mess = mess.replaceAll("\\r|\\n", PREFIX);
+
+
 
                                         if (mess.contains(PREFIX)) {
                                             Integer pos = mess.indexOf(PREFIX);
