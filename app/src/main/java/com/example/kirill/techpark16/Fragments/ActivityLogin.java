@@ -35,7 +35,7 @@ public class ActivityLogin extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         if (VKAccessToken.currentToken() == null) {
-            // la-la
+            // la-la-la
 
         } else {
 
