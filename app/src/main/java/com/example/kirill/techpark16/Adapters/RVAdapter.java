@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.kirill.techpark16.CircleTransform;
 import com.example.kirill.techpark16.Fragments.FragmentSingleFriend;
 import com.example.kirill.techpark16.R;
 import com.squareup.picasso.Picasso;
@@ -87,7 +88,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
             }
         });
 
-        Picasso.with(context).load(persons.get(i).photo)
+        Picasso.with(context).load(persons.get(i).photo).transform(new CircleTransform())
                 .placeholder(R.drawable.placeholder_light)
                 .into(personViewHolder.personPhoto);
 //        if(avatars.get(persons.get(i).getId()) != null) {

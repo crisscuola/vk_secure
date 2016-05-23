@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.kirill.techpark16.CircleTransform;
 import com.example.kirill.techpark16.R;
 import com.squareup.picasso.Picasso;
 import com.vk.sdk.api.model.VKApiMessage;
@@ -75,7 +76,7 @@ public class DialogsListAdapter extends BaseAdapter {
         }
         setData.msg.setText(messages.get(position).body);
 
-        Picasso.with(context).load(photo.get(position).photo_100)
+        Picasso.with(context).load(photo.get(position).photo_100).transform(new CircleTransform())
                 .placeholder(R.drawable.placeholder_light)
                 .into(setData.avatar);
 

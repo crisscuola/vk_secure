@@ -25,10 +25,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.kirill.techpark16.CircleTransform;
 import com.example.kirill.techpark16.FullEncryption;
 import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
+import com.squareup.picasso.Picasso;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
@@ -70,6 +72,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     BroadcastReceiver br;
     Button toolbarButton;
     static Integer pts;
+    Context context = this;
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL,
             VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
@@ -348,9 +351,13 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
             }
 
             TextView name = (TextView) findViewById(R.id.nav_username);
+            ImageView image = (ImageView) findViewById(R.id.imageView);
             name.setText(first_name + " " + last_name);
 
             new DownloadImageTask((ImageView) findViewById(R.id.imageView)).execute(photo_url);
+            Picasso.with(context).load(photo_url).transform(new CircleTransform())
+                        .placeholder(R.drawable.placeholder_dark)
+                        .into(image);
 
             super.onComplete(response);
             }

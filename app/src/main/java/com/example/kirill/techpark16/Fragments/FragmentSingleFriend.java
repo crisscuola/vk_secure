@@ -15,7 +15,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.kirill.techpark16.CircleTransform;
 import com.example.kirill.techpark16.R;
+import com.squareup.picasso.Picasso;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
@@ -184,8 +186,12 @@ public class FragmentSingleFriend extends Fragment {
             TextView b_date = (TextView)  view.findViewById(R.id.b_date);
             b_date.setText(bdate);
 
+            ImageView avatar = (ImageView) view.findViewById(R.id.avatar);
 
-            new DownloadImageTask((ImageView) view.findViewById(R.id.avatar)).execute(photo_url);
+            //new DownloadImageTask((ImageView) view.findViewById(R.id.avatar)).execute(photo_url);
+            Picasso.with(getContext()).load(photo_url).transform(new CircleTransform())
+                        .placeholder(R.drawable.placeholder_dark)
+                        .into(avatar);
 
             super.onComplete(response);
             }
