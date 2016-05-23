@@ -7,7 +7,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set Offline"
+        android:text="Оффлайн режим"
         android:id="@+id/off_button"
         android:layout_gravity="center_horizontal"
         android:background="#627dbe"
@@ -17,7 +17,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clear data"
+        android:text="Очистить базу"
         android:id="@+id/clear_db"
         android:layout_gravity="center_horizontal"
         android:background="#627dbe"
