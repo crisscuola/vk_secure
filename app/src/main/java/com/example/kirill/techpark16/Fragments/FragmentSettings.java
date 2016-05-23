@@ -1,6 +1,5 @@
 package com.example.kirill.techpark16.Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.Toast;
 import com.example.kirill.techpark16.MyMessagesHistory;
 import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
-import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
@@ -20,7 +18,7 @@ import com.vk.sdk.api.VKResponse;
  */
 public class FragmentSettings extends android.support.v4.app.Fragment {
 
-    Button setOff, clearDB, logout;
+    Button setOff, clearDB;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -55,19 +53,6 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
                 PublicKeysTable.deleteAll(PublicKeysTable.class);
                 MyMessagesHistory.deleteAll(MyMessagesHistory.class);
                 Toast.makeText(getContext(),"SQLite cleared.", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        logout = (Button) view.findViewById(R.id.logout);
-
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                VKSdk.logout();
-                Intent intent = new Intent(FragmentSettings.this.getActivity(), ActivityLogin.class);
-                startActivity(intent);
-                getActivity().finish();
 
             }
         });

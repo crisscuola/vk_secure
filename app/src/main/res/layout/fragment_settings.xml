@@ -24,15 +24,4 @@
         android:padding="12dp"
         android:layout_marginTop="30dp" />
 
-
-    <Button
-        android:layout_width="104dp"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:id="@+id/logout"
-        android:layout_gravity="center_horizontal"
-        android:background="#ec8383"
-        android:padding="12dp"
-        android:layout_marginTop="30dp"/>
-
 </LinearLayout>

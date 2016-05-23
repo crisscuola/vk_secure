@@ -395,8 +395,13 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 fragmentTransaction.commit();
                 toolbar.setTitle(R.string.settings_title);
                 toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
-
                 break;
+
+            case R.id.nav_logout:
+                VKSdk.logout();
+                Intent intent = new Intent(this, ActivityLogin.class);
+                startActivity(intent);
+                finish();
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
