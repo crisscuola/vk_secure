@@ -166,7 +166,7 @@ public class FragmentSingleDialog extends ListFragment {
         protected void onPostExecute(String result) {
             // might want to change "executed" for the returned string passed
             // into onPostExecute() but that is upto you
-            send.setText("Send");
+            send.setText("Отправить");
             send.setClickable(true);
             Collections.reverse(chatMessagesList);
             singleDialogAdapter.copyArrayList(chatMessagesList);
@@ -177,7 +177,7 @@ public class FragmentSingleDialog extends ListFragment {
         @Override
         protected void onPreExecute() {
             send.setClickable(false);
-            send.setText("loading");
+            send.setText("Загрузка");
             listView.setAdapter(singleDialogAdapter);
         }
     }
@@ -231,7 +231,6 @@ public class FragmentSingleDialog extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
         final View view = inflater.inflate(R.layout.fragment_single_dialog, null);
-        Log.d("lifecycle", "onCreateView");
         setupUI(view);
 
         VKRequest request_long_poll =  new VKRequest("messages.getLongPollServer", VKParameters.from("need_pts", 1));
@@ -316,20 +315,35 @@ public class FragmentSingleDialog extends ListFragment {
                 request.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
-                    super.onComplete(response);
-                    int msgId;
-                    try {
-                        msgId = (int) response.json.get("response");
-                        MyMessagesHistory myMessage = new MyMessagesHistory(id, msg, msgId);
-                        myMessage.save();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        super.onComplete(response);
+                        int msgId = 0;
+                        try {
+                            msgId = (int) response.json.get("response");
+                            MyMessagesHistory myMessage = new MyMessagesHistory(id, msg, msgId);
+                            myMessage.save();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        ChatMessage chatMessage = new ChatMessage(msg, true, null);
+                        singleDialogAdapter.add(chatMessage);
+                        singleDialogAdapter.notifyDataSetChanged();
+                        if(msgId != 0) {
+                            VKRequest getById = new VKRequest("messages.getById", VKParameters.from("message_ids", msgId));
+                            getById.executeWithListener(new VKRequest.VKRequestListener() {
+                                @Override
+                                public void onComplete(VKResponse response) {
+                                    super.onComplete(response);
+                                    try {
+                                        JSONArray message = response.json.getJSONObject("response").getJSONArray("items");
+                                        vkMessages.add(new VKApiMessage(message.getJSONObject(0)));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                        }
                     }
-                    ChatMessage chatMessage = new ChatMessage(msg, true, null);
-                    singleDialogAdapter.add(chatMessage);
-                    singleDialogAdapter.notifyDataSetChanged();
-                    }
-                    });
+                });
 
 
             } catch (Exception e) {
@@ -456,7 +470,6 @@ public class FragmentSingleDialog extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("lifecycle", "onResume");
         final String[] name_id = {""};
 
         VKRequest my_request = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, title_id,
@@ -484,7 +497,6 @@ public class FragmentSingleDialog extends ListFragment {
     @Override
     public void onStop() {
         super.onStop();
-        Log.d("lifecycle", "onStop");
         if (sendFlag) {
             String[] queryId = {String.valueOf(id)};
             List<MyMessagesHistory> list = MyMessagesHistory.find(MyMessagesHistory.class,
