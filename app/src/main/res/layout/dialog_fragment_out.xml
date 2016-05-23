@@ -14,6 +14,7 @@
         android:layout_marginRight="10dp"
         android:background="#c7e1fd"
         android:textColor="#000000"
-        android:padding="12dp"/>
+        android:padding="12dp"
+        android:maxWidth="300dp"/>
 
 </LinearLayout>

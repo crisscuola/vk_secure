@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Encryption on/off"
+        android:text="Шифрование вкл/выкл"
         android:textColor="@color/md_blue_900"
         android:id="@+id/textView"
         android:layout_gravity="center_horizontal"
@@ -29,7 +29,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Upload new key"
+        android:text="Загрузить новый ключ"
         android:id="@+id/new_device"
         android:layout_gravity="center_horizontal"
         android:background="#627dbe"
