@@ -21,6 +21,8 @@
         android:layout_height="wrap_content"
         android:text="New ToggleButton"
         android:id="@+id/mode"
+        android:textOff="Выкл"
+        android:textOn="Вкл"
         android:layout_gravity="center_horizontal"
         android:background="#627dbe"
         android:padding="12dp"
