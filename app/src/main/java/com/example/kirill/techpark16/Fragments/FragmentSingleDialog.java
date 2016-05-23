@@ -72,7 +72,7 @@ public class FragmentSingleDialog extends ListFragment {
 
     static int title_id;
     VKList list_s;
-    VKRequest update;
+    VKRequest update = new VKRequest("messages.getLongPollHistory", VKParameters.from("pts", ActivityBase.pts));;
     int y;
 
     String friendKey;
@@ -365,7 +365,7 @@ public class FragmentSingleDialog extends ListFragment {
             final ArrayList<Integer> idList = new ArrayList<>();
             final ArrayList<ChatMessage> addMessagesList = new ArrayList<>();
 
-//            VKRequest update = new VKRequest("messages.getLongPollHistory", VKParameters.from("pts", ActivityBase.pts));
+            update = new VKRequest("messages.getLongPollHistory", VKParameters.from("pts", ActivityBase.pts));
 
             mswipeRefreshLayout.setRefreshing(true);
 
