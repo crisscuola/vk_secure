@@ -1,5 +1,7 @@
 package com.example.kirill.techpark16;
 
+import android.util.Log;
+
 /**
  * Created by kirill on 04.05.16
  */
@@ -29,5 +31,13 @@ public class ChatMessage {
 
     public void setMsg(String msg){
         this.msg = msg;
+    }
+
+    public void setOut(Boolean out){
+        this.out = out;
+    }
+
+    public void setTime(Long time){
+        this.time = time;
     }
 }

@@ -43,8 +43,20 @@ public class SingleDialogAdapter extends BaseAdapter {
         return count;
     }
 
-    public String getMessage(int position){
-        return chatMessagesList.get(position - 1).getMsg();
+    public void copyArrayList(ArrayList<ChatMessage> list){
+        chatMessagesList = new ArrayList<>(list);
+    }
+
+    public void addArrayList(ArrayList<ChatMessage> list){
+        chatMessagesList.addAll(list);
+    }
+
+    public ArrayList<ChatMessage> getArrayList(){
+        return chatMessagesList;
+    }
+
+    public ChatMessage getMessage(int position){
+        return chatMessagesList.get(position - 1);
     }
 
     public void deleteMessage(int position){
