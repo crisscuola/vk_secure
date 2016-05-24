@@ -49,6 +49,12 @@ public class FragmentSettingsDialog extends Fragment {
         @Override
         protected String doInBackground(String... params) {
             pk = PublicKeyHandler.uploadMyPublicKey(title_id);
+
+            return pk;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
             if(!pk.equals("no")) {
                 VKRequest request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, title_id,
                         VKApiConst.MESSAGE, NEW_DEVICE_NOTIFICATION));
@@ -68,26 +74,17 @@ public class FragmentSettingsDialog extends Fragment {
                     }
                     }
                 });
-            }
-            return pk;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            // might want to change "executed" for the returned string passed
-            // into onPostExecute() but that is upto you
-            newDevice.setText("New Device");
+                Toast.makeText(getContext(), "Ключ отправлен", Toast.LENGTH_SHORT).show();
+            } else
+                Toast.makeText(getContext(), "Ключ не был отправлен", Toast.LENGTH_SHORT).show();
+            newDevice.setText("Загрузить новый ключ");
             newDevice.setClickable(true);
-            if (!pk.equals("no"))
-                Toast.makeText(getContext(), "Key sent", Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(getContext(), "Your key was not sent.", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         protected void onPreExecute() {
             newDevice.setClickable(false);
-            newDevice.setText("Uploading");
+            newDevice.setText("Отправка ключа");
         }
 
         @Override
@@ -107,12 +104,12 @@ public class FragmentSettingsDialog extends Fragment {
         flag = true;
 
         newDevice = (Button) view.findViewById(R.id.new_device);
-        final UploadKey uploadKey = new UploadKey();
+        //final UploadKey uploadKey = new UploadKey();
         newDevice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    uploadKey.execute();
+                    new UploadKey().execute();
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
                     Toast.makeText(getContext(),"You've already sent key.",Toast.LENGTH_SHORT).show();
