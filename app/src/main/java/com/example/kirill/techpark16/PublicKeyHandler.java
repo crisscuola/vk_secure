@@ -86,7 +86,7 @@ public class PublicKeyHandler {
         return pk;
     }
 
-    private static String requestPublicKeyFromServer(int friendId) throws IOException, JSONException {
+    public static String requestPublicKeyFromServer(int friendId) throws IOException, JSONException {
         String key = "none";
         String response = client.doGetRequest(String.valueOf(friendId));
         Log.d("resp_get_req", response);

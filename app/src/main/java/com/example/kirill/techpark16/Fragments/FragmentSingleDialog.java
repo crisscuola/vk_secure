@@ -63,6 +63,7 @@ public class FragmentSingleDialog extends ListFragment {
     int id;
     boolean sendFlag = false;
     boolean encryptionMode = false;
+    String publicKey;
 
 
     EditText text;
@@ -114,22 +115,24 @@ public class FragmentSingleDialog extends ListFragment {
             boolean keyIsDownloaded = false;
             String mediaMessage = "[MEDIA MESSAGE]";
 
+
             try {
-                friendKey = PublicKeyHandler.downloadFriendPublicKey(id, false);
-            } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
+                friendKey = PublicKeyHandler.requestPublicKeyFromServer(title_id);
+
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
 
             for (VKApiMessage msg : vkMessages) {
-                if (msg.body.equals("I write from new Device!") && !msg.out && !keyIsDownloaded) {
-                    keyIsDownloaded = true;
-                    try {
-                        friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id, true);
-                        ActivityBase.encryptor.setPublicKey(friendKey);
-                    } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+//                if (msg.body.equals("I write from new Device!") && !msg.out && !keyIsDownloaded) {
+//                    keyIsDownloaded = true;
+//                    try {
+//                        friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id, true);
+//                        ActivityBase.encryptor.setPublicKey(friendKey);
+//                    } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
 
                 ChatMessage chatMessage = new ChatMessage(msg.body, msg.out, msg.date);
                 if(msg.out && msg.body.length() == 174 && msg.body.charAt(msg.body.length() - 1) == '=') {
