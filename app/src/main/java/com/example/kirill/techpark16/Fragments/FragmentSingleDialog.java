@@ -301,7 +301,7 @@ public class FragmentSingleDialog extends ListFragment {
 
                 if (encryptionMode) {
                     if (!friendKey.equals("none")) {
-
+                        ActivityBase.encryptor.setPublicKey(friendKey);
                         messageToSend = ActivityBase.encryptor.encode(PREFIX + msg);
 
                     } else {
