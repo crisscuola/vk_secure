@@ -37,8 +37,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -187,7 +185,6 @@ public class FragmentSingleDialog extends ListFragment {
 
     public boolean onTouchEvent(MotionEvent event) {
         y = (int)event.getY();
-        y -=50;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
