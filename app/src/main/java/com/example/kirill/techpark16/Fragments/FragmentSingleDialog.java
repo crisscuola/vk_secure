@@ -399,6 +399,7 @@ public class FragmentSingleDialog extends ListFragment {
                     if(toReplace != 0) {
                         List<MyMessagesHistory> history = MyMessagesHistory.find(MyMessagesHistory.class,
                                 "", strings, "", "id DESC", String.valueOf(toReplace));
+                        Collections.reverse(history);
                         Log.d("history", String.valueOf(history.size()) + history.get(0).getMsg());
                         for (int i = 0; i < toReplace; i++){
                             singleDialogAdapter.deleteMessage(0);
