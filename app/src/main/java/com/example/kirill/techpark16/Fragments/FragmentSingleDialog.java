@@ -380,8 +380,6 @@ public class FragmentSingleDialog extends ListFragment {
                     for (int i = 0; i < new_messages.length(); i++) {
                         VKApiMessage mes = new VKApiMessage(new_messages.getJSONObject(i));
                         if (mes.user_id == title_id) {
-                            if (mes.body.equals("I write from new Device!") && !mes.out)
-                                new DownloadingKey().execute().get();
                             if (mes.body.length() == 174 && mes.body.charAt(mes.body.length() - 1) == '=') {
                                 mes.body = ActivityBase.encryptor.decode(mes.body);
                             }
