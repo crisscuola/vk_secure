@@ -415,11 +415,12 @@ public class FragmentSingleDialog extends ListFragment {
                     }
                     vkMessages.addAll(msgList);
 
-                    for(int i = 0; i < vkMessages.size(); i++){
+                    for(int i = vkMessages.size() - 1; i >=0 ; i--){
                         if (toDelete != 0){
                             if(vkMessages.get(i).out){
-                                Log.d("vkMessages_del", vkMessages.get(i).body);
+                                Log.d("vkMessages_del", vkMessages.get(i).body + " " + toDelete);
                                 vkMessages.remove(i);
+                                toDelete--;
                             }
                         }
                     }
