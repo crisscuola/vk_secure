@@ -35,6 +35,7 @@ import com.vk.sdk.api.model.VKList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,6 +71,7 @@ public class FragmentSingleDialog extends ListFragment {
     static String title;
 
     static int title_id;
+    static int outCounter = 0;
     VKList list_s;
     VKRequest update = new VKRequest("messages.getLongPollHistory", VKParameters.from("pts", ActivityBase.pts));;
     int y;
@@ -338,7 +340,11 @@ public class FragmentSingleDialog extends ListFragment {
                                     super.onComplete(response);
                                     try {
                                         JSONArray message = response.json.getJSONObject("response").getJSONArray("items");
-                                        vkMessages.add(new VKApiMessage(message.getJSONObject(0)));
+                                        JSONObject obj = new JSONObject(String.valueOf(message.get(0)));
+                                        obj.remove("body");
+                                        obj.put("body", msg);
+                                        Log.d("message", String.valueOf(obj));
+                                        vkMessages.add(new VKApiMessage(obj));
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
@@ -374,31 +380,49 @@ public class FragmentSingleDialog extends ListFragment {
                 @Override
                 public void onComplete(VKResponse response) {
                 try {
-
+                    outCounter = 0;
                     JSONArray new_messages = response.json.getJSONObject("response").getJSONObject("messages").getJSONArray("items");
                     for (int i = 0; i < new_messages.length(); i++) {
                         VKApiMessage mes = new VKApiMessage(new_messages.getJSONObject(i));
-                        if (mes.user_id == title_id) {
-                            if (mes.body.length() == 174 && mes.body.charAt(mes.body.length() - 1) == '=') {
-                                mes.body = ActivityBase.encryptor.decode(mes.body);
-                            }
+                        if(mes.out)
+                            outCounter++;
+                    }
+                    String [] strings = {};
+                    List<MyMessagesHistory> lastOut = MyMessagesHistory.find(MyMessagesHistory.class,
+                            "", strings, "", "id DESC", String.valueOf(outCounter));
+                    Collections.reverse(lastOut);
+                    int toDelete = 0;
+                    for (int i = 0; i < new_messages.length(); i++) {
+                        VKApiMessage mes = new VKApiMessage(new_messages.getJSONObject(i));
+                        if(!mes.out) {
+                            if (mes.user_id == title_id) {
+                                if (mes.body.length() == 174 && mes.body.charAt(mes.body.length() - 1) == '=') {
+                                    mes.body = ActivityBase.encryptor.decode(mes.body);
+                                    if (mes.body.startsWith(PREFIX))
+                                        mes.body = mes.body.substring(PREFIX.length());
+                                }
 
-                            msgList.add(mes);
-                            idList.add(mes.id);
+                            }
+                        } else {
+                            mes.body = lastOut.get(toDelete).getMsg();
+                            Log.d("message", mes.body);
+                            toDelete++;
                         }
+                        msgList.add(mes);
+                        idList.add(mes.id);
                     }
                     vkMessages.addAll(msgList);
                     if (msgList.size() == 0) {
                         mswipeRefreshLayout.setRefreshing(false);
                         return;
                     }
-                    String [] strings = {};
+                    String [] strings_new = {};
                     int toReplace = singleDialogAdapter.msgToReplace();
                     String body;
 
                     if(toReplace != 0) {
                         List<MyMessagesHistory> history = MyMessagesHistory.find(MyMessagesHistory.class,
-                                "", strings, "", "id DESC", String.valueOf(toReplace));
+                                "", strings_new, "", "id DESC", String.valueOf(toReplace));
                         Collections.reverse(history);
                         Log.d("history", String.valueOf(history.size()) + history.get(0).getMsg());
                         for (int i = 0; i < toReplace; i++){

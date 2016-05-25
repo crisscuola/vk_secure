@@ -28,7 +28,7 @@ import java.util.List;
  */
 public class FragmentSettingsDialog extends Fragment {
 
-    private final String NEW_DEVICE_NOTIFICATION = "I write from new Device!";
+    private final String NEW_DEVICE_NOTIFICATION = "Я пишу с нового устройства.";
     static int title_id;
     Button newDevice;
     ToggleButton encryptionMode;
@@ -112,7 +112,7 @@ public class FragmentSettingsDialog extends Fragment {
                     new UploadKey().execute();
                 } catch (IllegalStateException e) {
                     e.printStackTrace();
-                    Toast.makeText(getContext(),"You've already sent key.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Вы уже отправили ключ.",Toast.LENGTH_SHORT).show();
                 }
             }
         });
