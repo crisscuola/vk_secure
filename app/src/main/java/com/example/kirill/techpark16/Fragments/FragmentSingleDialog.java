@@ -62,7 +62,8 @@ public class FragmentSingleDialog extends ListFragment {
     int id;
     boolean sendFlag = false;
     boolean encryptionMode = false;
-    String publicKey;
+    static boolean[] wasResfesh = {false};
+    int buf = 0;
 
 
     EditText text;
@@ -230,10 +231,9 @@ public class FragmentSingleDialog extends ListFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-
         final View view = inflater.inflate(R.layout.fragment_single_dialog, null);
         setupUI(view);
-
+        wasResfesh[0] = false;
         update = new VKRequest("messages.getLongPollHistory", VKParameters.from("pts", ActivityBase.pts));
 
         VKRequest request_long_poll =  new VKRequest("messages.getLongPollServer", VKParameters.from("need_pts", 1));
@@ -338,15 +338,17 @@ public class FragmentSingleDialog extends ListFragment {
                                 @Override
                                 public void onComplete(VKResponse response) {
                                     super.onComplete(response);
-                                    try {
-                                        JSONArray message = response.json.getJSONObject("response").getJSONArray("items");
-                                        JSONObject obj = new JSONObject(String.valueOf(message.get(0)));
-                                        obj.remove("body");
-                                        obj.put("body", msg);
-                                        Log.d("message", String.valueOf(obj));
-                                        vkMessages.add(new VKApiMessage(obj));
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                    if(!wasResfesh[0]) {
+                                        try {
+                                            JSONArray message = response.json.getJSONObject("response").getJSONArray("items");
+                                            JSONObject obj = new JSONObject(String.valueOf(message.get(0)));
+                                            obj.remove("body");
+                                            obj.put("body", msg);
+                                            Log.d("message", String.valueOf(obj));
+                                            vkMessages.add(new VKApiMessage(obj));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
                                 }
                             });
@@ -361,13 +363,12 @@ public class FragmentSingleDialog extends ListFragment {
 
             }
         });
-
         mswipeRefreshLayout = (SwipyRefreshLayout) view.findViewById(R.id.refresh);
         mswipeRefreshLayout.setOnRefreshListener(new SwipyRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh(SwipyRefreshLayoutDirection direction) {
             Log.i("REFRESH", "REFRESH");
-
+            wasResfesh[0] = true;
             final ArrayList<VKApiMessage> msgList = new ArrayList<>();
             final ArrayList<Integer> idList = new ArrayList<>();
             final ArrayList<ChatMessage> addMessagesList = new ArrayList<>();
@@ -387,6 +388,7 @@ public class FragmentSingleDialog extends ListFragment {
                         if(mes.out)
                             outCounter++;
                     }
+                    buf = outCounter;
                     String [] strings = {};
                     List<MyMessagesHistory> lastOut = MyMessagesHistory.find(MyMessagesHistory.class,
                             "", strings, "", "id DESC", String.valueOf(outCounter));
@@ -565,6 +567,14 @@ public class FragmentSingleDialog extends ListFragment {
             for (MyMessagesHistory item : list) {
                 item.save();
             }
+            for (int i = 0; i < buf; i++){
+                Log.d("message_del1", singleDialogAdapter.getMessage(1).getMsg());
+                singleDialogAdapter.deleteMessage(0);
+                Log.d("message_del2", singleDialogAdapter.getMessage(1).getMsg());
+            }
+            Log.d("message_del3", singleDialogAdapter.getMessage(1).getMsg());
+            buf = 0;
+            singleDialogAdapter.notifyDataSetChanged();
         }
     }
 
