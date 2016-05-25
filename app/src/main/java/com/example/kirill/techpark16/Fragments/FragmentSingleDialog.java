@@ -97,10 +97,9 @@ public class FragmentSingleDialog extends ListFragment {
         @Override
         protected String doInBackground(String... params) {
             try {
-                friendKey = PublicKeyHandler.downloadFriendPublicKey(title_id, true);
-                Log.d("resp_not_equ", friendKey);
-                ActivityBase.encryptor.setPublicKey(friendKey);
-            } catch (InvalidKeySpecException | NoSuchAlgorithmException | JSONException | IOException e) {
+                friendKey = PublicKeyHandler.requestPublicKeyFromServer(title_id);
+
+            } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
             return friendKey;
@@ -306,7 +305,8 @@ public class FragmentSingleDialog extends ListFragment {
                         messageToSend = ActivityBase.encryptor.encode(PREFIX + msg);
 
                     } else {
-                        Toast.makeText(getContext(), "The friend hasn't started the dialog.",
+                        new DownloadingKey().execute();
+                        Toast.makeText(getContext(), "Друг еще не начал диалог с Вами. Попробуйте еще раз.",
                                 Toast.LENGTH_SHORT).show();
                         return;
                     }
