@@ -414,6 +414,16 @@ public class FragmentSingleDialog extends ListFragment {
                         idList.add(mes.id);
                     }
                     vkMessages.addAll(msgList);
+
+                    for(int i = 0; i < vkMessages.size(); i++){
+                        if (toDelete != 0){
+                            if(vkMessages.get(i).out){
+                                Log.d("vkMessages_del", vkMessages.get(i).body);
+                                vkMessages.remove(i);
+                            }
+                        }
+                    }
+
                     if (msgList.size() == 0) {
                         mswipeRefreshLayout.setRefreshing(false);
                         return;
