@@ -80,6 +80,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL,
             VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
+
     public static FullEncryption encryptor = new FullEncryption();
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
 
