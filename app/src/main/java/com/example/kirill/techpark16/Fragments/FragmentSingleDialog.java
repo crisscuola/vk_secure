@@ -295,7 +295,7 @@ public class FragmentSingleDialog extends ListFragment {
             VKRequest request;
 
             final String msg = text.getText().toString();
-            String messageToSend;
+            final String messageToSend;
 
             try {
 
