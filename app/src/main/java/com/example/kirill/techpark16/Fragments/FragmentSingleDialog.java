@@ -376,7 +376,6 @@ public class FragmentSingleDialog extends ListFragment {
                 try {
 
                     JSONArray new_messages = response.json.getJSONObject("response").getJSONObject("messages").getJSONArray("items");
-
                     for (int i = 0; i < new_messages.length(); i++) {
                         VKApiMessage mes = new VKApiMessage(new_messages.getJSONObject(i));
                         if (mes.user_id == title_id) {
@@ -395,42 +394,65 @@ public class FragmentSingleDialog extends ListFragment {
                     }
                     String [] strings = {};
                     int toReplace = singleDialogAdapter.msgToReplace();
-                    List<MyMessagesHistory> history = MyMessagesHistory.find(MyMessagesHistory.class,
-                            "", strings, "", "id DESC", String.valueOf(toReplace));
-                    Log.d("history", String.valueOf(history.size()) + history.get(0).getMsg());
-                    int counter = 0;
                     String body;
 
-                    for (int i = 0; i < toReplace; i++){
-                        singleDialogAdapter.deleteMessage(0);
-                    }
-                    singleDialogAdapter.notifyDataSetChanged();
-
-                    int lala = 0;
-                    for (int i = 0; i < msgList.size(); i++) {
-
-                        VKApiMessage mess = msgList.get(i);
-                        if (mess.out) {
-                            body = history.get(lala).getMsg();
-                            lala++;
-                            ChatMessage chatMessage = new ChatMessage(body, true, mess.date);
-                            addMessagesList.add(chatMessage);
-                            //singleDialogAdapter.add(chatMessage);
-                        } else {
-                            if (mess.body.startsWith(PREFIX)) {
-                                body = mess.body.substring(PREFIX.length());
-                            } else
-                                body = mess.body;
-
-                            ChatMessage chatMessage = new ChatMessage(body, false, mess.date);
-                            addMessagesList.add(chatMessage);
-
-                            //singleDialogAdapter.add(chatMessage);
+                    if(toReplace != 0) {
+                        List<MyMessagesHistory> history = MyMessagesHistory.find(MyMessagesHistory.class,
+                                "", strings, "", "id DESC", String.valueOf(toReplace));
+                        Log.d("history", String.valueOf(history.size()) + history.get(0).getMsg());
+                        for (int i = 0; i < toReplace; i++){
+                            singleDialogAdapter.deleteMessage(0);
                         }
+                        singleDialogAdapter.notifyDataSetChanged();
 
+                        int cnt = 0;
+                        for (int i = 0; i < msgList.size(); i++) {
 
+                            VKApiMessage mess = msgList.get(i);
+                            if (mess.out) {
+                                body = history.get(cnt).getMsg();
+                                cnt++;
+                                ChatMessage chatMessage = new ChatMessage(body, true, mess.date);
+                                addMessagesList.add(chatMessage);
+                                //singleDialogAdapter.add(chatMessage);
+                            } else {
+                                if (mess.body.startsWith(PREFIX)) {
+                                    body = mess.body.substring(PREFIX.length());
+                                } else
+                                    body = mess.body;
+
+                                ChatMessage chatMessage = new ChatMessage(body, false, mess.date);
+                                addMessagesList.add(chatMessage);
+
+                                //singleDialogAdapter.add(chatMessage);
+                            }
+                        }
+                    } else {
+                        int cnt = 0;
+                        for (int i = 0; i < msgList.size(); i++) {
+
+                            VKApiMessage mess = msgList.get(i);
+                            if (mess.out) {
+                                    body = mess.body;
+                                cnt++;
+                                ChatMessage chatMessage = new ChatMessage(body, true, mess.date);
+                                addMessagesList.add(chatMessage);
+                                //singleDialogAdapter.add(chatMessage);
+                            } else {
+                                if (mess.body.startsWith(PREFIX)) {
+                                    body = mess.body.substring(PREFIX.length());
+                                } else
+                                    body = mess.body;
+
+                                ChatMessage chatMessage = new ChatMessage(body, false, mess.date);
+                                addMessagesList.add(chatMessage);
+
+                                //singleDialogAdapter.add(chatMessage);
+                            }
+                        }
                     }
-                    //Collections.reverse(addMessagesList);
+
+                    Collections.reverse(addMessagesList);
                     singleDialogAdapter.addArrayList(addMessagesList);
                     singleDialogAdapter.notifyDataSetChanged();
                     mswipeRefreshLayout.setRefreshing(false);
