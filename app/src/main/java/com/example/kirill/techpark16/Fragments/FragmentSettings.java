@@ -52,7 +52,7 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
 
                 PublicKeysTable.deleteAll(PublicKeysTable.class);
                 MyMessagesHistory.deleteAll(MyMessagesHistory.class);
-                Toast.makeText(getContext(),"SQLite cleared.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"Данные очищены..", Toast.LENGTH_SHORT).show();
 
             }
         });

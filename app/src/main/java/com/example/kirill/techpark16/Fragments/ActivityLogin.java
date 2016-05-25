@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.example.kirill.techpark16.R;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
@@ -19,6 +20,7 @@ public class ActivityLogin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
 
         if (VKAccessToken.currentToken() == null) {
             VKSdk.login(this, scope);
