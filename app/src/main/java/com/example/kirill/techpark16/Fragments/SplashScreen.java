@@ -6,10 +6,15 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.kirill.techpark16.Adapters.DialogsListAdapter;
+import com.example.kirill.techpark16.Adapters.Person;
+import com.example.kirill.techpark16.Adapters.RVAdapter;
+import com.example.kirill.techpark16.Friend;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKScope;
@@ -27,6 +32,7 @@ import com.vk.sdk.api.model.VKApiUser;
 import com.vk.sdk.api.model.VKList;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -49,8 +55,10 @@ public class SplashScreen extends AppCompatActivity {
     final  VKList<VKApiUser> photo = new VKList<>();
     private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL,
             VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
+    VKList<VKApiUser> friendList = new VKList<>();
 
     TextView loading;
+
 
     @Override
     protected void onResume() {
@@ -60,7 +68,7 @@ public class SplashScreen extends AppCompatActivity {
             VKSdk.login(this, scope);
         } else {
             new DialogsDownloading().execute();
-            Log.d("test", "else");
+            new DownloadingFriendList().execute();
         }
     }
 
@@ -69,7 +77,6 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(bundle);
         setContentView(R.layout.activity_splash);
         loading = (TextView) findViewById(R.id.splash_loading);
-
     }
 
     private class DialogsDownloading extends AsyncTask<Object, Void, Void> {
@@ -204,6 +211,44 @@ public class SplashScreen extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
+        }
+    }
+
+
+    private class DownloadingFriendList extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS,
+                    "first_name, last_name, photo_100", "order", "hints"));
+
+            request_list_friend.executeWithListener(new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+
+                    super.onComplete(response);
+                    Friend.delete(Friend.class);
+                    friendList = (VKList<VKApiUser>) response.parsedModel;
+
+                    //List<Person> friends = new ArrayList<>();
+                    for (final VKApiUser user: friendList) {
+                        Friend friend = new Friend(user.first_name, user.last_name, user.photo_100, user.id);
+                        friend.save();
+                        //friends.add(new Person(user.first_name, user.last_name, user.photo_100, user.id));
+                    }
+                }
+            });
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
         }
     }
 }

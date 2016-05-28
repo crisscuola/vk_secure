@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.kirill.techpark16.CircleTransform;
 import com.example.kirill.techpark16.Fragments.FragmentSingleFriend;
+import com.example.kirill.techpark16.Friend;
 import com.example.kirill.techpark16.R;
 import com.squareup.picasso.Picasso;
 import com.vk.sdk.api.VKApi;
@@ -51,12 +52,12 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
         }
     }
 
-    List<Person> persons;
+    List<Friend> persons;
     Map<Integer, Bitmap> avatars;
     private FragmentManager fragmentManager;
     Context context;
 
-    public RVAdapter(Context context, FragmentManager fragmentManager, List<Person> persons){
+    public RVAdapter(Context context, FragmentManager fragmentManager, List<Friend> persons){
         this.context = context;
         this.persons = persons;
         this.avatars = new HashMap();
@@ -80,7 +81,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
         personViewHolder.personName.setText(persons.get(i).getFullName());
         personViewHolder.personName.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(persons.get(i).getId(), persons.get(i).firstName, persons.get(i).lastName);
+                FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(persons.get(i).getFriendId(),
+                        persons.get(i).getFirstName(), persons.get(i).getLastName());
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragmentPlace, newFragment)
                         .addToBackStack(null)
@@ -88,7 +90,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
             }
         });
 
-        Picasso.with(context).load(persons.get(i).photo).transform(new CircleTransform())
+        Picasso.with(context).load(persons.get(i).getPhotoUrl()).transform(new CircleTransform())
                 .placeholder(R.drawable.placeholder_light)
                 .into(personViewHolder.personPhoto);
 //        if(avatars.get(persons.get(i).getId()) != null) {

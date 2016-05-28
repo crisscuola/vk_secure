@@ -1,7 +1,7 @@
 package com.example.kirill.techpark16.Adapters;
 
 /**
- * Created by serj on 22.05.16.
+ * Created by serj on 22.05.16
  */
 public class Person {
     String firstName;

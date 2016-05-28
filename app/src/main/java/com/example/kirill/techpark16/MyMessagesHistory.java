@@ -11,6 +11,7 @@ public class MyMessagesHistory extends SugarRecord {
     Integer msgId;
 
 
+
     public MyMessagesHistory() {
     }
 
