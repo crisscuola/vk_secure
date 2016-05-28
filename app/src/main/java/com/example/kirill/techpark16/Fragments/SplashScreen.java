@@ -58,6 +58,9 @@ public class SplashScreen extends AppCompatActivity {
 
         if (VKAccessToken.currentToken() == null) {
             VKSdk.login(this, scope);
+        } else {
+            new DialogsDownloading().execute();
+            Log.d("test", "else");
         }
     }
 
@@ -67,7 +70,6 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         loading = (TextView) findViewById(R.id.splash_loading);
 
-            new DialogsDownloading().execute();
     }
 
     private class DialogsDownloading extends AsyncTask<Object, Void, Void> {

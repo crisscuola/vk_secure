@@ -204,7 +204,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 FragmentSettingsDialog newFragment = FragmentSettingsDialog.getInstance(id);
                 fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
-                //fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
                 toolbar.setTitle(R.string.friends_title);
                 toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
