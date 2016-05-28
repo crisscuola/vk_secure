@@ -29,7 +29,7 @@ import java.util.ArrayList;
 /**
  * Created by kirill on 25.05.16
  */
-public class SplashScreen extends AppCompatActivity {
+public class ActivitySplashScreen extends AppCompatActivity {
 
     private final int SPLASH_DISPLAY_LENGTH = 1000;
 
@@ -171,15 +171,15 @@ public class SplashScreen extends AppCompatActivity {
                                     new Handler().postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Intent mainIntent = new Intent(SplashScreen.this, ActivityBase.class);
+                                            Intent mainIntent = new Intent(ActivitySplashScreen.this, ActivityBase.class);
                                             final ArrayList<VKApiUser> photolist = new ArrayList<VKApiUser>(photo);
 
                                             mainIntent.putStringArrayListExtra("users", users)
                                                     .putParcelableArrayListExtra("photo", photolist)
                                                     .putParcelableArrayListExtra("messages", messages)
                                                     .putExtra("from_splash", true);
-                                            SplashScreen.this.startActivity(mainIntent);
-                                            SplashScreen.this.finish();
+                                            ActivitySplashScreen.this.startActivity(mainIntent);
+                                            ActivitySplashScreen.this.finish();
                                         }
                                     }, SPLASH_DISPLAY_LENGTH);
                                 }

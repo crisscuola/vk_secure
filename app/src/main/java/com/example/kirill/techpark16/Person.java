@@ -1,4 +1,4 @@
-package com.example.kirill.techpark16.Adapters;
+package com.example.kirill.techpark16;
 
 /**
  * Created by serj on 22.05.16

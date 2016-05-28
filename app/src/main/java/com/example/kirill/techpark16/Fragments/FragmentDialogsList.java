@@ -185,7 +185,7 @@ public class FragmentDialogsList extends ListFragment {
         getActivity().setTitle(R.string.dialog_list_title);
         getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
         Button myButton = (Button) getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button);
-        myButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_add_white_24dp, 0);
+        myButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_add, 0);
     }
 
     @Override

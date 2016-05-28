@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +18,6 @@ import com.example.kirill.techpark16.Fragments.FragmentSingleFriend;
 import com.example.kirill.techpark16.Friend;
 import com.example.kirill.techpark16.R;
 import com.squareup.picasso.Picasso;
-import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKParameters;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKApiModel;
-import com.vk.sdk.api.model.VKList;
-
-import org.json.JSONException;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -38,7 +28,7 @@ import java.util.Map;
  * Created by kirill on 07.05.16
  */
 
-public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
+public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.PersonViewHolder>{
 
     public class PersonViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
@@ -57,7 +47,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
     private FragmentManager fragmentManager;
     Context context;
 
-    public RVAdapter(Context context, FragmentManager fragmentManager, List<Friend> persons){
+    public FriendListAdapter(Context context, FragmentManager fragmentManager, List<Friend> persons){
         this.context = context;
         this.persons = persons;
         this.avatars = new HashMap();

@@ -6,9 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -35,7 +32,6 @@ import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
 import com.squareup.picasso.Picasso;
 import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
@@ -46,13 +42,11 @@ import com.vk.sdk.api.model.VKApiDialog;
 import com.vk.sdk.api.model.VKApiGetDialogResponse;
 import com.vk.sdk.api.model.VKApiMessage;
 import com.vk.sdk.api.model.VKApiModel;
-import com.vk.sdk.api.model.VKApiUser;
 import com.vk.sdk.api.model.VKList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.InputStream;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
@@ -79,8 +73,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     Context context = this;
     AlertDialog.Builder ad;
 
-    private String [] scope = new String[] {VKScope.MESSAGES,VKScope.FRIENDS,VKScope.WALL,
-            VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
 
     public static FullEncryption encryptor = new FullEncryption();
     final static String BROADCAST_EVENT = "com.example.kirill.techpark16";
@@ -131,11 +123,10 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
 
         if (VKAccessToken.currentToken() == null) {
-            //VKSdk.login(this, scope);
+            //nothing to do
 
         } else
             MY_ID = Integer.parseInt(VKSdk.getAccessToken().userId);
-
 
         VKRequest request_long_poll =  new VKRequest("messages.getLongPollServer", VKParameters.from("need_pts", 1));
 
@@ -158,10 +149,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
         setBroadcastReceiver();
 
-        IntentFilter intentFilter = new IntentFilter(BROADCAST_EVENT);
-
-        //registerReceiver(br, intentFilter);
-
+//        IntentFilter intentFilter = new IntentFilter(BROADCAST_EVENT);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
 
@@ -217,9 +205,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
             }
         });
 
-
         setSupportActionBar(toolbar);
-
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -260,7 +246,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 VKSdk.logout();
-                Intent intent = new Intent(context, SplashScreen.class);
+                Intent intent = new Intent(context, ActivitySplashScreen.class);
                 startActivity(intent);
                 finish();
             }
@@ -284,7 +270,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     protected void onStop() {
         super.onStop();
     }
-
 
     private void setBroadcastReceiver() {
         br = new BroadcastReceiver() {
@@ -333,30 +318,30 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     }
 
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
+//    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+//        ImageView bmImage;
+//
+//        public DownloadImageTask(ImageView bmImage) {
+//            this.bmImage = bmImage;
+//        }
+//
+//        protected Bitmap doInBackground(String... urls) {
+//            String urldisplay = urls[0];
+//            Bitmap mIcon11 = null;
+//            try {
+//                InputStream in = new java.net.URL(urldisplay).openStream();
+//                mIcon11 = BitmapFactory.decodeStream(in);
+//            } catch (Exception e) {
+//                Log.e("Error", e.getMessage());
+//                e.printStackTrace();
+//            }
+//            return mIcon11;
+//        }
+//
+//        protected void onPostExecute(Bitmap result) {
+//            bmImage.setImageBitmap(result);
+//        }
+//    }
 
 
     @Override
