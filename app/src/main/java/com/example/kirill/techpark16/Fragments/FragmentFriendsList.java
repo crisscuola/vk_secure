@@ -64,7 +64,7 @@ public class FragmentFriendsList extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
             recyclerView.setVisibility(View.INVISIBLE);
-            loading.setVisibility(View.VISIBLE);
+            //loading.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -75,7 +75,7 @@ public class FragmentFriendsList extends Fragment {
             recyclerView.setLayoutManager(linearLayoutManager);
             recyclerView.setAdapter(adapter);
             recyclerView.setVisibility(View.VISIBLE);
-            loading.setVisibility(View.GONE);
+            //loading.setVisibility(View.GONE);
         }
     }
 

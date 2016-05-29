@@ -21,6 +21,13 @@
                 android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
                 android:background="@color/default_button_color"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true"
+                    android:id="@+id/progressDialog"
+                    android:visibility="invisible"
+                    style="?android:attr/progressBarStyleSmall"/>
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

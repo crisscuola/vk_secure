@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,6 +17,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.kirill.techpark16.Adapters.SingleDialogAdapter;
@@ -226,10 +228,14 @@ public class FragmentSingleDialog extends ListFragment {
     }
 
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         final View view = inflater.inflate(R.layout.fragment_single_dialog, null);
+        ProgressBar bar = (ProgressBar) getActivity().findViewById(R.id.progressDialog);
+        if (bar != null)
+            bar.setVisibility(View.INVISIBLE);
         setupUI(view);
         wasResfesh[0] = false;
         update = new VKRequest("messages.getLongPollHistory", VKParameters.from("pts", ActivityBase.pts));
@@ -239,40 +245,16 @@ public class FragmentSingleDialog extends ListFragment {
         request_long_poll.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
-            super.onComplete(response);
-            try {
-                ActivityBase.pts = response.json.getJSONObject("response").getInt("pts");
+                super.onComplete(response);
+                try {
+                    ActivityBase.pts = response.json.getJSONObject("response").getInt("pts");
 
-                Log.i("PTS", String.valueOf(ActivityBase.pts));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+                    Log.i("PTS", String.valueOf(ActivityBase.pts));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
-
-
-//        VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id));
-//
-//        request.executeWithListener(new VKRequest.VKRequestListener() {
-//            @Override
-//            public void onComplete(VKResponse response) {
-//            super.onComplete(response);
-//
-//            try {
-//                JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
-//
-//                for (int i = 0; i < array.length(); i++) {
-//                    VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
-//                    vkMessages.add(mes);
-//                    if (!mes.out)
-//                        vkMessagesIds.add(mes.id);
-//                }
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            }
-//        });
 
         vkMessages = getArguments().getParcelableArrayList(MESSAGES);
         vkMessagesIds = getArguments().getIntegerArrayList(IDS);
@@ -588,6 +570,10 @@ public class FragmentSingleDialog extends ListFragment {
         myButton.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_settings, 0);
 
         encryptionMode = PublicKeyHandler.checkEncryprionMode(id);
+        if (encryptionMode)
+            text.setFilters(new InputFilter[] {new InputFilter.LengthFilter(60)});
+        else
+            text.setFilters(new InputFilter[] {new InputFilter.LengthFilter(200)});
     }
 
     @Override

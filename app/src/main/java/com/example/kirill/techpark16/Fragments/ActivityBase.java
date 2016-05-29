@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -411,6 +412,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
     @Override
     public void onDialogSelected(final int position) {
+        ProgressBar bar = (ProgressBar) findViewById(R.id.progressDialog);
+        if (bar != null)
+            bar.setVisibility(View.VISIBLE);
 
         final VKRequest request = VKApi.messages().getDialogs(VKParameters.from(VKApiConst.COUNT, 30));
 
@@ -430,15 +434,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
             }
 
             final  int id = (int) id_array.get(position);
-
-            final ArrayList<VKApiMessage> msg = new ArrayList<>();
-            final ArrayList<Integer> ids = new ArrayList<>();
-
-            FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, msg, ids);
-            fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
 
             VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id));
 
@@ -478,6 +473,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
     @Override
     public void onFriendSendSelected(final int position) {
+
         final VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS,
                 "first_name, last_name", "order", "hints"));
 
