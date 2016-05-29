@@ -49,7 +49,6 @@ public class FragmentSingleFriend extends Fragment {
     Button send;
 
     static int title_id;
-    VKList list_s;
 
     public static FragmentSingleFriend getInstance(int user_id, String first_name, String last_name){
         FragmentSingleFriend detailDialogFragment = new FragmentSingleFriend();
@@ -155,7 +154,6 @@ public class FragmentSingleFriend extends Fragment {
 
             try {
                 JSONArray array = response.json.getJSONArray("response");
-                Log.d("online", String.valueOf(array.getJSONObject(0).getInt("online")));
 
                 online = array.getJSONObject(0).getInt("online");
 
@@ -188,7 +186,9 @@ public class FragmentSingleFriend extends Fragment {
             TextView online_status = (TextView) view.findViewById(R.id.online);
             if (online == 1) {
                 online_status.setText("online");
-            }
+            } else
+                online_status.setText("offline");
+
             TextView b_date = (TextView)  view.findViewById(R.id.b_date);
             b_date.setText(bdate);
 
