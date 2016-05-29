@@ -36,7 +36,7 @@
             android:layout_marginBottom="0dp"/>
 
         <TextView
-            android:layout_width="300dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="@string/enc_mode_description"
@@ -86,7 +86,7 @@
             android:layout_marginTop="10dp"/>
 
         <TextView
-            android:layout_width="300dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:text="@string/new_key_description"
