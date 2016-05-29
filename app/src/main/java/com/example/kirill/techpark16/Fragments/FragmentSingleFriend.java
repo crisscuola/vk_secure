@@ -109,31 +109,31 @@ public class FragmentSingleFriend extends Fragment {
                 request.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
-                    super.onComplete(response);
+                        super.onComplete(response);
 
-                    final ArrayList<VKApiMessage> msg = new ArrayList<>();
-                    final ArrayList<Integer> ids = new ArrayList<>();
+                        final ArrayList<VKApiMessage> msg = new ArrayList<>();
+                        final ArrayList<Integer> ids = new ArrayList<>();
 
-                    try {
-                        JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
+                        try {
+                            JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
 
-                        for (int i = 0; i < array.length(); i++) {
-                            VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
-                            msg.add(mes);
-                            if (!mes.out)
-                                ids.add(mes.id);
+                            for (int i = 0; i < array.length(); i++) {
+                                VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
+                                msg.add(mes);
+                                if (!mes.out)
+                                    ids.add(mes.id);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
 
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
 
-
-                    FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, msg, ids);
-                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fragmentPlace, newFragment);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+                        FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, msg, ids);
+                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragmentPlace, newFragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
                     }
 
                 });
@@ -151,11 +151,13 @@ public class FragmentSingleFriend extends Fragment {
             String photoUrl = " ";
             String city = "Не указан";
             String bdate = "Не указан";
-            String online;
+            Integer online = 0;
 
             try {
                 JSONArray array = response.json.getJSONArray("response");
                 Log.d("online", String.valueOf(array.getJSONObject(0).getInt("online")));
+
+                online = array.getJSONObject(0).getInt("online");
 
                 List<Friend> avatar = Friend.find(Friend.class, "friend_id = ?", String.valueOf(id));
                 if (avatar.size() != 0)
@@ -183,6 +185,10 @@ public class FragmentSingleFriend extends Fragment {
             TextView name = (TextView) view.findViewById(R.id.city);
             name.setText(city);
 
+            TextView online_status = (TextView) view.findViewById(R.id.online);
+            if (online == 1) {
+                online_status.setText("online");
+            }
             TextView b_date = (TextView)  view.findViewById(R.id.b_date);
             b_date.setText(bdate);
 
