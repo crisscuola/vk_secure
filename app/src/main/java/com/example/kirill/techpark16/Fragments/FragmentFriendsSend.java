@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,14 +126,14 @@ public class FragmentFriendsSend extends ListFragment {
 //
 //                }
 //            });
-
-            List<Friend> friends = Friend.listAll(Friend.class);
-            for (int i = 0; i < friends.size(); i++) {
-                list_db.add(friends.get(i).getFullName());
+            if(list_db.size() == 0) {
+                List<Friend> friends = Friend.listAll(Friend.class);
+                for (int i = 0; i < friends.size(); i++) {
+                    list_db.add(friends.get(i).getFullName());
+                }
             }
-
+            Log.d("size_dialog", String.valueOf(list_db.size()));
             adapter = new ArrayAdapter<String>(getActivity(), R.layout.friend_send_list, list_db);
-
 
             return null;
         }
