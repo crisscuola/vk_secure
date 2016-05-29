@@ -432,8 +432,10 @@ public class FragmentSingleDialog extends ListFragment {
                             Log.d("message", mes.body);
                             toDelete++;
                         }
+                        if (mes.user_id == title_id) {
                         msgList.add(mes);
                         idList.add(mes.id);
+                        }
                     }
                     vkMessages.addAll(msgList);
 
