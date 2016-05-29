@@ -10,7 +10,7 @@
         android:text="Онлайн режим"
         android:id="@+id/off_button"
         android:layout_gravity="center_horizontal"
-        android:background="#627dbe"
+        android:background="@drawable/buttons_color"
         android:padding="12dp"
         android:layout_marginTop="100dp"/>
 
@@ -20,7 +20,7 @@
         android:text="Очистить базу"
         android:id="@+id/clear_db"
         android:layout_gravity="center_horizontal"
-        android:background="#627dbe"
+        android:background="@drawable/buttons_color"
         android:padding="12dp"
         android:layout_marginTop="50dp" />
 
