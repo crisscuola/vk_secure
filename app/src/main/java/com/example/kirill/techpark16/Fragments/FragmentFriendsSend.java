@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +14,10 @@ import android.widget.TextView;
 
 import com.example.kirill.techpark16.Friend;
 import com.example.kirill.techpark16.R;
-import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKParameters;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Created by konstantin on 10.04.16
@@ -35,12 +29,17 @@ public class FragmentFriendsSend extends ListFragment {
     ArrayAdapter<String> adapter;
     TextView loading;
     ListView listView;
+    ArrayList <String> list_db = new ArrayList<>();
+
+
 
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         mCallback.onFriendSendSelected(position);
     }
+
+
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -49,7 +48,7 @@ public class FragmentFriendsSend extends ListFragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_friend_send, null);
         FragmentSettingsDialog.flag = false;
-        loading = (TextView) view.findViewById(R.id.send_loading);
+//        loading = (TextView) view.findViewById(R.id.send_loading);
         //listView = (ListView) view.findViewById(R.id.list);
 
         new DownloadingFriends().execute();
@@ -111,34 +110,44 @@ public class FragmentFriendsSend extends ListFragment {
     private class DownloadingFriends extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS,
-                    "first_name, last_name", "order", "hints"));
+//            VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS,
+//                    "first_name, last_name", "order", "hints"));
+//
+//            request_list_friend.executeWithListener(new VKRequest.VKRequestListener() {
+//                @Override
+//                public void onComplete(VKResponse response) {
+//                super.onComplete(response);
+//
+//                list = (VKList) response.parsedModel;
+//                Log.d("friends", String.valueOf(list.size()));
+//                adapter = new ArrayAdapter<String>(getActivity(), R.layout.friend_send_list, list);
+//                setListAdapter(adapter);
+//
+//                }
+//            });
 
-            request_list_friend.executeWithListener(new VKRequest.VKRequestListener() {
-                @Override
-                public void onComplete(VKResponse response) {
-                super.onComplete(response);
+            List<Friend> friends = Friend.listAll(Friend.class);
+            for (int i = 0; i < friends.size(); i++) {
+                list_db.add(friends.get(i).getFullName());
+            }
 
-                list = (VKList) response.parsedModel;
-                Log.d("friends", String.valueOf(list.size()));
-                adapter = new ArrayAdapter<String>(getActivity(), R.layout.friend_send_list, list);
-                setListAdapter(adapter);
+            adapter = new ArrayAdapter<String>(getActivity(), R.layout.friend_send_list, list_db);
 
-                }
-            });
+
             return null;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            loading.setVisibility(View.VISIBLE);
+//            loading.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             loading.setVisibility(View.GONE);
+            setListAdapter(adapter);
             //listView.setAdapter(adapter);
 //            adapter = new ArrayAdapter<String>(getActivity(), R.layout.friend_send_list, list);
 //            setListAdapter(adapter);

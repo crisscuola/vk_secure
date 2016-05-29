@@ -48,6 +48,7 @@ public class ActivitySplashScreen extends AppCompatActivity {
             VKScope.OFFLINE, VKScope.STATUS, VKScope.NOTES};
     VKList<VKApiUser> friendList = new VKList<>();
 
+
     TextView loading;
 
 
