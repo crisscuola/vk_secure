@@ -140,17 +140,12 @@ public class FragmentFriendsSend extends ListFragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//            loading.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            loading.setVisibility(View.GONE);
             setListAdapter(adapter);
-            //listView.setAdapter(adapter);
-//            adapter = new ArrayAdapter<String>(getActivity(), R.layout.friend_send_list, list);
-//            setListAdapter(adapter);
         }
     }
 

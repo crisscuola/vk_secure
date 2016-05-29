@@ -11,8 +11,7 @@
         android:id="@+id/cv"
         card_view:cardElevation="0dp"
         card_view:cardMaxElevation="0dp"
-        card_view:cardCornerRadius="1dp"
-        >
+        card_view:cardCornerRadius="1dp">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="64dp">

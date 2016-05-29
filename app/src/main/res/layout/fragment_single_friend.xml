@@ -110,7 +110,7 @@
         android:text="Написать сообщение"
         android:id="@+id/button_write"
         android:layout_gravity="center_horizontal"
-        android:background="#627dbe"
+        android:background="@drawable/buttons_color"
         android:padding="12dp"
         android:layout_marginTop="30dp"/>
 
