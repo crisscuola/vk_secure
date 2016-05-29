@@ -142,7 +142,7 @@ public class FragmentSingleFriend extends Fragment {
 
 
         VKRequest request_info = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,id,
-                VKApiConst.FIELDS, "photo_200, bdate, city", "online"));
+                VKApiConst.FIELDS, "photo_200, bdate, city, online"));
 
         request_info.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
@@ -155,7 +155,7 @@ public class FragmentSingleFriend extends Fragment {
 
             try {
                 JSONArray array = response.json.getJSONArray("response");
-                Log.d("online", String.valueOf(array.getJSONObject(0)));
+                Log.d("online", String.valueOf(array.getJSONObject(0).getInt("online")));
 
                 List<Friend> avatar = Friend.find(Friend.class, "friend_id = ?", String.valueOf(id));
                 if (avatar.size() != 0)
