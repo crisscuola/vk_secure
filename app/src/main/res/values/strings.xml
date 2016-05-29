@@ -27,4 +27,5 @@
     <string name="new_key_description">Каждый раз, когда Вы заходите с нового устройства,
         нажимайте эту кнопку прежде чем начать писать.</string>
     <string name="enc_mode_description">Позволяет включать и отключать режим шифрования сообщений.</string>
+    <string name="offline_description">Помечает Ваш профиль как offline.</string>
 </resources>

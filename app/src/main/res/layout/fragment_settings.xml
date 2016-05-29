@@ -1,28 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ebf4fd">
 
-    <Button
-        android:layout_width="250dp"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Онлайн режим"
-        android:id="@+id/off_button"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/buttons_color"
-        android:padding="12dp"
-        android:layout_marginTop="100dp"/>
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_margin="20dp">
 
-    <Button
-        android:layout_width="250dp"
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="Офлайн"
+            android:id="@+id/off_button"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/buttons_color"
+            android:padding="12dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="0dp"/>
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/offline_description"
+            android:id="@+id/offline_description"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:lines="4"
+            android:textColor="@color/md_blue_900"
+            android:paddingRight="0dp"
+            android:paddingLeft="15dp"
+            android:layout_marginTop="0dp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="#000"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Очистить базу"
-        android:id="@+id/clear_db"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/buttons_color"
-        android:padding="12dp"
-        android:layout_marginTop="50dp" />
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_margin="20dp">
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="Очистить кэш"
+            android:id="@+id/clear_db"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/buttons_color"
+            android:padding="12dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"/>
+        </LinearLayout>
 
 
 </LinearLayout>

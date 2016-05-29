@@ -23,7 +23,7 @@
             android:layout_marginTop="20dp" />
 
         <ToggleButton
-            android:layout_width="100dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:text="New ToggleButton"
             android:id="@+id/mode"
