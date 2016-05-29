@@ -7,7 +7,7 @@
     <Button
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:text="Оффлайн режим"
+        android:text="Онлайн режим"
         android:id="@+id/off_button"
         android:layout_gravity="center_horizontal"
         android:background="#627dbe"
@@ -23,5 +23,6 @@
         android:background="#627dbe"
         android:padding="12dp"
         android:layout_marginTop="50dp" />
+
 
 </LinearLayout>

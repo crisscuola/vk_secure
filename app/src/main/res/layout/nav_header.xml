@@ -24,7 +24,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
+        android:paddingTop="14dp"
         android:text="Имя Фамилия"
         android:id="@+id/nav_username"
         android:textColor="@android:color/black"

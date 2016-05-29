@@ -1,9 +1,6 @@
 package com.example.kirill.techpark16.Fragments;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,7 +17,6 @@ import com.example.kirill.techpark16.CircleTransform;
 import com.example.kirill.techpark16.Friend;
 import com.example.kirill.techpark16.R;
 import com.squareup.picasso.Picasso;
-import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKParameters;
@@ -32,7 +28,6 @@ import com.vk.sdk.api.model.VKList;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -87,6 +82,7 @@ public class FragmentSingleFriend extends Fragment {
         months.put("11", " ноября");
         months.put("12"," декабря");
     }
+
 
     @Nullable
     @Override

@@ -10,11 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.kirill.techpark16.Adapters.RVAdapter;
+import com.example.kirill.techpark16.Adapters.FriendListAdapter;
 import com.example.kirill.techpark16.Friend;
 import com.example.kirill.techpark16.R;
-import com.vk.sdk.api.model.VKApiUser;
-import com.vk.sdk.api.model.VKList;
 
 import java.util.List;
 
@@ -24,7 +22,7 @@ import java.util.List;
 public class FragmentFriendsList extends Fragment {
 
     RecyclerView recyclerView;
-    RVAdapter adapter;
+    FriendListAdapter adapter;
     TextView loading;
 
     private class DownloadingFriendList extends AsyncTask<Void, Void, Void> {
@@ -35,7 +33,7 @@ public class FragmentFriendsList extends Fragment {
 
             List<Friend> friends = Friend.listAll(Friend.class);
 
-            adapter = new RVAdapter(getContext(), getActivity().getSupportFragmentManager(), friends);
+            adapter = new FriendListAdapter(getContext(), getActivity().getSupportFragmentManager(), friends);
 //            VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS,
 //                    "first_name, last_name, photo_100", "order", "hints"));
 //
@@ -55,7 +53,7 @@ public class FragmentFriendsList extends Fragment {
 ////                for (final VKApiUser user: list) {
 ////                    persons.add(new Person(user.first_name, user.last_name, user.photo_100, user.id));
 ////                }
-//                adapter = new RVAdapter(getContext(), getActivity().getSupportFragmentManager(), friends);
+//                adapter = new FriendListAdapter(getContext(), getActivity().getSupportFragmentManager(), friends);
 //                recyclerView.setAdapter(adapter);
 //                }
 //            });
@@ -65,7 +63,6 @@ public class FragmentFriendsList extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
             recyclerView.setVisibility(View.INVISIBLE);
             loading.setVisibility(View.VISIBLE);
         }
@@ -89,7 +86,6 @@ public class FragmentFriendsList extends Fragment {
         loading = (TextView) view.findViewById(R.id.loading);
 
         FragmentSettingsDialog.flag = true;
-
         new DownloadingFriendList().execute();
 
         return view;
@@ -98,7 +94,6 @@ public class FragmentFriendsList extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
@@ -107,5 +102,4 @@ public class FragmentFriendsList extends Fragment {
         getActivity().setTitle(R.string.friends_title);
         getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
     }
-
 }
