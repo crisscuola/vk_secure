@@ -53,14 +53,12 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
     }
 
     List<Friend> persons;
-    Map<Integer, Bitmap> avatars;
     private FragmentManager fragmentManager;
     Context context;
 
     public RVAdapter(Context context, FragmentManager fragmentManager, List<Friend> persons){
         this.context = context;
         this.persons = persons;
-        this.avatars = new HashMap();
         this.fragmentManager = fragmentManager;
     }
 
@@ -79,7 +77,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
     @Override
     public void onBindViewHolder(PersonViewHolder personViewHolder, final int i) {
         personViewHolder.personName.setText(persons.get(i).getFullName());
-        personViewHolder.personName.setOnClickListener(new View.OnClickListener() {
+        personViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 FragmentSingleFriend newFragment = FragmentSingleFriend.getInstance(persons.get(i).getFriendId(),
                         persons.get(i).getFirstName(), persons.get(i).getLastName());
@@ -93,51 +91,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
         Picasso.with(context).load(persons.get(i).getPhotoUrl()).transform(new CircleTransform())
                 .placeholder(R.drawable.placeholder_light)
                 .into(personViewHolder.personPhoto);
-//        if(avatars.get(persons.get(i).getId()) != null) {
-//            personViewHolder.personPhoto.setImageBitmap(avatars.get(persons.get(i).getId()));
-//            Log.d("recycler", "1");
-//        }
-//        else
-//            new DownloadImageTask(avatars, persons.get(i).getId(), personViewHolder.personPhoto).execute(persons.get(i).photo);
     }
 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-    }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-        Map<Integer, Bitmap> avatars;
-        Integer user_id;
-
-        public DownloadImageTask(Map<Integer, Bitmap> avatars, Integer i) {
-            this.avatars = avatars;
-            this.user_id = i;
-        }
-
-        public DownloadImageTask(Map<Integer, Bitmap> avatars, Integer i, ImageView bmImage) {
-            this.avatars = avatars;
-            this.user_id = i;
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            if(bmImage != null)
-                bmImage.setImageBitmap(result);
-            avatars.put(this.user_id, result);
-        }
     }
 }

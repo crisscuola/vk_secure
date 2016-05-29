@@ -5,25 +5,17 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.kirill.techpark16.Adapters.Person;
 import com.example.kirill.techpark16.Adapters.RVAdapter;
 import com.example.kirill.techpark16.Friend;
 import com.example.kirill.techpark16.R;
-import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.VKApiConst;
-import com.vk.sdk.api.VKParameters;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiUser;
 import com.vk.sdk.api.model.VKList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +24,6 @@ import java.util.List;
 public class FragmentFriendsList extends Fragment {
 
     RecyclerView recyclerView;
-    VKList<VKApiUser> list = new VKList();
     RVAdapter adapter;
     TextView loading;
 
@@ -43,7 +34,6 @@ public class FragmentFriendsList extends Fragment {
 
 
             List<Friend> friends = Friend.listAll(Friend.class);
-            Log.d("friends", String.valueOf(friends.size()));
 
             adapter = new RVAdapter(getContext(), getActivity().getSupportFragmentManager(), friends);
 //            VKRequest request_list_friend = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS,

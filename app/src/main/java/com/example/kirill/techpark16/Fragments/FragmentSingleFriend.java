@@ -1,5 +1,6 @@
 package com.example.kirill.techpark16.Fragments;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kirill.techpark16.CircleTransform;
+import com.example.kirill.techpark16.Friend;
 import com.example.kirill.techpark16.R;
 import com.squareup.picasso.Picasso;
 import com.vk.sdk.api.VKApi;
@@ -33,6 +35,7 @@ import org.json.JSONException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by konstantin on 10.04.16
@@ -43,6 +46,7 @@ public class FragmentSingleFriend extends Fragment {
     public static String FIRST_NAME = "first_name";
     public static String LAST_NAME = "last_name";
 
+    HashMap<String, String> months = new HashMap<>();
 
     int id = 0;
     String first_name;
@@ -66,29 +70,22 @@ public class FragmentSingleFriend extends Fragment {
         return detailDialogFragment;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
+        months.put("1", " января");
+        months.put("2", " февраля");
+        months.put("3", " марта");
+        months.put("4", " апреля");
+        months.put("5", " мая");
+        months.put("6", " июня");
+        months.put("7", " июля");
+        months.put("8", " августа");
+        months.put("9", " сентября");
+        months.put("10", " октября");
+        months.put("11", " ноября");
+        months.put("12"," декабря");
     }
 
     @Nullable
@@ -108,7 +105,102 @@ public class FragmentSingleFriend extends Fragment {
 
         friend_name.setText(name);
 
-        final VKRequest request = new VKRequest("status.get", VKParameters.from(VKApiConst.USER_ID, id));
+        send = (Button) view.findViewById(R.id.button_write);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id));
+                request.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+
+                    final ArrayList<VKApiMessage> msg = new ArrayList<>();
+                    final ArrayList<Integer> ids = new ArrayList<>();
+
+                    try {
+                        JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
+
+                        for (int i = 0; i < array.length(); i++) {
+                            VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
+                            msg.add(mes);
+                            if (!mes.out)
+                                ids.add(mes.id);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, msg, ids);
+                    FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragmentPlace, newFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                    }
+
+                });
+            }
+        });
+
+
+        VKRequest request_info = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,id,
+                VKApiConst.FIELDS, "photo_200, bdate, city", "online"));
+
+        request_info.executeWithListener(new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+
+            String photoUrl = " ";
+            String city = "Не указан";
+            String bdate = "Не указан";
+            String online;
+
+            try {
+                JSONArray array = response.json.getJSONArray("response");
+                Log.d("online", String.valueOf(array.getJSONObject(0)));
+
+                List<Friend> avatar = Friend.find(Friend.class, "friend_id = ?", String.valueOf(id));
+                if (avatar.size() != 0)
+                    photoUrl = avatar.get(0).getPhotoUrl();
+                else
+                    photoUrl = array.getJSONObject(0).getString("photo_200");
+                city = array.getJSONObject(0).getJSONObject("city").getString("title");
+                bdate = array.getJSONObject(0).getString("bdate");
+
+                String[] arraybdate = bdate.split("\\.");
+
+                bdate = arraybdate[0];
+
+                bdate += months.get(arraybdate[1]);
+
+                if (arraybdate.length == 3) {
+                    bdate += " ";
+                    bdate += arraybdate[2];
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            TextView name = (TextView) view.findViewById(R.id.city);
+            name.setText(city);
+
+            TextView b_date = (TextView)  view.findViewById(R.id.b_date);
+            b_date.setText(bdate);
+
+            ImageView avatar = (ImageView) view.findViewById(R.id.avatar);
+
+            Picasso.with(getContext()).load(photoUrl).transform(new CircleTransform())
+                        .placeholder(R.drawable.placeholder_dark)
+                        .into(avatar);
+
+            super.onComplete(response);
+            }
+        });
+
+        VKRequest request = new VKRequest("status.get", VKParameters.from(VKApiConst.USER_ID, id));
 
         request.executeWithListener(new VKRequest.VKRequestListener() {
             @Override
@@ -132,142 +224,15 @@ public class FragmentSingleFriend extends Fragment {
             }
         });
 
-        VKRequest request_info = new VKRequest("users.get", VKParameters.from(VKApiConst.USER_IDS,id,
-                VKApiConst.FIELDS, "photo_200,bdate,city"));
-
-        request_info.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-
-            String photo_url = " ";
-            String city = " ";
-            String bdate = "";
-
-            try {
-                JSONArray array = response.json.getJSONArray("response");
-
-                photo_url = array.getJSONObject(0).getString("photo_200");
-                city = array.getJSONObject(0).getJSONObject("city").getString("title");
-                bdate = array.getJSONObject(0).getString("bdate");
-
-                String[] arraybdate = bdate.split("\\.");
-
-                bdate = arraybdate[0];
-
-                HashMap<String, String> months = new HashMap<>();
-
-                months.put("1", " января");
-                months.put("2", " февраля");
-                months.put("3", " марта");
-                months.put("4", " апреля");
-                months.put("5", " мая");
-                months.put("6", " июня");
-                months.put("7", " июля");
-                months.put("8", " августа");
-                months.put("9", " сентября");
-                months.put("10", " октября");
-                months.put("11", " ноября");
-                months.put("12"," декабря");
-
-                bdate += months.get(arraybdate[1]);
-
-                if (arraybdate.length == 3) {
-                    bdate += " ";
-                    bdate += arraybdate[2];
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            TextView name = (TextView) view.findViewById(R.id.city);
-            name.setText(city);
-
-            TextView b_date = (TextView)  view.findViewById(R.id.b_date);
-            b_date.setText(bdate);
-
-            ImageView avatar = (ImageView) view.findViewById(R.id.avatar);
-
-            //new DownloadImageTask((ImageView) view.findViewById(R.id.avatar)).execute(photo_url);
-            Picasso.with(getContext()).load(photo_url).transform(new CircleTransform())
-                        .placeholder(R.drawable.placeholder_dark)
-                        .into(avatar);
-
-            super.onComplete(response);
-            }
-        });
-
-
-        send = (Button) view.findViewById(R.id.button_write);
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id));
-            request.executeWithListener(new VKRequest.VKRequestListener() {
-                @Override
-                public void onComplete(VKResponse response) {
-                super.onComplete(response);
-
-                final ArrayList<VKApiMessage> msg = new ArrayList<>();
-                final ArrayList<Integer> ids = new ArrayList<>();
-
-                try {
-                    JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
-
-                    for (int i = 0; i < array.length(); i++) {
-                        VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
-                        msg.add(mes);
-                        if(!mes.out)
-                            ids.add(mes.id);
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-                FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, msg, ids);
-                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragmentPlace, newFragment);
-                transaction.addToBackStack(null);
-                transaction.commit();
-                }
-
-            });
-
-
-            }
-        });
-
-
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        final String[] name_id = {""};
 
-        VKRequest my_request = VKApi.users().get(VKParameters.from(VKApiConst.USER_IDS, title_id, VKApiConst.FIELDS, "first_name, last_name"));
-        my_request.executeWithListener(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                list_s = (VKList) response.parsedModel;
-
-                name_id[0] = String.valueOf(FragmentSingleFriend.this.list_s.getById(title_id));
-                getActivity().setTitle(name_id[0]);
-            }
-        });
-
+        getActivity().setTitle(first_name);
         getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
     }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-
-
-    }
-
 
 }

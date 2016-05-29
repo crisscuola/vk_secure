@@ -192,7 +192,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
                 fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.FRIENDSEND]);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
-                toolbar.setTitle(R.string.friends_title);
                 toolbar.setTitle(R.string.send);
                 toolbar.findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
             }
@@ -333,32 +332,6 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
     }
 
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -472,6 +445,15 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
             }
 
             final  int id = (int) id_array.get(position);
+
+            final ArrayList<VKApiMessage> msg = new ArrayList<>();
+            final ArrayList<Integer> ids = new ArrayList<>();
+
+            FragmentSingleDialog newFragment = FragmentSingleDialog.getInstance(id, msg, ids);
+            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragmentPlace, newFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
 
             VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id));
 

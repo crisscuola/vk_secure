@@ -49,8 +49,6 @@ public class FragmentSingleDialog extends ListFragment {
 
 
     public static final String USER_ID = "user_id";
-    public static final String IN_LIST = "inList";
-    public static final String OUT_LIST = "outList";
     public static final String MESSAGES = "messages";
     public static final String IDS = "ids";
     private final String PREFIX = "cpslbs_";
@@ -252,6 +250,30 @@ public class FragmentSingleDialog extends ListFragment {
             }
         });
 
+
+//        VKRequest request = new VKRequest("messages.getHistory", VKParameters.from(VKApiConst.USER_ID, id));
+//
+//        request.executeWithListener(new VKRequest.VKRequestListener() {
+//            @Override
+//            public void onComplete(VKResponse response) {
+//            super.onComplete(response);
+//
+//            try {
+//                JSONArray array = response.json.getJSONObject("response").getJSONArray("items");
+//
+//                for (int i = 0; i < array.length(); i++) {
+//                    VKApiMessage mes = new VKApiMessage(array.getJSONObject(i));
+//                    vkMessages.add(mes);
+//                    if (!mes.out)
+//                        vkMessagesIds.add(mes.id);
+//                }
+//
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            }
+//        });
+
         vkMessages = getArguments().getParcelableArrayList(MESSAGES);
         vkMessagesIds = getArguments().getIntegerArrayList(IDS);
 
@@ -287,51 +309,51 @@ public class FragmentSingleDialog extends ListFragment {
             @Override
             public void onClick(View v) {
 
-            if (!sendFlag)
-                sendFlag = true;
+                if (!sendFlag)
+                    sendFlag = true;
 
-            VKRequest request;
+                VKRequest request;
 
-            final String msg = text.getText().toString();
-            final String messageToSend;
+                final String msg = text.getText().toString();
+                final String messageToSend;
 
-            try {
+                try {
 
-                if (encryptionMode) {
-                    if (!friendKey.equals("none")) {
-                        ActivityBase.encryptor.setPublicKey(friendKey);
-                        Log.d("resp_friend_key", ActivityBase.encryptor.getPublicKey());
-                        messageToSend = ActivityBase.encryptor.encode(PREFIX + msg);
+                    if (encryptionMode) {
+                        if (!friendKey.equals("none")) {
+                            ActivityBase.encryptor.setPublicKey(friendKey);
+                            Log.d("resp_friend_key", ActivityBase.encryptor.getPublicKey());
+                            messageToSend = ActivityBase.encryptor.encode(PREFIX + msg);
 
-                    } else {
-                        new DownloadingKey().execute();
-                        Toast.makeText(getContext(), "Друг еще не начал диалог с Вами. Попробуйте еще раз.",
-                                Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                } else
-                    messageToSend = msg;
-
-                text.setText("");
-
-                request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
-                        VKApiConst.MESSAGE, messageToSend));
-
-                request.executeWithListener(new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
-                        int msgId = 0;
-                        try {
-                            msgId = (int) response.json.get("response");
-                            MyMessagesHistory myMessage = new MyMessagesHistory(id, msg, msgId);
-                            myMessage.save();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        } else {
+                            new DownloadingKey().execute();
+                            Toast.makeText(getContext(), "Друг еще не начал диалог с Вами. Попробуйте еще раз.",
+                                    Toast.LENGTH_SHORT).show();
+                            return;
                         }
-                        ChatMessage chatMessage = new ChatMessage(msg, true, null);
-                        singleDialogAdapter.add(chatMessage);
-                        singleDialogAdapter.notifyDataSetChanged();
+                    } else
+                        messageToSend = msg;
+
+                    text.setText("");
+
+                    request = new VKRequest("messages.send", VKParameters.from(VKApiConst.USER_ID, id,
+                            VKApiConst.MESSAGE, messageToSend));
+
+                    request.executeWithListener(new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+                            int msgId = 0;
+                            try {
+                                msgId = (int) response.json.get("response");
+                                MyMessagesHistory myMessage = new MyMessagesHistory(id, msg, msgId);
+                                myMessage.save();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            ChatMessage chatMessage = new ChatMessage(msg, true, null);
+                            singleDialogAdapter.add(chatMessage);
+                            singleDialogAdapter.notifyDataSetChanged();
                         if(msgId != 0) {
                             VKRequest getById = new VKRequest("messages.getById", VKParameters.from("message_ids", msgId));
                             getById.executeWithListener(new VKRequest.VKRequestListener() {

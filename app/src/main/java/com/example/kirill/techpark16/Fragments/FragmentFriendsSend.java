@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.kirill.techpark16.Friend;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKApiConst;
@@ -18,8 +19,10 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 
+import java.util.List;
+
 /**
- * Created by konstantin on 10.04.16.
+ * Created by konstantin on 10.04.16
  */
 public class FragmentFriendsSend extends ListFragment {
 
@@ -90,7 +93,7 @@ public class FragmentFriendsSend extends ListFragment {
     }
 
     public interface onItemSelectedListener {
-        public void onFriendSendSelected(int position);
+        void onFriendSendSelected(int position);
     }
 
 }
