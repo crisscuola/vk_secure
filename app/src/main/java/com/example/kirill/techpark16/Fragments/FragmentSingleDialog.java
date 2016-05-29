@@ -432,8 +432,10 @@ public class FragmentSingleDialog extends ListFragment {
                             Log.d("message", mes.body);
                             toDelete++;
                         }
+                        if (mes.user_id == title_id) {
                         msgList.add(mes);
                         idList.add(mes.id);
+                        }
                     }
                     vkMessages.addAll(msgList);
 
@@ -594,7 +596,7 @@ public class FragmentSingleDialog extends ListFragment {
         if (sendFlag) {
             String[] queryId = {String.valueOf(id)};
             List<MyMessagesHistory> list = MyMessagesHistory.find(MyMessagesHistory.class,
-                    "user_id = ?", queryId, "", "id DESC", "10");
+                    "user_id = ?", queryId, "", "id DESC", "20");
             MyMessagesHistory.deleteAll(MyMessagesHistory.class, "user_id = ?", String.valueOf(id));
 
             for (MyMessagesHistory item : list) {

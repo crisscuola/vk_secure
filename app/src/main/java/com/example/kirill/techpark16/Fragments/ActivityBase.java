@@ -299,7 +299,7 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragmentPlace, fragmentSet[FragmentsConst.DIALOGSLIST]);
 
-        fragmentTransaction.addToBackStack(null);
+        //fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
         toolbar.setTitle(R.string.dialog_list_title);
         toolbar.findViewById(R.id.toolbar_button).setVisibility(View.VISIBLE);
