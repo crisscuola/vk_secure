@@ -1,5 +1,7 @@
 package com.example.kirill.techpark16.Fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +28,7 @@ import java.util.List;
 public class FragmentSettings extends android.support.v4.app.Fragment {
 
     Button setOff, clearDB;
+    AlertDialog.Builder ad;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -36,6 +39,36 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         FragmentSettingsDialog.flag = true;
+
+        String title = "Вы уверены, что хотите очистить кэш?";
+        String message = "В результате этого действия будут сгенерированы новые ключи.";
+        String button1String = "Да";
+        String button2String = "Отмена";
+
+        ad = new AlertDialog.Builder(getContext());
+        ad.setTitle(title);
+        ad.setMessage(message);
+        ad.setPositiveButton(button1String, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                PublicKeysTable.deleteAll(PublicKeysTable.class);
+                MyMessagesHistory.deleteAll(MyMessagesHistory.class);
+                new PublicKeyChecking().execute();
+                Toast.makeText(getContext(),"Данные очищены.", Toast.LENGTH_SHORT).show();
+            }
+        });
+        ad.setNegativeButton(button2String, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+
+            }
+        });
+        ad.setCancelable(true);
+        ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            public void onCancel(DialogInterface dialog) {
+                Toast.makeText(getContext(), "Вы ничего не выбрали",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
 
         setOff = (Button) view.findViewById(R.id.off_button);
         setOff.setOnClickListener(new View.OnClickListener() {
@@ -57,12 +90,7 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
         clearDB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                PublicKeysTable.deleteAll(PublicKeysTable.class);
-                MyMessagesHistory.deleteAll(MyMessagesHistory.class);
-                new PublicKeyChecking().execute();
-                Toast.makeText(getContext(),"Данные очищены.", Toast.LENGTH_SHORT).show();
-
+                ad.show();
             }
         });
 
