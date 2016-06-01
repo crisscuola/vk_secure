@@ -473,6 +473,9 @@ public  class ActivityBase extends AppCompatActivity implements FragmentDialogsL
 
     @Override
     public void onFriendSendSelected(final int position) {
+        ProgressBar bar = (ProgressBar) findViewById(R.id.progressDialog);
+        if (bar != null)
+            bar.setVisibility(View.VISIBLE)
 
         final VKRequest request = VKApi.friends().get(VKParameters.from(VKApiConst.FIELDS,
                 "first_name, last_name", "order", "hints"));

@@ -235,7 +235,7 @@ public class FragmentSingleDialog extends ListFragment {
         final View view = inflater.inflate(R.layout.fragment_single_dialog, null);
         ProgressBar bar = (ProgressBar) getActivity().findViewById(R.id.progressDialog);
         if (bar != null)
-            bar.setVisibility(View.INVISIBLE);
+            bar.setVisibility(View.GONE);
         setupUI(view);
         wasResfesh[0] = false;
         update = new VKRequest("messages.getLongPollHistory", VKParameters.from("pts", ActivityBase.pts));
