@@ -46,6 +46,7 @@
         android:textColor="#ffffff"
         android:maxLength="200"
         style="@style/EditTextCustomHolo"/>
+
     <View
         android:layout_width="2dp"
         android:layout_height="48dp"
@@ -62,7 +63,7 @@
         android:layout_alignBottom="@+id/textmsg"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:background="#4961bb"/>
+        android:background="@drawable/send_button_color"/>
 
 
 </RelativeLayout>

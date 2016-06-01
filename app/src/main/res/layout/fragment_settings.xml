@@ -61,7 +61,20 @@
             android:background="@drawable/buttons_color"
             android:padding="12dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="0dp"/>
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@string/clear_description"
+            android:id="@+id/clear_description"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:lines="4"
+            android:textColor="@color/md_blue_900"
+            android:paddingRight="0dp"
+            android:paddingLeft="15dp"
+            android:layout_marginTop="0dp" />
         </LinearLayout>
 
 

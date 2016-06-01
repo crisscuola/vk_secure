@@ -25,7 +25,9 @@
     <string name="drawer_item_contact">Contact</string>
 
     <string name="new_key_description">Каждый раз, когда Вы заходите с нового устройства,
-        нажимайте эту кнопку прежде чем начать писать.</string>
-    <string name="enc_mode_description">Позволяет включать и отключать режим шифрования сообщений.</string>
+        нажимайте эту кнопку, прежде чем начать писать.</string>
+    <string name="enc_mode_description">Позволяет включать и отключать режим шифрования
+        сообщений для данного диалога.</string>
     <string name="offline_description">Помечает Ваш профиль как offline.</string>
+    <string name="clear_description">После очистки кэша сгенерируются новые ключи.</string>
 </resources>

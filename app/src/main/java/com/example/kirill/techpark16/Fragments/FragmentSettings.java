@@ -1,6 +1,8 @@
 package com.example.kirill.techpark16.Fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,13 +10,18 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.kirill.techpark16.MyMessagesHistory;
+import com.example.kirill.techpark16.PublicKeyHandler;
 import com.example.kirill.techpark16.PublicKeysTable;
 import com.example.kirill.techpark16.R;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.List;
+
 /**
- * Created by konstantin on 09.04.16.
+ * Created by konstantin on 09.04.16
  */
 public class FragmentSettings extends android.support.v4.app.Fragment {
 
@@ -41,6 +48,7 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
                         super.onComplete(response);
                     }
                 });
+                Toast.makeText(getContext(),"Вы офлайн.", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -52,7 +60,8 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
 
                 PublicKeysTable.deleteAll(PublicKeysTable.class);
                 MyMessagesHistory.deleteAll(MyMessagesHistory.class);
-                Toast.makeText(getContext(),"Данные очищены..", Toast.LENGTH_SHORT).show();
+                new PublicKeyChecking().execute();
+                Toast.makeText(getContext(),"Данные очищены.", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -65,6 +74,42 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
         super.onResume();
         getActivity().setTitle(R.string.settings_title);
         getActivity().findViewById(R.id.toolbar).findViewById(R.id.toolbar_button).setVisibility(View.INVISIBLE);
+    }
+
+    private class PublicKeyChecking extends AsyncTask<Object, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Object[] params) {
+            List<PublicKeysTable> myPk = PublicKeysTable.find(PublicKeysTable.class,"user_id = ?",
+                    String.valueOf(0));
+            List<PublicKeysTable> priv = PublicKeysTable.find(PublicKeysTable.class, "user_id = ?",
+                    String.valueOf(-1));
+            if (myPk.size() == 0) {
+                try {
+                    ActivityBase.encryptor.rsaInstance.generateKeys();
+                    PublicKeyHandler.deleteMyPublicKey();
+                    PublicKeysTable pk = new PublicKeysTable(0, ActivityBase.encryptor.getPublicKey());
+                    pk.save();
+                    pk = new PublicKeysTable(-1, ActivityBase.encryptor.getPrivateKey());
+                    pk.save();
+                } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    ActivityBase.encryptor.setPublicKey(myPk.get(0).getPk());
+                    ActivityBase.encryptor.setPrivateKey(priv.get(0).getPk());
+
+                    Log.d("pk_publ", ActivityBase.encryptor.getPublicKey());
+
+                    Log.d("pk_from_DB", "publ: " + ActivityBase.encryptor.getPublicKey() + " priv: "
+                            + ActivityBase.encryptor.getPrivateKey());
+                } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
     }
 
 }

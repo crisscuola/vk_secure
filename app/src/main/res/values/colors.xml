@@ -6,4 +6,5 @@
     <color name="white">#FFFF</color>
     <color name="default_button_color">#627dbe</color>
     <color name="button_color_pressed">#8089ae</color>
+    <color name="send_button_default">#4961bb</color>
 </resources>
