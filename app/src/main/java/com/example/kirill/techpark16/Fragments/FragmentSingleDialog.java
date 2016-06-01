@@ -305,7 +305,10 @@ public class FragmentSingleDialog extends ListFragment {
                         if (!friendKey.equals("none")) {
                             ActivityBase.encryptor.setPublicKey(friendKey);
                             Log.d("resp_friend_key", ActivityBase.encryptor.getPublicKey());
-                            messageToSend = ActivityBase.encryptor.encode(PREFIX + msg);
+                            if (msg.equals(""))
+                                return;
+                            else
+                                messageToSend = ActivityBase.encryptor.encode(PREFIX + msg);
 
                         } else {
                             new DownloadingKey().execute();

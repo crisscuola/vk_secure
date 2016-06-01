@@ -41,7 +41,7 @@ public class FragmentSettings extends android.support.v4.app.Fragment {
         FragmentSettingsDialog.flag = true;
 
         String title = "Вы уверены, что хотите очистить кэш?";
-        String message = "В результате этого действия будут сгенерированы новые ключи.";
+        String message = "В результате этого действия будут сгенерированы новые ключи шифрования.";
         String button1String = "Да";
         String button2String = "Отмена";
 

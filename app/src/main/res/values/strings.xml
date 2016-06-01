@@ -29,5 +29,5 @@
     <string name="enc_mode_description">Позволяет включать и отключать режим шифрования
         сообщений для данного диалога.</string>
     <string name="offline_description">Помечает Ваш профиль как offline.</string>
-    <string name="clear_description">После очистки кэша сгенерируются новые ключи.</string>
+    <string name="clear_description">После очистки кэша сгенерируются новые ключи шифрования.</string>
 </resources>
